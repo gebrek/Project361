@@ -2,6 +2,7 @@ package edu.uwm.cs361;
 
 import java.util.ArrayList;
 
+import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -40,8 +41,9 @@ public class DatastoreServ {
 	public void createCourse(ArrayList<Course> cs){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try{
-			pm.makePersistentAll(cs);
+//			pm.makePersistentAll(cs);
 			for(Course c : cs){
+				pm.makePersistent(c);
 				pm.makePersistentAll(c.getSections());
 			}
 		}finally{
@@ -76,5 +78,15 @@ public class DatastoreServ {
 		Section s = pm.getObjectById(Section.class, key);
 		pm.close();
 		return s;
+	}
+	
+	public ArrayList<Course> getAllCourses(){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Extent<Course> e = pm.getExtent(Course.class);
+		ArrayList<Course> cs = new ArrayList<Course>();
+		for(Course c : e){
+			cs.add(c);
+		}
+		return cs;
 	}
 }
