@@ -23,7 +23,6 @@ public class Course {
 	private ArrayList<Section> sections;
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-//	@Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
 	private Key key;
 	
 	public Course(String des, String titl, ArrayList<Section> secs){
@@ -32,20 +31,9 @@ public class Course {
 		sections = secs;
 		
 		key = KeyFactory.createKey(Course.class.getSimpleName(), designation);
-		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		pm.makePersistent(this);
 		pm.close();
-	}
-
-	// deprecated
-	public Course(Entity e) {
-		DemeritDatastoreService ds = new DemeritDatastoreService();
-		String myKey = ds.getOurKey(e.getKey());
-		designation = "COMPSCI-" +myKey; 
-		title = e.getProperty(ds.COURSE_TITLE).toString();
-//		keyfield = designation;
-		
 	}
 	
 	public Key key(){
@@ -55,7 +43,6 @@ public class Course {
 		return designation;
 	}
 	public String getNumber() {
-		// gotta comply with DemeritDatastoreService.java
 		return designation.replaceFirst(".*?(?=\\d)", "");
 	}
 	public String getTitle() {

@@ -16,6 +16,8 @@ public class Section {
 	// supported in java 1.8, which is not what we're using
 	// lol seriously. 
 	
+	// removed deprecated constructors
+	
 	@Persistent
 	private Course course;
 	@Persistent
@@ -41,7 +43,6 @@ public class Section {
 		this.key = key;
 	}
 	
-	
 	public Section(Course c, String un, String des, 
 			String hr, String dy, String dts, String ins, String rm){
 		course = c;
@@ -52,42 +53,11 @@ public class Section {
 		dates = dts;
 		instructor = ins;
 		room = rm;
-		key = KeyFactory.createKey(Section.class.getSimpleName(), designation);
 		
+		key = KeyFactory.createKey(Section.class.getSimpleName(), designation);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		pm.makePersistent(this);
 		pm.close();
-		
-	}
-	public Section(String un, String des, 
-			String hr, String dy, String dts, String ins, String rm){
-		// deprecated
-		units = un;
-		designation = des;
-		hours = hr;
-		days = dy;
-		dates = dts;
-		instructor = ins;
-		room = rm;
-	}
-	
-	public Section(Entity s){
-		DemeritDatastoreService ds = new DemeritDatastoreService();
-		units = s.getProperty(ds.UNITS).toString();
-		String str = s.getKey().toString();
-		designation = s.getProperty(ds.TYPE).toString() + " " +str.substring(str.indexOf(' ')+1, str.indexOf(')') - 1);
-		if(s.getProperty(ds.TIME) != null)
-				hours = s.getProperty(ds.TIME).toString();
-		days = s.getProperty(ds.DAYS).toString();
-//		dates = s.getProperty(ds.UNITS).toString(); fug
-		try{
-			instructor = s.getProperty(ds.STAFF).toString();
-		}catch(Exception e){
-			// eh
-			instructor = "";
-		}
-		room = s.getProperty(ds.ROOM).toString();
-		
 	}
 
 	// CLOS does OO better
