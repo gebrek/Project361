@@ -18,8 +18,13 @@ public class DatastoreServ {
 		return ds;
 	}
 	
-	public void createStaff(){
-		// TODO
+	public void createStaff(Staff s){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try{
+			pm.makePersistent(s);
+		}finally{
+			pm.close();
+		}
 	}
 	
 	// i don't know what the equivalent to higher order
@@ -41,7 +46,6 @@ public class DatastoreServ {
 	public void createCourse(ArrayList<Course> cs){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try{
-//			pm.makePersistentAll(cs);
 			for(Course c : cs){
 				pm.makePersistent(c);
 				pm.makePersistentAll(c.getSections());
@@ -88,5 +92,14 @@ public class DatastoreServ {
 			cs.add(c);
 		}
 		return cs;
+	}
+	public ArrayList<Staff> getAllStaff(){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Extent<Staff> e = pm.getExtent(Staff.class);
+		ArrayList<Staff> ss = new ArrayList<Staff>();
+		for(Staff s : e){
+			ss.add(s);
+		}
+		return ss;
 	}
 }
