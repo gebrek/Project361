@@ -30,13 +30,17 @@ public class Section {
 	private String instructor;
 	@Persistent
 	private String room;
-	@PrimaryKey
 	@Persistent
 	private String keyfield;
+
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Key key;
 	
-//	@PrimaryKey
-//	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-//	private Key key;
+	public void setKey(Key key) {
+		this.key = key;
+	}
+	
 	
 	public Section(Course c, String un, String des, 
 			String hr, String dy, String dts, String ins, String rm){

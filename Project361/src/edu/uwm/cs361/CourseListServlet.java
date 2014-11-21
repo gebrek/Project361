@@ -21,7 +21,7 @@ import edu.uwm.cs361.DemeritDatastoreService;;
 @SuppressWarnings("serial")
 public class CourseListServlet extends HttpServlet{
 	ProjectServlet page = new ProjectServlet();
-	DemeritDatastoreService ds = new DemeritDatastoreService();
+	DatastoreServ ds = new DatastoreServ();
 	 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -36,7 +36,7 @@ public class CourseListServlet extends HttpServlet{
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 	}
-	
+	/*
 	private String buildPage(){
 		String http = "";
 //		String http = "<table>\n";
@@ -79,5 +79,23 @@ public class CourseListServlet extends HttpServlet{
 		+		"</form>";
 		return http;
 	}
-		
+	*/
+	private String buildPage(){
+		String http = "";
+//		String http = "<table>\n";
+		http += "<form id=\"ccflist\">"
+		+			"<div id=\"title-create-staff\">"
+		+				"Course List"
+		+			"</div>";
+		http += 	"<div id=\"sub\">"
+		+				"<table class='courselist'>";
+		for(Course c : ds.getAllCourses()){
+			http += c.toHtmlTable();
+		}
+		http +=				"</table>"
+		+			"</div>"
+		+		"</form>";
+		return http;
+	}
+
 }
