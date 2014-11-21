@@ -12,7 +12,7 @@ public class Staff {
 	private String email;
 	@Persistent
 	private String name;
-	@Persistent
+	@Persistent(mappedBy = "instructor")
 	private ArrayList<Section> sectionsTaught;
 	@Persistent
 	private String officeHours;

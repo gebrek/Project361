@@ -2,6 +2,8 @@ package edu.uwm.cs361;
 
 import java.util.ArrayList;
 
+import javax.jdo.PersistenceManager;
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -9,6 +11,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 @PersistenceCapable
 public class Course {
@@ -19,18 +22,20 @@ public class Course {
 	@Persistent(mappedBy = "course")
 	private ArrayList<Section> sections;
 	@PrimaryKey
-	@Persistent
-	private String keyfield;
-	
-//	@PrimaryKey
-//	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-//	private Key key;
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+//	@Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+	private Key key;
 	
 	public Course(String des, String titl, ArrayList<Section> secs){
 		designation = des;
 		title = titl;
 		sections = secs;
-		keyfield = des;
+		
+		key = KeyFactory.createKey(Course.class.getSimpleName(), designation);
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		pm.makePersistent(this);
+		pm.close();
 	}
 
 	// deprecated
@@ -39,12 +44,12 @@ public class Course {
 		String myKey = ds.getOurKey(e.getKey());
 		designation = "COMPSCI-" +myKey; 
 		title = e.getProperty(ds.COURSE_TITLE).toString();
-		keyfield = designation;
+//		keyfield = designation;
 		
 	}
 	
-	public String key(){
-		return keyfield;
+	public Key key(){
+		return key;
 	}
 	public String getDesignation() {
 		return designation;

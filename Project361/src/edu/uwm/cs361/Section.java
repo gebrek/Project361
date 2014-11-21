@@ -1,5 +1,6 @@
 package edu.uwm.cs361;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -7,6 +8,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 @PersistenceCapable
 public class Section {
@@ -30,8 +32,6 @@ public class Section {
 	private String instructor;
 	@Persistent
 	private String room;
-	@Persistent
-	private String keyfield;
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -52,7 +52,12 @@ public class Section {
 		dates = dts;
 		instructor = ins;
 		room = rm;
-		keyfield = c.key() + des;
+		key = KeyFactory.createKey(Section.class.getSimpleName(), designation);
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		pm.makePersistent(this);
+		pm.close();
+		
 	}
 	public Section(String un, String des, 
 			String hr, String dy, String dts, String ins, String rm){
