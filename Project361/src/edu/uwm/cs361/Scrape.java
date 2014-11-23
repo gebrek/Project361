@@ -5,12 +5,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.*;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.Filter;
-
-import edu.uwm.cs361.DemeritDatastoreService;
-
 public class Scrape {
 	/////////////////////////////////////
 	// call this from a web call or something
