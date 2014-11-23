@@ -1,5 +1,6 @@
 package edu.uwm.cs361;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +24,20 @@ public class EditSectionServlet extends HttpServlet {
 	DemeritDatastoreService data = new DemeritDatastoreService();
 	DatastoreService ds = data.getDatastore();
 
+	DatastoreServ myData = new DatastoreServ();
+	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
-		Query q = new Query(data.COURSE);
-		List<Entity> courses = ds.prepare(q).asList(
-				FetchOptions.Builder.withDefaults());
+		ArrayList<Course> myCourses = myData.getAllCourses();
+		
 		String http = "";
 
 		if (courseKey == null)
 			courseKey = "";
 
-		String sectionKey = "";
+		String sectionKey;
 		sectionKey = req.getParameter("sectionKey");
 		if (sectionKey == null) {
 			page.banner(req, resp);
@@ -49,26 +51,23 @@ public class EditSectionServlet extends HttpServlet {
 					+ "<td class='form'>"
 					+ "Courses:"
 					+ "<select id='staff' name='sectionKey' class='staff-select'>";
-			for (Entity course : courses) {
-				courseKey = data.getOurKey(course.getKey());
-				http += "<option disabled>COMPSCI " + courseKey + "</option>";
-				String list = course.getProperty(data.SECTION_LIST).toString();
-				String[] listArray = data.makeDelStringToArray(list);
-
-				for (String i : listArray) {
-					Entity section = null;
-					try {
-						i = i.replaceAll("~", "");
-						section = data.getSection(courseKey + " " + i);
-					} catch (EntityNotFoundException e) {
-						e.printStackTrace();
+			for (Course course : myCourses) {
+				
+				courseKey = course.key().toString();
+				http += "<option disabled>" + courseKey + "</option>";
+				ArrayList<Section> list = course.getSections();
+				//String[] listArray = data.makeDelStringToArray(list);
+				if(list != null){
+					System.out.println("Size of my list is: HQ "+list.size());
+					for (Section i : list) {
+						System.out.println("My section keys happen to be HQ "+i.key());
+						http += "<option>  "
+								+ i.key()
+								+ "</option>";
 					}
-					http += "<option>--"
-							+ courseKey + " - "
-							+ section.getProperty(data.TYPE).toString() + " "
-							+ i + "</option>";
+				}else {
+					System.out.println("My list must have been null HQ");
 				}
-
 			}
 
 			http += "</select><br><br>" + "</td>" + "</tr>";
@@ -90,22 +89,19 @@ public class EditSectionServlet extends HttpServlet {
 			throws IOException {
 
 		String staff = req.getParameter("staff");
-		String mainKey = req.getParameter("mainKey");
+		//String mainKey = req.getParameter("mainKey");
 		//System.out.println("staff: " + staff + "KEy: " + mainKey);
 		
-		Entity sectionEn = null;
+		/*Entity sectionEn = null;
 		try {
 			sectionEn = data.getSection(mainKey);
 		} catch (EntityNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String courseNumber = mainKey.substring(0, 3);
-		String days = sectionEn.getProperty(data.DAYS).toString();
-		String lecLabDis = sectionEn.getProperty(data.TYPE).toString();
-		String sectionNumber = mainKey.substring(4);
-		String room = sectionEn.getProperty(data.ROOM).toString();
-		String time = sectionEn.getProperty(data.TIME).toString();
+		*/
+		
+		Section mySection = myData.getSection(req.getParameter("sectionKey"));
 		
 		List<String> errors = new ArrayList<String>();
 
@@ -119,17 +115,9 @@ public class EditSectionServlet extends HttpServlet {
 		} else {
 
 			Entity e = null;
-
-			try {
-
-				data.updateSection(courseNumber, days, lecLabDis, sectionNumber, room, staff, time);
-				e = data.getSection(mainKey);
-				//System.out.println(e.toString());
-
-			} catch (EntityNotFoundException ex) {
-				// TODO Auto-generated catch block
-				ex.printStackTrace();
-			}
+			mySection.setInstructor(staff);
+			
+			myData.setSection(mySection);
 
 			String http = "";
 
@@ -157,31 +145,19 @@ public class EditSectionServlet extends HttpServlet {
 
 		//System.out.println(mainKey);
 
-		String[] temp = mainKey.split(" - ");
-		String[] temp2 = temp[1].split(" ");
-		mainKey = temp[0] + " " + temp2[1];
-		mainKey = mainKey.substring(2);
-
 		//System.out.println(mainKey);
 
 
 		resp.setContentType("text/html");
 		String http = "";
-		String courseNum = mainKey.substring(0, 3);
-		String sectionNum = mainKey.substring(5);
 
-		Entity sectionEn = null;
-		try {
-			sectionEn = data.getSection(mainKey);
-		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String type = sectionEn.getProperty(data.TYPE).toString();
+		Section mySection = myData.getSection(req.getParameter("sectionKey"));
+		
+		String type = mySection.getType();
 
 		http += "<form id=\"ccf\" method=\"POST\" action=\"/editSection\">"
-				+ "<div id=\"title-create-staff\">" + "CompSci " + courseNum
-				+ " - " + type + " " + sectionNum + "<br>" + "</div>";
+				+ "<div id=\"title-create-staff\">" + "CompSci " + mainKey
+				+ " - " + type + " " + "<br>" + "</div>";
 
 		if (errors.size() > 0) {
 			http += "<ul class='errors'>";
@@ -193,23 +169,22 @@ public class EditSectionServlet extends HttpServlet {
 			http += "</ul>";
 		}
 
-		Query q = new Query(data.STAFF);
-		List<Entity> users = ds.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		ArrayList<Staff> users = myData.getAllStaff();
 		
 		http += "<div id=\"sub\">" + "<table>" + "<tr>"
 				+ "<td class=\"form\" >" + "Staff:"
 				+ "<select id='staff' name='staff' class='staff-select'>";
 		http += "<option disabled>Instructor's</option>";
-		for (Entity user : users) {
-			if (!user.getProperty(data.TYPE).equals("TA"))
-				http += "<option>" + data.getOurKey(user.getKey())
+		for (Staff user : users) {
+			if (!user.getPermissions().equals("TA"))
+				http += "<option>" + data.getOurKey(user.key())
 						+ "</option>";
 
 		}
 		http += "<option disabled>TA's</option>";
-		for (Entity user : users) {
-			if (user.getProperty(data.TYPE).equals("TA"))
-				http += "<option>" + data.getOurKey(user.getKey())
+		for (Staff user : users) {
+			if (user.getPermissions().equals("TA"))
+				http += "<option>" + data.getOurKey(user.key())
 						+ "</option>";
 		}
 		http += "<input class='createStaffInput' type=\"hidden\" id='staff' name='mainKey' value='" + mainKey + "'/><br>";

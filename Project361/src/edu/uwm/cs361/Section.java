@@ -1,5 +1,6 @@
 package edu.uwm.cs361;
 
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -39,8 +40,19 @@ public class Section {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;
 	
-	public void setKey(Key key) {
+	/*public void setKey(Key key) {
 		this.key = key;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		pm.makePersistent(this);
+		pm.close();
+	}
+	*/
+	
+	public void setInstructor(String instructor) {
+		this.instructor = instructor;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		pm.makePersistent(this);
+		pm.close();
 	}
 	
 	public Section(Course c, String un, String des, 
@@ -55,12 +67,16 @@ public class Section {
 		room = rm;
 		
 		key = KeyFactory.createKey(Section.class.getSimpleName(), designation);
+		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		pm.makePersistent(this);
 		pm.close();
 	}
 
 	// CLOS does OO better
+	public Key key() {
+		return key;
+	}
 	public String getUnits() {
 		return units;
 	}
@@ -97,5 +113,19 @@ public class Section {
 	public String toHtmlTR() {
 		return String.format("<tr class='border_bottom'><td></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
 				designation, units, hours, days, instructor, room);
+	}
+	
+	//HQ Methods
+	public String prettyKey() {
+		String workingKey = this.key.toString();
+		int quoteIndex = workingKey.indexOf("\"");
+		int secondQuote = workingKey.indexOf("\"", quoteIndex);
+		
+		return "";
+		
+	}
+	public Key convertPrettyKey() {
+		
+		return this.key;
 	}
 }
