@@ -15,6 +15,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @PersistenceCapable
 public class Course {
+	//HQHQHQHQHQHQ
 	@Persistent
 	private String designation;
 	@Persistent
