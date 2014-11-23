@@ -1,5 +1,6 @@
 package edu.uwm.cs361;
 
+
 import java.util.ArrayList;
 
 import javax.jdo.PersistenceManager;
@@ -15,12 +16,11 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @PersistenceCapable
 public class Course {
-	//HQHQHQHQHQHQ
 	@Persistent
 	private String designation;
 	@Persistent
 	private String title;
-	@Persistent//(mappedBy = "course")
+	@Persistent(mappedBy = "course")
 	private ArrayList<Section> sections;
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
