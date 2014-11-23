@@ -59,8 +59,11 @@ public class ProjectServlet extends HttpServlet {
 	}
 	
 	
-	/*
-	 * to create a banner for the page and include the CSS file
+	/**
+	 * create a banner for the page and include the CSS file
+	 * @param req
+	 * @param resp
+	 * @throws IOException
 	 */
 	public void banner(HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
@@ -79,8 +82,13 @@ public class ProjectServlet extends HttpServlet {
 		+						"</div>");
 	}
 	
-	/*
+	/**
 	 * takes a string which will create the Contents page
+	 * 
+	 * @param http
+	 * @param req
+	 * @param resp
+	 * @throws IOException
 	 */
 	public void layout(String http, HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
@@ -92,8 +100,13 @@ public class ProjectServlet extends HttpServlet {
 		+							"</div>");
 	}
 	
-	/*
+	/**
 	 * takes a string which will create the Contents page
+	 * 
+	 * @param http
+	 * @param req
+	 * @param resp
+	 * @throws IOException
 	 */
 	public void courseListLayout(String http, HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
@@ -105,8 +118,13 @@ public class ProjectServlet extends HttpServlet {
 		+							"</div>");
 	}
 	
-	/*
+
+	/**
 	 * menu methods create the menu on side of the page
+	 * 
+	 * @param req
+	 * @param resp
+	 * @throws IOException
 	 */
 	public void menu(HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
