@@ -5,8 +5,6 @@ xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	
-	<sessions-enabled>true</sessions-enabled>
-	
 	<servlet>
 		<servlet-name>Project</servlet-name>
 		<servlet-class>edu.uwm.cs361.ProjectServlet</servlet-class>
@@ -116,4 +114,5 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+
 </web-app>

@@ -9,7 +9,16 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
 public class DatastoreServ {
+	
 	private DatastoreService ds = null;
+	private String adminPassword = "admin";
+	
+	public String getAdminPassword() {
+		return adminPassword;
+	}
+	public void setAdminPassword(String password) {
+		adminPassword = password;
+	}
 	
 	public DatastoreServ() {
 		ds = DatastoreServiceFactory.getDatastoreService();

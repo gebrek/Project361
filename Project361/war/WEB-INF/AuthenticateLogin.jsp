@@ -1,4 +1,6 @@
 <%@ page import="java.util.List" %>
+<%@ page import="edu.uwm.cs361.DatastoreServ" %>
+<%@ page import="edu.uwm.cs361.Staff" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
     <head>
@@ -7,29 +9,45 @@
     </head>
     <body>
         <%
-    	System.out.println("Made it to AuthenticateLogin");//REMOVE/////
-        
         
         String username = request.getParameter("login");
         String password = request.getParameter("password");
         
-        System.out.println("Username: " + username + "\nPassword: " + password); //REMOVE///
+        DatastoreServ ds = new DatastoreServ();
         
-        //get all users
-        //List<Staff> staffList = ds.getAllStaff();
-        //any users have given login(email)?
+        //admin?
+        if (username.equals("admin@uwm.edu") && password.equals(ds.getAdminPassword())) {
         	
-        //passwords match?
-       
-       	
-        if ( username.equals("") && password.equals("") )
-        {
-            //session.setAttribute("username",username);
-            response.sendRedirect("/project");
-        }
-        else
-            //response.sendRedirect("loginError.html");
         	response.sendRedirect("/project");
+
+        }
+        
+        else {
+        	//get all users
+        	List<Staff> staffList = ds.getAllStaff();
+        
+        	boolean validUser = false;
+        	System.out.println("Checking " + username + " / " + password);
+        	//any users have given login(email)?
+	        for (Staff staff:staffList) {
+	        	
+        		System.out.println("vs - " + staff.getEmail() + " / " + staff.getPassword());
+	        	
+	        	if (staff.getEmail().equalsIgnoreCase(username)) {
+	        		
+	        		if (staff.getPassword().equals(password)) {
+	        			
+						response.sendRedirect("/project");
+	                    break;
+	        		}
+        		}
+	        	else {
+	        		response.sendRedirect("loginError.html");
+	        	}
+        	}
+        }
+        
+        
         %>
     </body>
 </html>

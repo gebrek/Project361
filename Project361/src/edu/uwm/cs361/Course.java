@@ -19,7 +19,7 @@ public class Course {
 	private String designation;
 	@Persistent
 	private String title;
-	@Persistent(mappedBy = "course")
+	@Persistent//(mappedBy = "course")
 	private ArrayList<Section> sections;
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
