@@ -70,6 +70,9 @@ public class Course implements Comparable<Course>{
 		
 		String lhString = this.number;
 		String rhString = c.getNumber();
+		
+		if(lhString == null || rhString == null) return 0;
+		
 		lhString = lhString.substring(0, 3);
 		rhString = rhString.substring(0, 3);
 		

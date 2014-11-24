@@ -52,7 +52,7 @@ public class DatastoreServ {
 		}
 		
 		List<Course> courseList = (List<Course>)q.execute();
-		Collections.sort(courseList);
+		if(courseList != null) Collections.sort(courseList);
 		return courseList;
 	}
 	
