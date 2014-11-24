@@ -66,6 +66,10 @@ public class Staff {
 		pm.close();
 	}
 	
+	public String key() {
+		return key.toString();
+	}
+	
 	/**
 	 * getOfficeLoc
 	 * 
