@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.http.*;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -13,21 +14,19 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 
 import edu.uwm.cs361.ProjectServlet;
-import edu.uwm.cs361.DemeritDatastoreService;;
 
 @SuppressWarnings("serial")
 public class EditStaffServlet extends HttpServlet{
 	ProjectServlet page = new ProjectServlet();
-	DemeritDatastoreService data = new DemeritDatastoreService();
+	DatastoreServ data = new DatastoreServ();
 	
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		DatastoreService dsNew =  data.getDatastore();
+
+		List<Staff> staffList = data.getAllStaff();
 		
-		Query q = new Query(data.STAFF);
-		List<Entity> users = dsNew.prepare(q).asList(FetchOptions.Builder.withDefaults());
 		String http = "";
 
 		String staff = " ";
@@ -46,14 +45,14 @@ public class EditStaffServlet extends HttpServlet{
 			+							"<select id='staff' name='staff' class='staff-select'>"
 			+									"<option value = '' selected> Select a Person </option>";
 											http += "<option disabled>Instructor's</option>";		
-											for(Entity user:users){
-												if(!user.getProperty(data.TYPE).equals("TA"))
-														http += "<option>" + data.getOurKey(user.getKey()) + "</option>";
+											for(Staff user:staffList){
+												if(!user.getPermissions().equals("TA"))
+														http += "<option>" + user.getName() + "</option>";
 											}
 											http += "<option disabled>TA's</option>";
-											for(Entity user:users){
-												if(user.getProperty(data.TYPE).equals("TA"))
-													http += "<option>" + data.getOurKey(user.getKey()) + "</option>";
+											for(Staff user:staffList){
+												if(user.getPermissions().equals("TA"))
+													http += "<option>" + user.getName() + "</option>";
 											}
 			http +=						"</select><br><br>"
 			+						"</td>"
@@ -85,7 +84,6 @@ public class EditStaffServlet extends HttpServlet{
 		String password = req.getParameter("password");
 		String firstname = req.getParameter("firstname");
 		String lastname = req.getParameter("lastname");
-		String telephone = req.getParameter("telephone");
 		String stafftype = req.getParameter("stafftype");
 
 		List<String> errors = new ArrayList<String>();
@@ -113,14 +111,19 @@ public class EditStaffServlet extends HttpServlet{
 			page.layout(displayForm(req,resp,errors,username),req,resp);
 			page.menu(req,resp);
 		} else {
-			try {
-				//update the information for the user
-				String[] myS = {""};
-				data.updateStaff(username, firstname + " " +lastname, password, telephone, myS, stafftype);
-			} catch (EntityNotFoundException ex) {
-				// TODO Auto-generated catch block
-				ex.printStackTrace();
+			
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			List<Staff> staffList = data.getAllStaff();
+			for (Staff staff : staffList) {
+				if (staff.getEmail().equalsIgnoreCase(username))
+				{
+					staff.setName(firstname + lastname);
+					staff.setPassword(password);
+					staff.setPermissions(stafftype);
+					pm.makePersistent(staff);
+				}
 			}
+			
 			//update conformation form
 			String http = "";
 			
@@ -143,18 +146,21 @@ public class EditStaffServlet extends HttpServlet{
 		}
 	}
 	
-	/*
+	/**
 	 * display form will get a list for errors 
 	 * print the form with errors.
+	 * 
+	 * @param errors any errors encountered
+	 * @param staff staff editing
+	 * @return html of page
+	 * @throws IOException
 	 */
 	private String displayForm(HttpServletRequest req, HttpServletResponse resp, List<String> errors,String staff) throws IOException
 	{
 		resp.setContentType("text/html");
 		String http = "";
-		DatastoreService dsNew =  data.getDatastore();
 		
-		Query q = new Query(data.STAFF);
-		List<Entity> users = dsNew.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		List<Staff> users = data.getAllStaff();
 		
 		http += "<form id=\"ccf\" method=\"POST\" action=\"/editStaff\">"
 		+			"<div id=\"title-create-staff\">"
@@ -181,8 +187,8 @@ public class EditStaffServlet extends HttpServlet{
 //		+						"</td>"
 //		+					"</tr>";
 		
-		for(Entity user:users){
-			if(data.getOurKey(user.getKey()).equals(staff)){
+		for(Staff user:users){
+			if(user.getEmail().equals(staff)){
 				if (errors.size() > 0) {
 					http += "<tr><td><ul class='errors'>";
 
@@ -192,16 +198,15 @@ public class EditStaffServlet extends HttpServlet{
 
 					http += "</ul></td></tr>";
 				}
-				String[] na = user.getProperty(data.NAME).toString().split(" ");
+				String[] na = user.getName().split(" ");
 
 				http+=				"<tr>"
 				+						"<td class=\"form\">"
-				+							"Username *: <input readonly class='createStaffInput' type=\"text\" id='username' name='username' value='" + data.getOurKey(user.getKey()) + "'/><br>"
-				+							"Password *: <input class='createStaffInput' type=\"password\" id='password' name='password' value='" + user.getProperty(data.PASSWORD) + "'/><br>"
-				+							"First Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + na[0].toString() + "'/><br>"
-				+							"Last Name *: <input class='createStaffInput' type=\"text\" id='lastname' name='lastname' value='" + na[1].toString() + "'/><br>"
-				+							"Telephone: <input class='createStaffInput' type=\"text\" id='telephone' name='telephone' value='" + user.getProperty(data.HOME_PHONE) + "'/><br>"
-				+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + user.getProperty(data.TYPE) + "'>"
+				+							"Username *: <input readonly class='createStaffInput' type=\"text\" id='username' name='username' value='" + user.getEmail() + "'/><br>"
+				+							"Password *: <input class='createStaffInput' type=\"password\" id='password' name='password' value='" + user.getPassword() + "'required/><br>"
+				+							"First Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + na[0].toString() + "'required/><br>"
+				+							"Last Name *: <input class='createStaffInput' type=\"text\" id='lastname' name='lastname' value='" + na[1].toString() + "'required/><br>"
+				+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + user.getPermissions() + "'>"
 				+											"<option value = '' selected> Select a Type </option>"
 				+											"<option> Instructor </option>"
 				+											"<option> TA </option>"

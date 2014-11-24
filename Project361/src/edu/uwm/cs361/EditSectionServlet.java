@@ -7,194 +7,119 @@ import java.util.List;
 
 import javax.servlet.http.*;
 
-import com.google.appengine.api.datastore.BaseDatastoreService;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Query;
-
 @SuppressWarnings("serial")
 public class EditSectionServlet extends HttpServlet {
 
-	private String courseKey = null;
-
 	ProjectServlet page = new ProjectServlet();
-	DemeritDatastoreService data = new DemeritDatastoreService();
-	DatastoreService ds = data.getDatastore();
-
-	DatastoreServ myData = new DatastoreServ();
+	
+	DatastoreServ ds = new DatastoreServ();
+	
+	HttpServletRequest _req;
+	
+	HttpServletResponse _resp;
+	
+	List<String> _errors;
+	
+	String sectionid;
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
-		ArrayList<Course> myCourses = myData.getAllCourses();
+		_req = req;
 		
-		String http = "";
-
-		if (courseKey == null)
-			courseKey = "";
-
-		String sectionKey;
-		sectionKey = req.getParameter("sectionKey");
-		if (sectionKey == null) {
-			page.banner(req, resp);
-			http += "<form id=\"ccf\" method=\"GET\" action=\"/editSection\">"
-					+ "<div id=\"title-create-staff\">"
-					+ "Edit Section"
-					+ "</div>"
-					+ "<div id=\"sub\">"
-					+ "<table>"
-					+ "<tr>"
-					+ "<td class='form'>"
-					+ "Courses:"
-					+ "<select id='staff' name='sectionKey' class='staff-select'>";
-			for (Course course : myCourses) {
-				
-				courseKey = course.key().toString();
-				http += "<option disabled>" + courseKey + "</option>";
-				ArrayList<Section> list = course.getSections();
-				//String[] listArray = data.makeDelStringToArray(list);
-				if(list != null){
-					System.out.println("Size of my list is: HQ "+list.size());
-					for (Section i : list) {
-						System.out.println("My section keys happen to be HQ "+i.key());
-						http += "<option>  "
-								+ i.key()
-								+ "</option>";
-					}
-				}else {
-					System.out.println("My list must have been null HQ");
-				}
-			}
-
-			http += "</select><br><br>" + "</td>" + "</tr>";
-			http += "</table>"
-					+ "<input class=\"submit\" type=\"submit\" value=\"Submit\" />"
-					+ "</div>" + "</form>";
-			page.layout(http, req, resp);
-			page.menu(req, resp);
-		} else {
-			page.banner(req, resp);
-			page.layout(
-					displayForm(req, resp, new ArrayList<String>(),sectionKey), req, resp);
-			page.menu(req, resp);
-		}
+		_resp = resp;
+		
+		_errors = new ArrayList<String>();
+		
+		page.checkLogin(req, resp);
+		
+		displayForm();
+		
+		handleSubmit();
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
-
-		String staff = req.getParameter("staff");
-		//String mainKey = req.getParameter("mainKey");
-		//System.out.println("staff: " + staff + "KEy: " + mainKey);
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
-		/*Entity sectionEn = null;
-		try {
-			sectionEn = data.getSection(mainKey);
-		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+		doGet(req, resp);
+	}
+
+	private void displayForm() throws IOException {
+
+		page.banner(_req, _resp);
 		
-		Section mySection = myData.getSection(req.getParameter("sectionKey"));
+		startForm();
 		
-		List<String> errors = new ArrayList<String>();
+		diplayCourses();
+		
+		displayStaff();
+		
+		endForm();
+		
+		page.menu(_req, _resp);
+	}
 
-		if (staff == null)
-			staff = "";
+	private void startForm() throws IOException {
 
-		if (errors.size() > 0) {
-			page.banner(req, resp);
-			page.layout(displayForm(req, resp, errors, staff), req, resp);
-			page.menu(req, resp);
-		} else {
+		_resp.getWriter().println("<div class=\"layout background-style\">"
+				+ "<div class=\"page-after-banner\">"
+				+ (_req.getParameter("submit") != null ? "<div>Successfully Saved<div>" : "")
+				+ "<form id='ccf' method='POST' action='editSection'>"
+				+ "<div id='title-create-staff'>");
+	}
+	
+	private void endForm() throws IOException {
+		
+		_resp.getWriter().println("<input class='submit' name='submit' type='submit' value='Submit' />"
+										+ "</div></form></div></div>");
+		
+	}
 
-			Entity e = null;
-			mySection.setInstructor(staff);
+	private void displayStaff() throws IOException {
+		
+		String html = "<select id='staff' name='staff' class='staff-select'>";
+		
+		for(int i = 1; i < 10; i++) {
 			
-			myData.setSection(mySection);
-
-			String http = "";
-
-			http += "<form id=\"ccf\" method=\"GET\" action=\"/editSection\">"
-					+			"<div id=\"title-create-staff\">"
-					+				"Edit Course Section Conformation"
-					+			"</div>"
-					+ 			"<div id=\"sub\">"
-					+ 				"New section instructor: "
-					+ 					e.getProperty(data.STAFF).toString()
-					+ 					"<br>"
-					+ 					"This section has been updated.<br><br><br><br><br><br>"
-					+				"<input class=\"submit\" type=\"submit\" value=\"Back\" />"
-					+			"</div>"
-					+		"</form>";
-			page.banner(req, resp);
-			page.layout(http, req, resp);
-			page.menu(req, resp);
+			html += "<option value='"+i+"'>"+i+"</option>";
 		}
+		
+		html += "</select>";
+		
+		_resp.getWriter().println(html);
 	}
 
-	private String displayForm(HttpServletRequest req,
-			HttpServletResponse resp, List<String> errors, String mainKey)
-			throws IOException {
-
-		//System.out.println(mainKey);
-
-		//System.out.println(mainKey);
-
-
-		resp.setContentType("text/html");
-		String http = "";
-
-		Section mySection = myData.getSection(req.getParameter("sectionKey"));
+	private void diplayCourses() throws IOException {
 		
-		String type = mySection.getType();
-
-		http += "<form id=\"ccf\" method=\"POST\" action=\"/editSection\">"
-				+ "<div id=\"title-create-staff\">" + "CompSci " + mainKey
-				+ " - " + type + " " + "<br>" + "</div>";
-
-		if (errors.size() > 0) {
-			http += "<ul class='errors'>";
-
-			for (String error : errors) {
-				http += "  <li>" + error + "</li>";
+		List<Course> myCourses = ds.getAllCourses();
+		
+		String html = "<select id='section' name='section' class='staff-select'>";
+		
+		for (Course course : myCourses) {
+			
+			List<Section> sections = ds.getSection("courseid=='"+course.getID()+"'");
+			
+			html += "<option disabled> CS " + course.getNumber() + "</option>";
+			
+			for (Section section : sections) {
+				
+				html += "<option value='"+section.getID()+"'>"
+						+ section.getType() + " " + section.getSection()
+						+ "</option>";
 			}
-
-			http += "</ul>";
 		}
-
-		ArrayList<Staff> users = myData.getAllStaff();
 		
-		http += "<div id=\"sub\">" + "<table>" + "<tr>"
-				+ "<td class=\"form\" >" + "Staff:"
-				+ "<select id='staff' name='staff' class='staff-select'>";
-		http += "<option disabled>Instructor's</option>";
-		for (Staff user : users) {
-			if (!user.getPermissions().equals("TA"))
-				http += "<option>" + data.getOurKey(user.key())
-						+ "</option>";
-
-		}
-		http += "<option disabled>TA's</option>";
-		for (Staff user : users) {
-			if (user.getPermissions().equals("TA"))
-				http += "<option>" + data.getOurKey(user.key())
-						+ "</option>";
-		}
-		http += "<input class='createStaffInput' type=\"hidden\" id='staff' name='mainKey' value='" + mainKey + "'/><br>";
-		http += "</select><br><br>" + "</td>" + "</tr>" + "</table>"
-				+ "<input class=\"submit\" type=\"submit\" value=\"Submit\" />"
-				+ "</div>" + "</form>";
+		html += "</select>";
 		
-		
-		return http;
-
+		_resp.getWriter().println(html);
 	}
-
+	
+	private void handleSubmit() {
+		
+		if(_req.getParameter("submit") != null) {
+			
+			ds.editSection(_req.getParameter("section"), _req.getParameter("staff"));
+		}
+	}
 }

@@ -1,17 +1,26 @@
 
 package edu.uwm.cs361;
 
+//cargo cult imports from CreateStaffServlet. clean up later
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.*;
 
+import com.google.appengine.api.datastore.BaseDatastoreService;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query;
 
 import edu.uwm.cs361.ProjectServlet;
-import edu.uwm.cs361.DemeritDatastoreService;;
 
 @SuppressWarnings("serial")
 public class ScrapeServlet extends HttpServlet{
 	ProjectServlet page = new ProjectServlet();
-	DemeritDatastoreService ds = new DemeritDatastoreService();
 	 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -27,7 +36,8 @@ public class ScrapeServlet extends HttpServlet{
 			throws IOException {
 	}
 	
-	private String buildPage(){
+	private String buildPage() throws IOException {
+		
 		Scrape.getCourseListandStore();
 		String http = "";
 		http += "<form id=\"ccflist\">"

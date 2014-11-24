@@ -51,9 +51,11 @@ public class CreateStaffServlet extends HttpServlet{
 		List<Staff> staffList = data.getAllStaff();
 		boolean exist = false;
 		for(Staff staff:staffList){
-			if (staff.getName().equalsIgnoreCase(firstname + " " + lastname)) {
+			System.out.println("Checking: " + staff.getName());
+			if (staff.getName().equalsIgnoreCase(firstname + " " + lastname) || staff.getEmail().equalsIgnoreCase(username)) {
 				errors.add("User '"+ username +"' Already Exist.");
 				exist = true;
+				break;
 			}
 		}
 		
@@ -82,7 +84,7 @@ public class CreateStaffServlet extends HttpServlet{
 			page.menu(req,resp);
 		} else {	
 
-			Staff newStaff = new Staff(username, firstname + lastname, null, stafftype, password);
+			Staff newStaff = new Staff(username, firstname + " " + lastname, null, stafftype, password);
 			data.createStaff(newStaff);
 			String http = "";
 			//Staff created confirmation page.
@@ -105,9 +107,14 @@ public class CreateStaffServlet extends HttpServlet{
 		}
 	}
 	
-	/*
+
+	/**
 	 * display form will get a list for errors 
 	 * print the form with errors.
+	 * 
+	 * @param errors Any errors encountered
+	 * @return String of the page html
+	 * @throws IOException
 	 */
 	private String displayForm(HttpServletRequest req, HttpServletResponse resp, List<String> errors) throws IOException
 	{
@@ -140,11 +147,11 @@ public class CreateStaffServlet extends HttpServlet{
 		+				"<table>"
 		+					"<tr>"
 		+						"<td class=\"form\">"
-		+							"Username *: <input class='createStaffInput' type=\"text\" id='username' name='username' value='" + username + "'/><br>"
-		+							"Password *: <input class='createStaffInput' type=\"password\" id='password' name='password' value='" + password + "'/><br>"
-		+							"First Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + firstname + "'/><br>"
-		+							"Last Name *: <input class='createStaffInput' type=\"text\" id='lastname' name='lastname' value='" + lastname + "'/><br>"
-		+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + stafftype + "'>"
+		+							"Username *: <input class='createStaffInput' type=\"text\" id='username' name='username' value='" + username + "' required/><br>"
+		+							"Password *: <input class='createStaffInput' type=\"password\" id='password' name='password' value='" + password + "'required/><br>"
+		+							"First Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + firstname + "'required/><br>"
+		+							"Last Name *: <input class='createStaffInput' type=\"text\" id='lastname' name='lastname' value='" + lastname + "'required/><br>"
+		+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + stafftype + "'required>"
 				+									"<option value = '' selected> Select a Type </option>"
 		+											"<option> Instructor </option>"
 		+											"<option> TA </option>"

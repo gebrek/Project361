@@ -5,13 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.*;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Query;
-
 import edu.uwm.cs361.ProjectServlet;
-import edu.uwm.cs361.DemeritDatastoreService;;
 
 @SuppressWarnings("serial")
 public class ViewStaffServlet extends HttpServlet{
@@ -20,7 +14,7 @@ public class ViewStaffServlet extends HttpServlet{
 	 * create insistence of datastore service 
 	 */
 	ProjectServlet page = new ProjectServlet();
-	DemeritDatastoreService data = new DemeritDatastoreService();
+	DatastoreServ data = new DatastoreServ();
 	
 	/*
 	 * (non-Javadoc)
@@ -58,11 +52,9 @@ public class ViewStaffServlet extends HttpServlet{
 	{
 		resp.setContentType("text/html");
 		String http = "";
-
-		DatastoreService dsNew =  data.getDatastore();
 		
-		Query q = new Query(data.STAFF);
-		List<Entity> users = dsNew.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		
+		List<Staff> users = data.getAllStaff();
 
 		String stafftype = staff;
 		
@@ -80,14 +72,14 @@ public class ViewStaffServlet extends HttpServlet{
 		+							"<select id='stafftype' name='stafftype' class='staff-select'>"
 		+									"<option value = '' selected> Select a Person </option>";
 										http += "<option disabled>Instructor's</option>";		
-										for(Entity user:users){
-											if(!user.getProperty(data.TYPE).equals("TA"))
-												http += "<option>" + data.getOurKey(user.getKey()) + "</option>";
+										for(Staff user:users){
+											if(!user.getPermissions().equals("TA"))
+												http += "<option>" + user.getName() + "</option>";
 										}
 										http += "<option disabled>TA's</option>";
-										for(Entity user:users){
-											if(user.getProperty(data.TYPE).equals("TA"))
-												http += "<option>" + data.getOurKey(user.getKey()) + "</option>";
+										for(Staff user:users){
+											if(user.getPermissions().equals("TA"))
+												http += "<option>" + user.getName() + "</option>";
 										}
 		http +=						"</select>"
 		+						"</td>"
@@ -99,9 +91,8 @@ public class ViewStaffServlet extends HttpServlet{
 		+					"</td>"
 		+				"</tr>";
 		
-		System.out.println(stafftype);
-		for(Entity user:users){
-			if(data.getOurKey(user.getKey()).equals(stafftype)){					
+		for(Staff user:users){
+			if(user.getPermissions().equals("Staff")){					
 				http+=	"<tr>"
 				+			"<td class='view-staff'>"
 				+				"Name:<br>"
@@ -114,14 +105,14 @@ public class ViewStaffServlet extends HttpServlet{
 				+				"Home Phone:<br>"
 				+			"</td>"
 				+			"<td class='view-staff-result'>"
-				+				user.getProperty(data.NAME) + "<br>"
-				+				data.getOurKey(user.getKey()) + "<br>"
-				+				user.getProperty(data.PASSWORD) + "<br>"
-				+				user.getProperty(data.TYPE) + "<br>"
-				+				user.getProperty(data.OFFICE_LOCATION) + "<br>"
-				+				user.getProperty(data.OFFICE_PHONE) + "<br>"
-				+				user.getProperty(data.HOME_ADDRESS) + "<br>"
-				+				user.getProperty(data.HOME_PHONE) + "<br>"
+				+				user.getName() + "<br>"
+				+				user.getEmail() + "<br>"
+				+				user.getPassword() + "<br>"
+				+				user.getPermissions() + "<br>"
+				+				user.getOfficeLoc() + "<br>"
+				+				user.getOfficePhone() + "<br>"
+				+				user.getHomeAddress() + "<br>"
+				+				user.getHomePhone() + "<br>"
 				+			"</td>"
 				+		"</tr>";
 			}

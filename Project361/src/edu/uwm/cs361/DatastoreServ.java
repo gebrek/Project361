@@ -1,9 +1,12 @@
 package edu.uwm.cs361;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -12,6 +15,8 @@ public class DatastoreServ {
 	
 	private DatastoreService ds = null;
 	private String adminPassword = "admin";
+	
+	private PersistenceManager _pm = PMF.get().getPersistenceManager();
 	
 	public String getAdminPassword() {
 		return adminPassword;
@@ -36,71 +41,38 @@ public class DatastoreServ {
 		}
 	}
 	
-	// i don't know what the equivalent to higher order
-	// functions in java would be. in CL i'd just write 
-	// a with-persistence-manager macro, but that won't
-	// do here because no homoiconicity... but i could
-	// get a higher order function to work for the same
-	// purpose if i had any
-	
-	public void createCourse(Course c){
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try{
-			pm.makePersistent(c);
-			pm.makePersistentAll(c.getSections());
-		}finally{
-			pm.close();
+	@SuppressWarnings("unchecked")
+	public List<Course> getCourse(String query){
+		
+		Query q = _pm.newQuery(Course.class);
+		
+		if(query != null) {
+			
+			q.setFilter(query);
 		}
-	}
-	public void createCourse(ArrayList<Course> cs){
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try{
-			for(Course c : cs){
-				pm.makePersistent(c);
-				pm.makePersistentAll(c.getSections());
-			}
-		}finally{
-			pm.close();
-		}
-	}
-	public void createSection(Section s){
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try{
-			pm.makePersistent(s);
-		}finally{
-			pm.close();
-		}
-	}
-	public void createSection(ArrayList<Section> ss){
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try{
-			pm.makePersistentAll(ss);
-		}finally{
-			pm.close();
-		}
+		
+		List<Course> courseList = (List<Course>)q.execute();
+		Collections.sort(courseList);
+		return courseList;
 	}
 	
-	public Course getCourse(String key){
-		PersistenceManager pm = PMF.get().getPersistenceManager(); // this line smells
-		Course c = pm.getObjectById(Course.class, key);
-		pm.close();	// i don't trust java to close pm when the function is done
-		return c;  // so that's another two lines
-	}
-	public Section getSection(String key){
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Section s = pm.getObjectById(Section.class, key);
-		pm.close();
-		return s;
+	@SuppressWarnings("unchecked")
+	public List<Section> getSection(String query){
+		
+		Query q = _pm.newQuery(Section.class);
+		
+		if(query != null) {
+			
+			q.setFilter(query);
+		}
+		
+		return (List<Section>) q.execute() ;
 	}
 	
-	public ArrayList<Course> getAllCourses(){
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Extent<Course> e = pm.getExtent(Course.class);
-		ArrayList<Course> cs = new ArrayList<Course>();
-		for(Course c : e){
-			cs.add(c);
-		}
-		return cs;
+	@SuppressWarnings("unchecked")
+	public List<Course> getAllCourses(){
+		
+		return getCourse(null) ;
 	}
 	public ArrayList<Staff> getAllStaff(){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -111,4 +83,55 @@ public class DatastoreServ {
 		}
 		return ss;
 	}
+	
+	public void addCourse(String ID, String title, String number) {
+		
+		Course course = new Course();
+		
+		course.setID(ID);
+		course.setTitle(title);
+		course.setNumber(number);
+		
+		_pm.makePersistent(course);
+	}
+	
+	public void addSection(String sectionid, String courseid, String units,
+			String designation, String hours, String days,
+			String dates, String slurpInstructor, String room) {
+		
+		String[] temp = designation.split(" ");
+		
+		Section section = new Section();
+		section.setID(sectionid);
+		section.setCourseid(courseid);
+		section.setDates(dates);
+		section.setDays(days);
+		section.setHours(hours);
+		section.setInstructor("");
+		section.setRoom(room);
+		section.setType(temp.length == 2 ? temp[0] : "");
+		section.setSection(temp.length == 2 ? temp[1] : "");
+		section.setUnits(units);
+		
+		_pm.makePersistent(section);
+	}
+	
+	public void deleteCourses() {
+		
+		List<Course> courses = getCourse(null);
+		List<Section> sections = getSection(null);
+		
+		_pm.deletePersistentAll(courses);
+		_pm.deletePersistentAll(sections);
+	}
+	
+	public void editSection(String sectionid, String staff) {
+		
+		Section section = getSection("sectionid=='"+sectionid+"'").get(0);
+		
+		section.setInstructor(staff);
+		
+		_pm.makePersistent(section);
+	}
+	
 }

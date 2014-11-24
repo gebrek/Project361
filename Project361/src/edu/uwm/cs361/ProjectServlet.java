@@ -1,16 +1,11 @@
 package edu.uwm.cs361;
 
+import java.awt.Window;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.*;
-
-import edu.uwm.cs361.DemeritDatastoreService;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Query;
 
 @SuppressWarnings("serial")
 public class ProjectServlet extends HttpServlet {
@@ -18,7 +13,7 @@ public class ProjectServlet extends HttpServlet {
 	//constructor
 	public ProjectServlet(){};
 
-	DemeritDatastoreService data = new DemeritDatastoreService();
+	DatastoreServ data = new DatastoreServ();
 	
 	/*
 	 * (non-Javadoc)
@@ -36,15 +31,11 @@ public class ProjectServlet extends HttpServlet {
 		+			"</div>"
 		+ 			"<div id=\"sub\">";
 		
-		Query q = new Query(data.STAFF);
-
-		DatastoreService ds = data.getDatastore();
-		
-		List<Entity> users = ds.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		ArrayList<Staff> users = data.getAllStaff();
 		http += "Ther are " + users.size() + " users.<br><br>";
-		for(Entity user:users){
-			http += "Name: " + user.getProperty(data.NAME) + "<br>";
-			//ds.delete(user.getKey());
+		for(Staff user:users){
+			http += "Name: " + user.getName() + "<br>";
+			
 		}
 		http += "</div>"
 		+		"</form>";
@@ -59,13 +50,17 @@ public class ProjectServlet extends HttpServlet {
 	}
 	
 	
-	/**
-	 * create a banner for the page and include the CSS file
-	 * @param req
-	 * @param resp
-	 * @throws IOException
+	/*
+	 * to create a banner for the page and include the CSS file
 	 */
 	public void banner(HttpServletRequest req, HttpServletResponse resp)throws IOException{
+		
+		boolean loggedIn = checkLogin(req, resp);
+		if (!loggedIn)
+		{
+			resp.sendRedirect("/index.html");
+		}
+		
 		resp.setContentType("text/html");
 		
 		resp.getWriter().println("<head>"
@@ -82,13 +77,8 @@ public class ProjectServlet extends HttpServlet {
 		+						"</div>");
 	}
 	
-	/**
+	/*
 	 * takes a string which will create the Contents page
-	 * 
-	 * @param http
-	 * @param req
-	 * @param resp
-	 * @throws IOException
 	 */
 	public void layout(String http, HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
@@ -100,13 +90,8 @@ public class ProjectServlet extends HttpServlet {
 		+							"</div>");
 	}
 	
-	/**
+	/*
 	 * takes a string which will create the Contents page
-	 * 
-	 * @param http
-	 * @param req
-	 * @param resp
-	 * @throws IOException
 	 */
 	public void courseListLayout(String http, HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
@@ -118,13 +103,8 @@ public class ProjectServlet extends HttpServlet {
 		+							"</div>");
 	}
 	
-
-	/**
+	/*
 	 * menu methods create the menu on side of the page
-	 * 
-	 * @param req
-	 * @param resp
-	 * @throws IOException
 	 */
 	public void menu(HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
@@ -199,10 +179,28 @@ public class ProjectServlet extends HttpServlet {
 //		resp.getWriter().println("			</li>");
 //		resp.getWriter().println("		</ul>");
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
-		resp.getWriter().println("			<li> <a href=\"index.html\">Logout</a></li>");
+		resp.getWriter().println("			<li> <a href=\"/logout\">Logout</a></li>");
 		resp.getWriter().println("		</ul>");
 		resp.getWriter().println("	</div>");
 		resp.getWriter().println("</div>");
+
+	}
+
+	public boolean checkLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		
+		String username = null;
+
+		Cookie[] cookies = req.getCookies();
+
+		if (cookies != null) {
+			for (Cookie c : cookies) {
+				if (c.getName().equals("username")) {
+					username = c.getValue();
+					return true;
+				}
+			}
+		}
+		return false;
 
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.http.*;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -15,16 +16,14 @@ import com.google.appengine.api.datastore.Query;
 @SuppressWarnings("serial")
 public class EditStaffContactServlet extends HttpServlet{
 	ProjectServlet page = new ProjectServlet();
-	DemeritDatastoreService data = new DemeritDatastoreService();
-	DatastoreService ds =  data.getDatastore();
+	DatastoreServ data = new DatastoreServ();
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
 		
-		Query q = new Query(data.STAFF);
-		List<Entity> users = ds.prepare(q).asList(FetchOptions.Builder.withDefaults());
+		List<Staff> staffList = data.getAllStaff();
 		String http = "";
 
 		String staff = "";
@@ -42,15 +41,15 @@ public class EditStaffContactServlet extends HttpServlet{
 			+							"Staff:"
 			+							"<select id='staff' name='staff' class='staff-select'>";
 											http += "<option disabled>Instructor's</option>";		
-											for(Entity user:users){
-												if(!user.getProperty(data.TYPE).equals("TA"))
-														http += "<option>" + data.getOurKey(user.getKey()) + "</option>";
+											for(Staff user:staffList){
+												if(!user.getPermissions().equals("TA"))
+														http += "<option>" + user.getName() + "</option>";
 														
 											}
 											http += "<option disabled>TA's</option>";
-											for(Entity user:users){
-												if(user.getProperty(data.TYPE).equals("TA"))
-													http += "<option>" + data.getOurKey(user.getKey()) + "</option>";
+											for(Staff user:staffList){
+												if(user.getPermissions().equals("TA"))
+													http += "<option>" + user.getName() + "</option>";
 											}
 			http +=						"</select><br><br>"
 			+						"</td>"
@@ -116,16 +115,17 @@ public class EditStaffContactServlet extends HttpServlet{
 			page.menu(req,resp);
 		} else {
 	
-			Entity e = null;
-			
-			try {
-				
-				data.updateStaffContact(toEditEmail, office, officePhone, homeAddress, homePhone);
-				e = data.getStaff(toEditEmail);
-				
-			} catch (EntityNotFoundException ex) {
-				// TODO Auto-generated catch block
-				ex.printStackTrace();
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			List<Staff> staffList = data.getAllStaff();
+			for (Staff staff : staffList) {
+				if (staff.getEmail().equalsIgnoreCase(toEditEmail))
+				{
+					staff.setOfficeLoc(office);
+					staff.setOfficePhone(officePhone);
+					staff.setHomeAddress(homeAddress);
+					staff.setHomePhone(homePhone);
+					pm.makePersistent(staff);
+				}
 			}
 			
 			String http = "";
@@ -135,10 +135,10 @@ public class EditStaffContactServlet extends HttpServlet{
 			+				"Edit Contact info: " + req.getParameter("staff")
 			+			"</div>"
 			+ 			"<div id=\"sub\">"
-			+				"Office: " + e.getProperty(data.OFFICE_LOCATION) + "<br>" 
-			+				"Office Phone: " + e.getProperty(data.OFFICE_PHONE) + "<br>" 
-			+				"Home Address: " + e.getProperty(data.HOME_ADDRESS) + "<br><br>" 
-			+				"Home Phone: " + e.getProperty(data.HOME_PHONE) + "<br>" 
+			+				"Office: " + office + "<br>" 
+			+				"Office Phone: " + officePhone + "<br>" 
+			+				"Home Address: " + homeAddress + "<br>" 
+			+				"Home Phone: " + homePhone + "<br><br>" 
 			+				"The User's contact info has been updated.<br><br><br><br><br><br>"
 			+				"<input class=\"submit\" type=\"submit\" value=\"Back\" />"
 			+			"</div>"
@@ -151,13 +151,14 @@ public class EditStaffContactServlet extends HttpServlet{
 	
 	private String displayForm(HttpServletRequest req, HttpServletResponse resp, List<String> errors, String staff) throws IOException
 	{	
-		
-		Entity toUpdate = null;
-		try {
-			toUpdate = data.getStaff(staff);
-		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		List<Staff> staffList = data.getAllStaff();
+		Staff staffToUpdate = null;
+		for (Staff i : staffList) {
+			if (i.getEmail().equalsIgnoreCase(staff))
+			{
+				staffToUpdate = i;
+				break;
+			}
 		}
 		
 		resp.setContentType("text/html");
@@ -165,14 +166,14 @@ public class EditStaffContactServlet extends HttpServlet{
 		
 		http += "<form id=\"ccf\" method=\"POST\" action=\"/editStaffContact\">"
 		+			"<div id=\"title-create-staff\">"
-		+				"Edit Contact info: " + toUpdate.getProperty(data.NAME).toString()
+		+				"Edit Contact info: " + staffToUpdate.getName()
 		+			"</div>";
 		
-		String name = toUpdate.getProperty(data.NAME).toString();
-		String office = toUpdate.getProperty(data.OFFICE_LOCATION).toString();
-		String officePhone = toUpdate.getProperty(data.OFFICE_PHONE).toString();
-		String homeAddress = toUpdate.getProperty(data.HOME_ADDRESS).toString();
-		String homePhone = toUpdate.getProperty(data.HOME_PHONE).toString();
+		String name = staffToUpdate.getName();
+		String office = staffToUpdate.getOfficeLoc();
+		String officePhone = staffToUpdate.getOfficePhone();
+		String homeAddress = staffToUpdate.getHomeAddress();
+		String homePhone = staffToUpdate.getHomePhone();
 		System.out.println(name + "\n" + office + "\n" + officePhone + "\n" + homeAddress + "\n" + homePhone);
 		
 
@@ -191,10 +192,10 @@ public class EditStaffContactServlet extends HttpServlet{
 		+					"<tr>"
 		+						"<td class=\"form\" >"
 		+							"<input class='createStaffInput' type=\"hidden\" id='staff' name='staff' value='" + staff + "'/><br>"
-		+							"Office: <input class='createStaffInput' type=\"text\" id='officeLoc' name='office' value='" + office + "'/><br>"
-		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + officePhone + "'/><br>"
-		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + homeAddress + "'/><br>"
-		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + homePhone + "'/><br>"
+		+							"Office: <input class='createStaffInput' type=\"text\" id='officeLoc' name='office' value='" + office + "'required/><br>"
+		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + officePhone + "'required/><br>"
+		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + homeAddress + "'required/><br>"
+		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + homePhone + "'required/><br>"
 		+						"</td>"
 		+					"</tr>"
 		+				"</table>"

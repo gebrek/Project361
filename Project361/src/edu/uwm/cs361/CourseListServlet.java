@@ -16,7 +16,6 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 
 import edu.uwm.cs361.ProjectServlet;
-import edu.uwm.cs361.DemeritDatastoreService;;
 
 @SuppressWarnings("serial")
 public class CourseListServlet extends HttpServlet{
@@ -82,14 +81,14 @@ public class CourseListServlet extends HttpServlet{
 	*/
 	private String buildPage(){
 		String http = "";
-//		String http = "<table>\n";
 		http += "<form id=\"ccflist\">"
-		+			"<div id=\"title-create-staff\">"
+		+			"<div id=\"title-course-list\">"
 		+				"Course List"
 		+			"</div>";
 		http += 	"<div id=\"sub\">"
 		+				"<table class='courselist'>";
-		for(Course c : ds.getAllCourses()){
+		List<Course> courses = ds.getAllCourses();
+		for (Course c : courses) {
 			http += c.toHtmlTable();
 		}
 		http +=				"</table>"
