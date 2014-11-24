@@ -3,15 +3,8 @@ package edu.uwm.cs361;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.jdo.PersistenceManager;
 import javax.servlet.http.*;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Query;
 
 @SuppressWarnings("serial")
 public class EditStaffContactServlet extends HttpServlet{
@@ -86,9 +79,8 @@ public class EditStaffContactServlet extends HttpServlet{
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-
 		
-		String toEditEmail = req.getParameter("staff");
+		String toEdit = req.getParameter("staff");
 		String officePhone = req.getParameter("officePhone");
 		String office = req.getParameter("office");
 		String homeAddress = req.getParameter("homeAddress");
@@ -111,22 +103,11 @@ public class EditStaffContactServlet extends HttpServlet{
 		
 		if (errors.size() > 0) {
 			page.banner(req,resp);
-			page.layout(displayForm (req,resp,errors, toEditEmail),req,resp);
+			page.layout(displayForm (req,resp,errors, toEdit),req,resp);
 			page.menu(req,resp);
 		} else {
 	
-			PersistenceManager pm = PMF.get().getPersistenceManager();
-			List<Staff> staffList = data.getAllStaff();
-			for (Staff staff : staffList) {
-				if (staff.getEmail().equalsIgnoreCase(toEditEmail))
-				{
-					staff.setOfficeLoc(office);
-					staff.setOfficePhone(officePhone);
-					staff.setHomeAddress(homeAddress);
-					staff.setHomePhone(homePhone);
-					pm.makePersistent(staff);
-				}
-			}
+			data.updateStaffContact(toEdit, office, officePhone, homeAddress, homePhone);
 			
 			String http = "";
 			
@@ -151,10 +132,11 @@ public class EditStaffContactServlet extends HttpServlet{
 	
 	private String displayForm(HttpServletRequest req, HttpServletResponse resp, List<String> errors, String staff) throws IOException
 	{	
+		
 		List<Staff> staffList = data.getAllStaff();
 		Staff staffToUpdate = null;
 		for (Staff i : staffList) {
-			if (i.getEmail().equalsIgnoreCase(staff))
+			if (i.getName().equalsIgnoreCase(staff))
 			{
 				staffToUpdate = i;
 				break;
@@ -166,15 +148,13 @@ public class EditStaffContactServlet extends HttpServlet{
 		
 		http += "<form id=\"ccf\" method=\"POST\" action=\"/editStaffContact\">"
 		+			"<div id=\"title-create-staff\">"
-		+				"Edit Contact info: " + staffToUpdate.getName()
+		+				"Edit Contact info: " + staff
 		+			"</div>";
 		
-		String name = staffToUpdate.getName();
 		String office = staffToUpdate.getOfficeLoc();
 		String officePhone = staffToUpdate.getOfficePhone();
 		String homeAddress = staffToUpdate.getHomeAddress();
 		String homePhone = staffToUpdate.getHomePhone();
-		System.out.println(name + "\n" + office + "\n" + officePhone + "\n" + homeAddress + "\n" + homePhone);
 		
 
 		if (errors.size() > 0) {
