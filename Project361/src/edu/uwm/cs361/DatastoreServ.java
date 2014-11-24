@@ -133,5 +133,21 @@ public class DatastoreServ {
 		
 		_pm.makePersistent(section);
 	}
+	public void updateStaffContact(String toEdit, String office,
+			String officePhone, String homeAddress, String homePhone) {
+
+		Query q = _pm.newQuery(Staff.class);
+		q.setFilter("name=='"+toEdit+"'");
+		
+		List<Staff> staffList = (List<Staff>) q.execute(); 
+		Staff staff = staffList.get(0);
+		
+		staff.setOfficeLoc(office);
+		staff.setOfficePhone(officePhone);
+		staff.setHomeAddress(homeAddress);
+		staff.setHomePhone(homePhone);
+		
+		_pm.makePersistent(staff);
+	}
 	
 }
