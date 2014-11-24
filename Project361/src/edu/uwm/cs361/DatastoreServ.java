@@ -149,5 +149,29 @@ public class DatastoreServ {
 		
 		_pm.makePersistent(staff);
 	}
+	public Staff getStaff(String staff) {
+		System.out.println("Tried getting: " + staff);
+		Query q = _pm.newQuery(Staff.class);
+			
+		q.setFilter("name=='"+staff+"'");
+		List<Staff> staffList = (List<Staff>)q.execute();
+		
+		return staffList.get(0);
+	}
+	public void updateStaff(String username, String nameIn, String password,
+			String stafftype) {
+		// username, firstname + lastname, password, stafftype
+		Query q = _pm.newQuery(Staff.class);
+		q.setFilter("email=='"+username+"'");
+		
+		List<Staff> staffList = (List<Staff>) q.execute(); 
+		Staff staff = staffList.get(0);
+		
+		staff.setName(nameIn);
+		staff.setPassword(password);
+		
+		_pm.makePersistent(staff);
+	}
+
 	
 }
