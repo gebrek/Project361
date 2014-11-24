@@ -106,6 +106,9 @@ public class Section implements Comparable<Section>{
 	}
 	
 	public String toHtmlTR() {
+		if (section.length() > 2)
+			section = section.substring(0, 3);
+		
 		return String.format("<tr class='border_bottom'><td></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
 				section, units, hours, days, instructor, room);
 	}
@@ -116,10 +119,15 @@ public class Section implements Comparable<Section>{
 		String lhString = this.section;
 		String rhString = s.getSection();
 		
-		if (lhString.length() < 3)
+		if (lhString.length() < 2)
 			lhString = "000";
-		if (rhString.length() < 3)
+		else
+			lhString = lhString.substring(0, 3);
+
+		if (rhString.length() < 2)
 			rhString = "000";
+		else
+			rhString = rhString.substring(0, 3);
 		
 		int lhs = Integer.parseInt(lhString);
 		int rhs = Integer.parseInt(rhString);

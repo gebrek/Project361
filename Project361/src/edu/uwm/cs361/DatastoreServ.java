@@ -107,7 +107,7 @@ public class DatastoreServ {
 		section.setDates(dates);
 		section.setDays(days);
 		section.setHours(hours);
-		section.setInstructor("");
+		section.setInstructor(slurpInstructor);
 		section.setRoom(room);
 		section.setType(temp.length == 2 ? temp[0] : "");
 		section.setSection(temp.length == 2 ? temp[1] : "");
