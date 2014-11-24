@@ -16,10 +16,14 @@
         DatastoreServ ds = new DatastoreServ();
         
         //admin?
-        if (username.equals("admin@uwm.edu") && password.equals(ds.getAdminPassword())) {
+        if (username.equals("admin@uwm.edu")) {
         	
-        	response.sendRedirect("/project");
-
+        	if ( password.equals(ds.getAdminPassword()) ) {
+        		response.sendRedirect("/project");
+        	}
+        	else {
+        		response.sendRedirect("loginError.html");
+        	}
         }
         
         else {
@@ -27,11 +31,12 @@
         	List<Staff> staffList = ds.getAllStaff();
         
         	boolean validUser = false;
-        	System.out.println("Checking " + username + " / " + password);
+        	
         	//any users have given login(email)?
+        	System.out.println("Checking: " + username + " / " + password);
 	        for (Staff staff:staffList) {
 	        	
-        		System.out.println("vs - " + staff.getEmail() + " / " + staff.getPassword());
+	        	System.out.println("against: " + staff.getEmail() + " / " + staff.getPassword());
 	        	
 	        	if (staff.getEmail().equalsIgnoreCase(username)) {
 	        		
@@ -40,11 +45,13 @@
 						response.sendRedirect("/project");
 	                    break;
 	        		}
+	        		else {
+	        			response.sendRedirect("loginError.html");
+	        			break;
+	        		}
         		}
-	        	else {
-	        		response.sendRedirect("loginError.html");
-	        	}
         	}
+	        response.sendRedirect("loginError.html");
         }
         
         
