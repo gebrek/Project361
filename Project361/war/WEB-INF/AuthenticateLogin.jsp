@@ -19,6 +19,10 @@
         if (username.equals("admin@uwm.edu")) {
         	
         	if ( password.equals(ds.getAdminPassword()) ) {
+        		
+        		Cookie c = new Cookie("username", username);
+    			response.addCookie(c);
+    			
         		response.sendRedirect("/project");
         	}
         	else {
@@ -27,6 +31,7 @@
         }
         
         else {
+        	
         	//get all users
         	List<Staff> staffList = ds.getAllStaff();
         
@@ -42,6 +47,8 @@
 	        		
 	        		if (staff.getPassword().equals(password)) {
 	        			
+	            		Cookie c = new Cookie("username", username);
+	        			response.addCookie(c);
 						response.sendRedirect("/project");
 	                    break;
 	        		}
