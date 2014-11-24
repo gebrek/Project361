@@ -12,7 +12,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 //my new
 @PersistenceCapable
-public class Section {
+public class Section implements Comparable<Section>{
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;
@@ -103,5 +103,32 @@ public class Section {
 	}
 	public void setRoom(String room) {
 		this.room = room;
+	}
+	
+	public String toHtmlTR() {
+		return String.format("<tr class='border_bottom'><td></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
+				section, units, hours, days, instructor, room);
+	}
+
+	@Override
+	public int compareTo(Section s) {
+		
+		String lhString = this.section;
+		String rhString = s.getSection();
+		
+		if (lhString.length() < 3)
+			lhString = "000";
+		if (rhString.length() < 3)
+			rhString = "000";
+		
+		int lhs = Integer.parseInt(lhString);
+		int rhs = Integer.parseInt(rhString);
+		
+		if (lhs < rhs)
+			return -1;
+		else if (lhs > rhs)
+			return 1;
+		else
+			return 0;
 	}
 }
