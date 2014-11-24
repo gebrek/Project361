@@ -38,27 +38,31 @@
         	boolean validUser = false;
         	
         	//any users have given login(email)?
-        	System.out.println("Checking: " + username + " / " + password);
+        	//System.out.println("Checking: " + username + " / " + password);
 	        for (Staff staff:staffList) {
 	        	
-	        	System.out.println("against: " + staff.getEmail() + " / " + staff.getPassword());
+	        	//System.out.println("against: " + staff.getEmail() + " / " + staff.getPassword());
 	        	
 	        	if (staff.getEmail().equalsIgnoreCase(username)) {
+	        		System.out.println(""+password.length());
+	        		System.out.println(""+staff.getPassword().length());
 	        		
 	        		if (staff.getPassword().equals(password)) {
-	        			
+	        			//System.out.println("Passes matched");
+	        			validUser = true;
 	            		Cookie c = new Cookie("username", username);
 	        			response.addCookie(c);
 						response.sendRedirect("/project");
 	                    break;
 	        		}
 	        		else {
+	        			//System.out.println("Passes failed");
 	        			response.sendRedirect("loginError.html");
 	        			break;
 	        		}
         		}
         	}
-	        response.sendRedirect("loginError.html");
+	        if(validUser == false) response.sendRedirect("loginError.html");
         }
         
         
