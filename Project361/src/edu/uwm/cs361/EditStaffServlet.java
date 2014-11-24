@@ -42,7 +42,7 @@ public class EditStaffServlet extends HttpServlet{
 			+					"<tr>"
 			+						"<td class='form'>"
 			+							"Staff:"
-			+							"<select id='staff' name='staff' class='staff-select'>"
+			+							"<select id='staff' name='staff' class='staff-select' required>"
 			+									"<option value = '' selected> Select a Person </option>";
 											http += "<option disabled>Instructor's</option>";		
 											for(Staff user:staffList){
@@ -83,7 +83,6 @@ public class EditStaffServlet extends HttpServlet{
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String firstname = req.getParameter("firstname");
-		String lastname = req.getParameter("lastname");
 		String stafftype = req.getParameter("stafftype");
 
 		List<String> errors = new ArrayList<String>();
@@ -97,9 +96,6 @@ public class EditStaffServlet extends HttpServlet{
 			if (firstname.isEmpty()) {
 				errors.add("First is required.");
 			} 
-			if (lastname.isEmpty()) {
-				errors.add("Lastname is required.");
-			} 
 			if (stafftype.isEmpty()) {
 				errors.add("Staff Type is required.");
 			}
@@ -108,23 +104,14 @@ public class EditStaffServlet extends HttpServlet{
 		//any error, reprint the form
 		if (errors.size() > 0) {
 			page.banner(req,resp);
-			page.layout(displayForm(req,resp,errors,username),req,resp);
+			page.layout(displayForm(req,resp,errors, firstname),req,resp);
 			page.menu(req,resp);
 		} else {
 			
-			PersistenceManager pm = PMF.get().getPersistenceManager();
-			List<Staff> staffList = data.getAllStaff();
-			for (Staff staff : staffList) {
-				if (staff.getEmail().equalsIgnoreCase(username))
-				{
-					staff.setName(firstname + lastname);
-					staff.setPassword(password);
-					staff.setPermissions(stafftype);
-					pm.makePersistent(staff);
-				}
-			}
+			data.updateStaff(username, firstname, password, stafftype);
+		
 			
-			//update conformation form
+			//update confirmation form
 			String http = "";
 			
 			http += "<form id=\"ccf\" method=\"get\" action=\"/editStaff\">"
@@ -133,10 +120,9 @@ public class EditStaffServlet extends HttpServlet{
 			+			"</div>"
 			+ 			"<div id=\"sub\">"
 			+				"UserName: " + username + "<br>" 
-			+				"First Name: " + firstname + "<br>" 
-			+				"Last Name: " + lastname + "<br><br>" 
+			+				"Name: " + firstname + "<br><br>"  
 			+				"Staff Type: " + stafftype + "<br>" 
-			+				"The User has been Created.<br><br><br><br><br><br>"
+			+				"The User has been updated.<br><br><br><br><br><br>"
 			+				"<input class=\"submit\" type=\"submit\" value=\"Back\" />"
 			+			"</div>"
 			+		"</form>";
@@ -159,8 +145,6 @@ public class EditStaffServlet extends HttpServlet{
 	{
 		resp.setContentType("text/html");
 		String http = "";
-		
-		List<Staff> users = data.getAllStaff();
 		
 		http += "<form id=\"ccf\" method=\"POST\" action=\"/editStaff\">"
 		+			"<div id=\"title-create-staff\">"
@@ -186,9 +170,8 @@ public class EditStaffServlet extends HttpServlet{
 //		http +=						"</select><br><br>"
 //		+						"</td>"
 //		+					"</tr>";
+				Staff user = data.getStaff(staff);
 		
-		for(Staff user:users){
-			if(user.getEmail().equals(staff)){
 				if (errors.size() > 0) {
 					http += "<tr><td><ul class='errors'>";
 
@@ -198,15 +181,13 @@ public class EditStaffServlet extends HttpServlet{
 
 					http += "</ul></td></tr>";
 				}
-				String[] na = user.getName().split(" ");
 
 				http+=				"<tr>"
 				+						"<td class=\"form\">"
 				+							"Username *: <input readonly class='createStaffInput' type=\"text\" id='username' name='username' value='" + user.getEmail() + "'/><br>"
 				+							"Password *: <input class='createStaffInput' type=\"password\" id='password' name='password' value='" + user.getPassword() + "'required/><br>"
-				+							"First Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + na[0].toString() + "'required/><br>"
-				+							"Last Name *: <input class='createStaffInput' type=\"text\" id='lastname' name='lastname' value='" + na[1].toString() + "'required/><br>"
-				+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + user.getPermissions() + "'>"
+				+							"Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + user.getName() + "'required/><br>"
+				+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + user.getPermissions() + "' required>"
 				+											"<option value = '' selected> Select a Type </option>"
 				+											"<option> Instructor </option>"
 				+											"<option> TA </option>"
@@ -214,8 +195,6 @@ public class EditStaffServlet extends HttpServlet{
 				+						"</td>"
 				+					"</tr>";
 
-			}
-		}
 		http+=				"</table>"
 		+				"<input class=\"submit\" type=\"submit\" value=\"Submit\" />"
 		+			"</div>"
