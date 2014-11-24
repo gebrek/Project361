@@ -58,31 +58,37 @@ public class EditSectionServlet extends HttpServlet {
 		endForm();
 		
 		page.menu(_req, _resp);
+
 	}
 
 	private void startForm() throws IOException {
 
 		_resp.getWriter().println("<div class=\"layout background-style\">"
 				+ "<div class=\"page-after-banner\">"
-				+ (_req.getParameter("submit") != null ? "<div>Successfully Saved<div>" : "")
 				+ "<form id='ccf' method='POST' action='editSection'>"
-				+ "<div id='title-create-staff'>");
+				+ (_req.getParameter("submit") != null ? "<div id='title-create-staff'>Successfully Saved</div>" : "")
+				);
 	}
 	
 	private void endForm() throws IOException {
 		
-		_resp.getWriter().println("<input class='submit' name='submit' type='submit' value='Submit' />"
-										+ "</div></form></div></div>");
-		
+		_resp.getWriter().println( ""
+										+ "<input class='submit' name='submit' type='submit' value='Submit' />"
+										+ "</div></form></div>"
+										+ "</div>"
+										);
 	}
 
 	private void displayStaff() throws IOException {
 		
-		String html = "<select id='staff' name='staff' class='staff-select'>";
+		String html = "<br><div id=\"sub\">Select a staff to assign: </div>"
+				+ "<select id='staff' name='staff' class='staff-select'>";
 		
-		for(int i = 1; i < 10; i++) {
+		List<Staff> staffList = ds.getAllStaff();
+		
+		for(Staff staffer:staffList) {
 			
-			html += "<option value='"+i+"'>"+i+"</option>";
+			html += "<option value='"+staffer.getName()+"'>"+staffer.getName()+"</option>";
 		}
 		
 		html += "</select>";
@@ -94,7 +100,8 @@ public class EditSectionServlet extends HttpServlet {
 		
 		List<Course> myCourses = ds.getAllCourses();
 		
-		String html = "<select id='section' name='section' class='staff-select'>";
+		String html = "<div id=\"sub\">Select a course for assignment: </div>"
+						+"<select id='section' name='section' class='staff-select'>";
 		
 		for (Course course : myCourses) {
 			
