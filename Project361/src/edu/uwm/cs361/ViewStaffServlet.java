@@ -37,10 +37,10 @@ public class ViewStaffServlet extends HttpServlet{
 			throws IOException {
 		
 		//get the value from the dropdown
-		String stafftype = req.getParameter("stafftype");
+		String staffName = req.getParameter("staffname");
 		
 		page.banner(req,resp);
-		page.layout(displayForm(req,resp,stafftype),req,resp);
+		page.layout(displayForm(req,resp,staffName),req,resp);
 		page.menu(req,resp);
 		
 	}
@@ -55,8 +55,6 @@ public class ViewStaffServlet extends HttpServlet{
 		
 		
 		List<Staff> users = data.getAllStaff();
-
-		String stafftype = staff;
 		
 		
 		http += "<form id=\"ccf\" method=\"POST\" action=\"/viewStaff\">"
@@ -69,7 +67,7 @@ public class ViewStaffServlet extends HttpServlet{
 		+					"<tr>"
 		+						"<td class='form'>"
 		+							"Staff:"
-		+							"<select id='stafftype' name='stafftype' class='staff-select'>"
+		+							"<select id='staffname' name='staffname' class='staff-select'>"
 		+									"<option value = '' selected> Select a Person </option>";
 										http += "<option disabled>Instructor's</option>";		
 										for(Staff user:users){
@@ -92,7 +90,7 @@ public class ViewStaffServlet extends HttpServlet{
 		+				"</tr>";
 		
 		for(Staff user:users){
-			if(user.getPermissions().equals("Staff")){					
+			if(user.getName().equals(staff)){					
 				http+=	"<tr>"
 				+			"<td class='view-staff'>"
 				+				"Name:<br>"
