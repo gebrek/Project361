@@ -42,7 +42,7 @@ public class EditStaffServlet extends HttpServlet{
 			+					"<tr>"
 			+						"<td class='form'>"
 			+							"Staff:"
-			+							"<select id='staff' name='staff' class='staff-select' required>"
+			+							"<select id='staff' name='staff' class='staff-select staff-view-margin' required>"
 			+									"<option value = '' selected> Select a Person </option>";
 											http += "<option disabled>Instructor's</option>";		
 											for(Staff user:staffList){

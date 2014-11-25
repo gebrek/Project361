@@ -67,7 +67,7 @@ public class ViewStaffServlet extends HttpServlet{
 		+					"<tr>"
 		+						"<td class='form'>"
 		+							"Staff:"
-		+							"<select id='staffname' name='staffname' class='staff-select'>"
+		+							"<select id='staffname' name='staffname' class='staff-select staff-view-margin'>"
 		+									"<option value = '' selected> Select a Person </option>";
 										http += "<option disabled>Instructor's</option>";		
 										for(Staff user:users){

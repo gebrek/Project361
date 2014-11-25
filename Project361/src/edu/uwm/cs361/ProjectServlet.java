@@ -83,7 +83,7 @@ public class ProjectServlet extends HttpServlet {
 	public void layout(String http, HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
 		
-		resp.getWriter().println("<div class=\"layout background-style\">"
+		resp.getWriter().println("<div class=\"layout\">"
 		+							"	<div class=\"page-after-banner\">"
 		+									http
 		+							"	</div>"

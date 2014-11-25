@@ -52,9 +52,26 @@ body, .login-submit, .login-submit:before, .login-submit:after {
   background: #373737 url("/img/bg.png") 0 0 repeat;
 }
 
+label[for="title"]
+{
+float: left;
+padding-left: -44px;
+margin-top: -40px;
+/* margin-bottom: 43px; */
+margin-left: -502px;
+font-size: 34px;
+font-weight: 100;
+letter-spacing: 1px;
+color: #FFFCC1;
+text-decoration: none;
+position: relative;
+/* font-family: "Times New Roman", Georgia, Serif; */
+width: 221px;
+text-align: left;
+}
 body {
   font: 14px/20px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #404040;
+
 }
 
 a {
@@ -123,20 +140,22 @@ label {
 }
 
 .login-title{
-	padding-left: 602px;
-	margin-top: -29px;
-	font-size: 23px;
-	font-weight: 100;
-	letter-spacing: 1px;
-	color: #FFFCC1;
-	text-decoration: none;
-	position: absolute;
-	font-family: "Times New Roman", Georgia, Serif;
+float:left;
+padding-left: 602px;
+margin-top: -30px;
+font-size: 23px;
+font-weight: 100;
+letter-spacing: 1px;
+color: #FFFCC1;
+text-decoration: none;
+position: relative;
+font-family: "Times New Roman", Georgia, Serif;
+m
 }
 
 .login-submit {
   position: absolute;
-  top: 12px;
+  top: 22px;
   right: 0;
   width: 48px;
   height: 48px;
@@ -214,7 +233,7 @@ box-shadow: inset 0 0 0 1px #E4CE2A, 0 0 0 5px rgba(0, 0, 0, 0.16);
   left: 12px;
   width: 25px;
   height: 19px;
-  background: url("/img/arrow.png") 0 0 no-repeat;
+  background: url("../img/arrow.png") 0 0 no-repeat;
 }
 
 ::-moz-focus-inner {
