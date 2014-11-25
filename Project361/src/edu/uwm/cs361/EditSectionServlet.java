@@ -67,9 +67,12 @@ public class EditSectionServlet extends HttpServlet {
 	 */
 	private void startForm() throws IOException {
 
-		_resp.getWriter().println("<div class=\"layout background-style\">"
+		_resp.getWriter().println("<div class=\"layout\">"
 				+ "<div class=\"page-after-banner\">"
 				+ "<form id='ccf' method='POST' action='editSection'>"
+				+			"<div id=\"title-create-staff\">"
+				+				"Add Staff To Section"
+				+			"</div>"
 				+ (_req.getParameter("submit") != null ? "<div id='title-create-staff'>Successfully Saved</div>" : "")
 				);
 	}
@@ -96,7 +99,7 @@ public class EditSectionServlet extends HttpServlet {
 	private void displayStaff() throws IOException {
 		
 		String html = "<br><div id=\"sub\">Select a staff to assign: </div>"
-				+ "<select id='staff' name='staff' class='staff-select'>";
+				+ "<select id='staff' name='staff' class='staff-select staff-view-margin'>";
 		
 		List<Staff> staffList = ds.getAllStaff();
 		

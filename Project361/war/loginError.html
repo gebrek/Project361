@@ -1,36 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Login</title>
-    <link href="main.css" rel="stylesheet" type="text/css"/>
-    <meta charset="UTF-8">
-  </head>
-  
-  <body class="grad_jac">
-    <img src="Images/UWM_D2L_banner_960w.png" alt="UWM Banner" id="banner"> 
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Staff Login Form</title>
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
 
-    <section class="container_jac floatingcenter">
-      <div class="login border_jac abscenter_jac light-on-dark" id="loginbox">
-        <h1>University Scheduling System Login</h1>
+  <form method="post" action="/authenticateLogin" class="login">
+      
+    <p class="login-title">
+       <label for="title">Staff Login:-</label>
+    </p>
+    
         <font color="red">Invalid username or password</font>
-        <!-- <form method="post" action="index.html"> -->
-        <form class="cleanform" method="POST" action="/authenticateLogin">
-          <p><label>UWM Email</label><input class="cleanput" type="email" name="login" value="" placeholder="Enter UWM Email" pattern="^[_a-z0-9-]+@uwm.edu" required></p>
-          <p><label>Password</label><input class="cleanput" type="password" name="password" value="" placeholder="Password" required></p>
-          <!-- <p class="remember_me"> -->
-          <!--   <label> -->
-          <!--     <input type="checkbox" name="remember_me" id="remember_me"> -->
-          <!--     Remember me on this computer -->
-          <!--   </label> -->
-          <!-- </p> -->
-          <p><input class="cleanput" type="submit" name="commit" value="Login"></p>
-        </form>
-      </div>
+    <p>
+      <label for="login">Email:</label>
+      <input type="text" name="login" id="login" placeholder="pantherID@.uwm.edu" pattern="^[_a-z0-9-]+@uwm.edu" required >
+    </p> 
 
-      <div class="login-help border_jac abscenter_jac light-on-dark" id="helpbox">
-        <p>Forgot your password?<br> <a href="index.html">Click here to reset it</a>.</p>
-      </div>
-    </section>
+    <p>
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" placeholder="password" required>
+    </p>
 
-  </body>
+    <p class="login-submit">
+      <button type="submit" class="login-button">Login</button>
+    </p>
+
+    <p class="forgot-password"><a href="index.html">Forgot your password?</a></p>
+  </form>
+</body>
 </html>
+

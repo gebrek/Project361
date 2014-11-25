@@ -86,10 +86,10 @@ public class CourseListServlet extends HttpServlet{
 	private String buildPage(){
 		String http = "";
 		http += "<form id=\"ccflist\">"
-		+			"<div id=\"title-course-list\">"
+		+			"<div id=\"title-create-staff\">"
 		+				"Course List"
 		+			"</div>";
-		http += 	"<div id=\"sub\">"
+		http += 	"<div id=\"sub1\">"
 		+				"<table class='courselist'>";
 		List<Course> courses = ds.getAllCourses();
 		for (Course c : courses) {

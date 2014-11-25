@@ -112,7 +112,7 @@ public class ProjectServlet extends HttpServlet {
 	public void courseListLayout(String http, HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
 		
-		resp.getWriter().println("<div class=\"courselayout background-style\">"
+		resp.getWriter().println("<div class=\"courselayout\">"
 		+							"	<div class=\"page-after-banner\">"
 		+									http
 		+							"	</div>"
