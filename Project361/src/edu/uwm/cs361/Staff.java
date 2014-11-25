@@ -14,6 +14,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 @PersistenceCapable
 public class Staff {
 	// email name sectionsTaught officeHours permissions password
+	
 	@Persistent
 	private String email;
 	@Persistent
@@ -66,6 +67,10 @@ public class Staff {
 		pm.close();
 	}
 	
+	/**
+	 * 
+	 * @return Key for datastore
+	 */
 	public String key() {
 		return key.toString();
 	}

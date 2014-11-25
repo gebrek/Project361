@@ -61,6 +61,10 @@ public class EditSectionServlet extends HttpServlet {
 
 	}
 
+	/**
+	 * Print initial form html code
+	 * @throws IOException
+	 */
 	private void startForm() throws IOException {
 
 		_resp.getWriter().println("<div class=\"layout background-style\">"

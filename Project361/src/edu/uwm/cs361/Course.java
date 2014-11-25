@@ -25,28 +25,66 @@ public class Course implements Comparable<Course>{
 	@Persistent
 	private String number;
 	
+	/**
+	 * 
+	 * @return Key for datastore
+	 */
 	public Key getKey() {
 		return key;
 	}
+	
+	/**
+	 * 
+	 * @return Course title
+	 */
 	public String getTitle() {
 		return title;
 	}
+	
+	/**
+	 * 
+	 * @param title String to set this courses title to
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	/**
+	 * 
+	 * @return Course id (locale number used for reference in datastore)
+	 */
 	public String getID() {
 		return this.courseid;
 	}
+	
+	/**
+	 * 
+	 * @param ID Set the course Id to this string
+	 */
 	public void setID(String ID) {
 		this.courseid = ID;
 	}
+	
+	/**
+	 * 
+	 * @return Courses number (ex CS 361 -- 361)
+	 */
 	public String getNumber() {
 		return number;
 	}
+	
+	/**
+	 * 
+	 * @param number Set the courses number to this param
+	 */
 	public void setNumber(String number) {
 		this.number = number;
 	}
 	
+	/**
+	 * 
+	 * @return Returns this course as a string formatted to fit our pages course list
+	 */
 	public String toHtmlTable() {
 		
 		DatastoreServ ds = new DatastoreServ();
@@ -65,6 +103,9 @@ public class Course implements Comparable<Course>{
 		return str;
 	}
 	
+	/**
+	 * Compares this course to c. Works like a standard compare, compare key = course number
+	 */
 	@Override
 	public int compareTo(Course c) {
 		

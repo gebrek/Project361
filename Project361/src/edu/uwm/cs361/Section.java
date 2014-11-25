@@ -38,73 +38,181 @@ public class Section implements Comparable<Section>{
 	@Persistent
 	private String room;
 	
+	/**
+	 * @return key for datastore
+	 */
 	public Key getKey() {
 		return key;
 	}
+	
+	/**
+	 * 
+	 * @param key Key to set for datastore
+	 */
 	public void setKey(Key key) {
 		this.key = key;
 	}
+	
+	/**
+	 * 
+	 * @return Local only section ID
+	 */
 	public String getID() {
 		return sectionid;
 	}
+	
+	/**
+	 * 
+	 * @param sectionid Local section id to set
+	 */
 	public void setID(String sectionid) {
 		this.sectionid = sectionid;
 	}
+	
+	/**
+	 * 
+	 * @return Courses id (non local)
+	 */
 	public String getCourseid() {
 		return courseid;
 	}
+	/**
+	 * 
+	 * @param courseid Non-local course id to set
+	 */
 	public void setCourseid(String courseid) {
 		this.courseid = courseid;
 	}
+	
+	/**
+	 * 
+	 * @return Number credits
+	 */
 	public String getUnits() {
 		return units;
 	}
+	
+	/**
+	 * 
+	 * @param units Number of credits
+	 */
 	public void setUnits(String units) {
 		this.units = units;
 	}
+	
+	/**
+	 * 
+	 * @return lec, lab or dis
+	 */
 	public String getType() {
 		return type;
 	}
+	
+	/**
+	 * 
+	 * @param type set with lec, lab, dis
+	 */
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	/**
+	 * 
+	 * @return returns this section number
+	 */
 	public String getSection() {
 		return section;
 	}
+	
+	/**
+	 * 
+	 * @param section number of section
+	 */
 	public void setSection(String section) {
 		this.section = section;
 	}
+	
+	/**
+	 * 
+	 * @return Hours sections meets
+	 */
 	public String getHours() {
 		return hours;
 	}
+	
+	/**
+	 * 
+	 * @param hours Sets sections meeting hours
+	 */
 	public void setHours(String hours) {
 		this.hours = hours;
 	}
+	
+	/**
+	 * 
+	 * @return Meeting days
+	 */
 	public String getDays() {
 		return days;
 	}
+	
+	/**
+	 * 
+	 * @param days Set meeting days
+	 */
 	public void setDays(String days) {
 		this.days = days;
 	}
+	
+	/**
+	 * 
+	 * @return Meeting dates
+	 */
 	public String getDates() {
 		return dates;
 	}
+	/**
+	 * 
+	 * @param dates Set meeting dates
+	 */
 	public void setDates(String dates) {
 		this.dates = dates;
 	}
+	/**
+	 * 
+	 * @return Assigned instructors name
+	 */
 	public String getInstructor() {
 		return instructor;
 	}
+	/**
+	 * 
+	 * @param instructor Instructors full name
+	 */
 	public void setInstructor(String instructor) {
 		this.instructor = instructor;
 	}
+	
+	/**
+	 * 
+	 * @return meeting room location
+	 */
 	public String getRoom() {
 		return room;
 	}
+	
+	/**
+	 * 
+	 * @param room Set meeting room
+	 */
 	public void setRoom(String room) {
 		this.room = room;
 	}
 	
+	/**
+	 * 
+	 * @return Returns this sections as a formatted html line to fit our course list html
+	 */
 	public String toHtmlTR() {
 		if (section.length() > 2)
 			section = section.substring(0, 3);
@@ -113,6 +221,9 @@ public class Section implements Comparable<Section>{
 				section, units, hours, days, instructor, room);
 	}
 
+	/**
+	 * Compares this section to s. Works like a standard compare, compare key = section number
+	 */
 	@Override
 	public int compareTo(Section s) {
 		
