@@ -74,6 +74,11 @@ public class EditSectionServlet extends HttpServlet {
 				);
 	}
 	
+	/**
+	 * Print endind form html code
+	 * 
+	 * @throws IOException
+	 */
 	private void endForm() throws IOException {
 		
 		_resp.getWriter().println( ""
@@ -83,6 +88,11 @@ public class EditSectionServlet extends HttpServlet {
 										);
 	}
 
+	/**
+	 * Displays the staff as a dropdown
+	 * 
+	 * @throws IOException
+	 */
 	private void displayStaff() throws IOException {
 		
 		String html = "<br><div id=\"sub\">Select a staff to assign: </div>"
@@ -100,6 +110,11 @@ public class EditSectionServlet extends HttpServlet {
 		_resp.getWriter().println(html);
 	}
 
+	/**
+	 *  Displays courses as a dropdown
+	 *  
+	 * @throws IOException
+	 */
 	private void diplayCourses() throws IOException {
 		
 		List<Course> myCourses = ds.getAllCourses();
@@ -116,6 +131,7 @@ public class EditSectionServlet extends HttpServlet {
 			for (Section section : sections) {
 				
 				html += "<option value='"+section.getID()+"'>"
+						+ "CS " + course.getNumber() + " - "
 						+ section.getType() + " " + section.getSection()
 						+ "</option>";
 			}
@@ -126,6 +142,9 @@ public class EditSectionServlet extends HttpServlet {
 		_resp.getWriter().println(html);
 	}
 	
+	/**
+	 * Checks if submit has been clicked, edits the section if so
+	 */
 	private void handleSubmit() {
 		
 		if(_req.getParameter("submit") != null) {
