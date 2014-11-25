@@ -18,20 +18,41 @@ public class DatastoreServ {
 	
 	private PersistenceManager _pm = PMF.get().getPersistenceManager();
 	
+	/**
+	 * 
+	 * @return Returns admins password from datastore
+	 */
 	public String getAdminPassword() {
 		return adminPassword;
 	}
+	
+	/**
+	 * 
+	 * @param password New password to set for admin
+	 */
 	public void setAdminPassword(String password) {
 		adminPassword = password;
 	}
 	
+	/**
+	 * Constructor for datastoreserv. No params, MUST call the setters
+	 */
 	public DatastoreServ() {
 		ds = DatastoreServiceFactory.getDatastoreService();
 	}
+	
+	/**
+	 * 
+	 * @return internal datastore, if needed for queries
+	 */
 	public DatastoreService getDatastore(){
 		return ds;
 	}
 	
+	/**
+	 * Creates a staff class within the datastore
+	 * @param s New staff
+	 */
 	public void createStaff(Staff s){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try{
@@ -41,6 +62,11 @@ public class DatastoreServ {
 		}
 	}
 	
+	/**
+	 * Returns a list containing single course. 
+	 * @param query Use this to find specific course. See jdo queries
+	 * @return Course list. Use list.get(0) for the course being searched for
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Course> getCourse(String query){
 		
@@ -56,6 +82,11 @@ public class DatastoreServ {
 		return courseList;
 	}
 	
+	/**
+	 * Returns one element list with section
+	 * @param query Ex ("courseid=='"+course.getID()+"'")
+	 * @return Return list of section, list.get(0) is result of query
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Section> getSection(String query){
 		
@@ -69,11 +100,20 @@ public class DatastoreServ {
 		return (List<Section>) q.execute() ;
 	}
 	
+	/**
+	 * 
+	 * @return List of all courses
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Course> getAllCourses(){
 		
 		return getCourse(null) ;
 	}
+	
+	/**
+	 * 
+	 * @return List of all staff
+	 */
 	public ArrayList<Staff> getAllStaff(){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Extent<Staff> e = pm.getExtent(Staff.class);
@@ -84,6 +124,13 @@ public class DatastoreServ {
 		return ss;
 	}
 	
+	/**
+	 * Adds the given course to datastore
+	 * 
+	 * @param ID Local use id number
+	 * @param title Course title
+	 * @param number Course number
+	 */
 	public void addCourse(String ID, String title, String number) {
 		
 		Course course = new Course();
@@ -95,9 +142,22 @@ public class DatastoreServ {
 		_pm.makePersistent(course);
 	}
 	
+	/**
+	 * Adds the section to datastore
+	 * 
+	 * @param sectionid Locale only section id
+	 * @param courseid Section's corresponding courses id
+	 * @param units (credits)
+	 * @param designation lab/lec/dis
+	 * @param hours Meeting hours
+	 * @param days Meeting days
+	 * @param dates Meeting dates
+	 * @param instructor Instructor
+	 * @param room Meeting room
+	 */
 	public void addSection(String sectionid, String courseid, String units,
 			String designation, String hours, String days,
-			String dates, String slurpInstructor, String room) {
+			String dates, String secInstructor, String room) {
 		
 		String[] temp = designation.split(" ");
 		
@@ -107,7 +167,7 @@ public class DatastoreServ {
 		section.setDates(dates);
 		section.setDays(days);
 		section.setHours(hours);
-		section.setInstructor(slurpInstructor);
+		section.setInstructor(secInstructor);
 		section.setRoom(room);
 		section.setType(temp.length == 2 ? temp[0] : "");
 		section.setSection(temp.length == 2 ? temp[1] : "");
@@ -116,6 +176,9 @@ public class DatastoreServ {
 		_pm.makePersistent(section);
 	}
 	
+	/**
+	 * Deletes all courses form datastore
+	 */
 	public void deleteCourses() {
 		
 		List<Course> courses = getCourse(null);
@@ -125,6 +188,12 @@ public class DatastoreServ {
 		_pm.deletePersistentAll(sections);
 	}
 	
+	/**
+	 * Edit the given section in datastore
+	 * 
+	 * @param sectionid Section's id
+	 * @param staff New instructor to teach section
+	 */
 	public void editSection(String sectionid, String staff) {
 		
 		Section section = getSection("sectionid=='"+sectionid+"'").get(0);
@@ -133,6 +202,16 @@ public class DatastoreServ {
 		
 		_pm.makePersistent(section);
 	}
+	
+	/**
+	 * Updates the staffs contact info in datastore
+	 * 
+	 * @param toEdit Staff name to edit
+	 * @param office Office location
+	 * @param officePhone 10 digit phone for office
+	 * @param homeAddress home address
+	 * @param homePhone 10 digit phone for home
+	 */
 	public void updateStaffContact(String toEdit, String office,
 			String officePhone, String homeAddress, String homePhone) {
 
@@ -149,6 +228,12 @@ public class DatastoreServ {
 		
 		_pm.makePersistent(staff);
 	}
+	
+	/**
+	 * Returns a particular staff from datastore
+	 * @param staff Staffs full name with space
+	 * @return Staff object from ds
+	 */
 	public Staff getStaff(String staff) {
 		System.out.println("Tried getting: " + staff);
 		Query q = _pm.newQuery(Staff.class);
@@ -158,6 +243,15 @@ public class DatastoreServ {
 		
 		return staffList.get(0);
 	}
+	
+	/**
+	 * Update the given staff 
+	 * 
+	 * @param username Username (email) to update. Cannot change email
+	 * @param nameIn New name
+	 * @param password New password
+	 * @param stafftype New staff type
+	 */
 	public void updateStaff(String username, String nameIn, String password,
 			String stafftype) {
 		// username, firstname + lastname, password, stafftype

@@ -45,8 +45,14 @@ public class ViewStaffServlet extends HttpServlet{
 		
 	}
 	
-	/*
+	/**
 	 * display form will list all the information for the staff
+	 * 
+	 * @param req
+	 * @param resp
+	 * @param staff
+	 * @return
+	 * @throws IOException
 	 */
 	private String displayForm(HttpServletRequest req, HttpServletResponse resp, String staff) throws IOException
 	{

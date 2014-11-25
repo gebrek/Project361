@@ -36,6 +36,11 @@ public class ScrapeServlet extends HttpServlet{
 			throws IOException {
 	}
 	
+	/**
+	 * Builds pages main content
+	 * @return
+	 * @throws IOException
+	 */
 	private String buildPage() throws IOException {
 		
 		Scrape.getCourseListandStore();

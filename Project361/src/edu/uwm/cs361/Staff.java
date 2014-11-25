@@ -66,6 +66,10 @@ public class Staff {
 		pm.close();
 	}
 	
+	/**
+	 * 
+	 * @return Key for datastore
+	 */
 	public String key() {
 		return key.toString();
 	}

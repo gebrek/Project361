@@ -79,6 +79,10 @@ public class CourseListServlet extends HttpServlet{
 		return http;
 	}
 	*/
+	/**
+	 * Build the main page content 
+	 * @return String containing built html code
+	 */
 	private String buildPage(){
 		String http = "";
 		http += "<form id=\"ccflist\">"

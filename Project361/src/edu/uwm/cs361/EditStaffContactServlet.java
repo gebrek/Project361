@@ -61,6 +61,11 @@ public class EditStaffContactServlet extends HttpServlet{
 		}
 	}
 	
+	/**
+	 * Formats the phone for storage, removing all non-digits
+	 * @param number 10 digit phone number
+	 * @return Only numbers, from the original phone number given
+	 */
 	private String formatPhone(String number)
 	{
 		String toReturn = "";
@@ -130,6 +135,15 @@ public class EditStaffContactServlet extends HttpServlet{
 		}
 	}
 	
+	/**
+	 * Displays the form with fields used to edit staff contact info
+	 * @param req
+	 * @param resp
+	 * @param errors
+	 * @param staff Staff full name with space
+	 * @return generated html code as string 
+	 * @throws IOException
+	 */
 	private String displayForm(HttpServletRequest req, HttpServletResponse resp, List<String> errors, String staff) throws IOException
 	{	
 		

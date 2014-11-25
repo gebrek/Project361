@@ -10,7 +10,9 @@ import javax.servlet.http.*;
 @SuppressWarnings("serial")
 public class ProjectServlet extends HttpServlet {
 	
-	//constructor
+	/**
+	 * Constuctor for page
+	 */
 	public ProjectServlet(){};
 
 	DatastoreServ data = new DatastoreServ();
@@ -49,9 +51,12 @@ public class ProjectServlet extends HttpServlet {
 			throws IOException {
 	}
 	
-	
-	/*
-	 * to create a banner for the page and include the CSS file
+	/**
+	 * create a banner for the page and include the CSS file
+	 * 
+	 * @param req
+	 * @param resp
+	 * @throws IOException
 	 */
 	public void banner(HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		
@@ -77,8 +82,14 @@ public class ProjectServlet extends HttpServlet {
 		+						"</div>");
 	}
 	
-	/*
-	 * takes a string which will create the Contents page
+
+	/**
+	 * takes a string which will create the Contents of page
+	 * 
+	 * @param http
+	 * @param req
+	 * @param resp
+	 * @throws IOException
 	 */
 	public void layout(String http, HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
@@ -90,8 +101,13 @@ public class ProjectServlet extends HttpServlet {
 		+							"</div>");
 	}
 	
-	/*
-	 * takes a string which will create the Contents page
+
+	/**
+	 * takes a string which will create the main Contents of page
+	 * @param http
+	 * @param req
+	 * @param resp
+	 * @throws IOException
 	 */
 	public void courseListLayout(String http, HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
@@ -103,8 +119,11 @@ public class ProjectServlet extends HttpServlet {
 		+							"</div>");
 	}
 	
-	/*
+	/**
 	 * menu methods create the menu on side of the page
+	 * @param req
+	 * @param resp
+	 * @throws IOException
 	 */
 	public void menu(HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		resp.setContentType("text/html");
@@ -186,8 +205,18 @@ public class ProjectServlet extends HttpServlet {
 
 	}
 
+	/**
+	 * Checks cookies to see if user is currently logged in.
+	 * returns boolean, true if logged in
+	 * 
+	 * @param req
+	 * @param resp
+	 * @return
+	 * @throws IOException
+	 */
 	public boolean checkLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
+		//use for sprint3
 		String username = null;
 
 		Cookie[] cookies = req.getCookies();
