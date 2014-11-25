@@ -26,7 +26,7 @@ public class EditStaffServlet extends HttpServlet{
 			throws IOException {
 
 		List<Staff> staffList = data.getAllStaff();
-		
+	
 		String http = "";
 
 		String staff = " ";

@@ -54,7 +54,7 @@ public class ViewStaffServlet extends HttpServlet{
 		String http = "";
 		
 		
-		List<Staff> users = data.getAllStaff();
+		List<Staff> users = data.getAllStaff(); 
 		
 		
 		http += "<form id=\"ccf\" method=\"POST\" action=\"/viewStaff\">"
