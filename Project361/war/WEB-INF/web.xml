@@ -101,14 +101,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<url-pattern>/editSection</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+    	<servlet-name>AuthenticateLogin</servlet-name>
+    	<servlet-class>edu.uwm.cs361.AuthenticationServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
     	<servlet-name>AuthenticateLogin</servlet-name>
     	<url-pattern>/authenticateLogin</url-pattern>   
 	</servlet-mapping>
-	<servlet>
-    	<servlet-name>AuthenticateLogin</servlet-name>
-    	<jsp-file>/WEB-INF/authenticateLogin.jsp</jsp-file>
-	</servlet>
+
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

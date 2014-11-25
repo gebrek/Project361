@@ -1,36 +1,40 @@
-<%@ page import="java.util.List" %>
-<%@ page import="edu.uwm.cs361.DatastoreServ" %>
-<%@ page import="edu.uwm.cs361.Staff" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Authenticating...</title>
-    </head>
-    <body>
-        <%
-        
-        String username = request.getParameter("login");
-        String password = request.getParameter("password");
+package edu.uwm.cs361;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@SuppressWarnings("serial")
+public class AuthenticationServlet  extends HttpServlet{
+
+	@Override
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	{
+		String username = req.getParameter("login");
+        String password = req.getParameter("password");
         
         DatastoreServ ds = new DatastoreServ();
         
-        //admin?
+      //admin?
         if (username.equals("admin@uwm.edu")) {
         	
         	if ( password.equals(ds.getAdminPassword()) ) {
         		
         		Cookie c = new Cookie("username", username);
-    			response.addCookie(c);
+    			resp.addCookie(c);
     			
-        		response.sendRedirect("/project");
+        		resp.sendRedirect("/project");
         	}
         	else {
-        		response.sendRedirect("loginError.html");
+        		resp.sendRedirect("loginError.html");
         	}
         }
         
-        else {
+else {
         	
         	//get all users
         	List<Staff> staffList = ds.getAllStaff();
@@ -51,21 +55,18 @@
 	        			//System.out.println("Passes matched");
 	        			validUser = true;
 	            		Cookie c = new Cookie("username", username);
-	        			response.addCookie(c);
-						response.sendRedirect("/project");
+	        			resp.addCookie(c);
+						resp.sendRedirect("/project");
 	                    break;
 	        		}
 	        		else {
 	        			//System.out.println("Passes failed");
-	        			response.sendRedirect("loginError.html");
+	        			resp.sendRedirect("loginError.html");
 	        			break;
 	        		}
         		}
         	}
-	        if(validUser == false) response.sendRedirect("loginError.html");
+	        if(validUser == false) resp.sendRedirect("loginError.html");
         }
-        
-        
-        %>
-    </body>
-</html>
+	}
+}
