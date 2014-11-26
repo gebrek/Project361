@@ -2,6 +2,7 @@ package edu.uwm.cs361;
 
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.regex.*;
 
 public class Scrape {
@@ -20,6 +21,10 @@ public class Scrape {
 		
 		getURL("http://www4.uwm.edu/schedule/index.cfm?a1=subject_details&subject=COMPSCI&strm=2149");
 	}
+	public static void main(String[] args) throws IOException{
+//		getURL("http://www4.uwm.edu/schedule/index.cfm?a1=subject_details&subject=COMPSCI&strm=2149");
+		getURL("file:/home/ovid/workspace2/UWM Online Schedule of Classes: Results.html");
+	}
 	
 	/**
 	 * Gets a buffer containing all the html form an url
@@ -27,49 +32,74 @@ public class Scrape {
 	 * @throws IOException
 	 */
 	private static void getURL(String url) throws IOException {
-		
 		URL place = new URL(url);
-		
 		String buf = "";
-		
 		BufferedReader in = new BufferedReader(new InputStreamReader(place.openStream()));
-		
 		String inputLine;
-		
 		while ((inputLine = in.readLine()) != null) {
-			
 			if(inputLine.trim().isEmpty()) {
-				
 				continue;
 			}
-			
-			buf += removeTags(inputLine).trim() + " ";
+//			buf += removeTags(inputLine).trim() + " ";
+			buf += inputLine;
 		}
-		
 		in.close();
-		
-		processCourses(buf);
+//		processCourses(buf);
+		getAllCourses(buf);
 	}
 	
+	private static void getAllCourses(String text) throws FileNotFoundException, UnsupportedEncodingException{
+		Pattern pattern = Pattern.compile("<td class=\"body copy\">\\s*<span class=\"subhead\">.*?</div>\\s*</td>\\s*</tr>\\s*<tr>");
+		Matcher matcher = pattern.matcher(text);
+		ArrayList<String> rawCourses = new ArrayList<String>();
+		while(matcher.find()){
+			rawCourses.add(matcher.group());
+		}
+		getCourseAttributes(rawCourses.get(3));
+		getCourseSections(rawCourses.get(3));
+	}
+	private static void getCourseAttributes(String course){
+		Pattern pattern = Pattern.compile("<span class=\"subhead\">.*?</span>");
+		Matcher matcher = pattern.matcher(course);
+		matcher.find();
+		String[] temp = removeTags(matcher.group()).split(":");
+		for(String s : temp){
+			System.out.println(s.trim());
+		}
+	}
+	private static void getCourseSections(String course) throws FileNotFoundException, UnsupportedEncodingException{
+		Pattern pattern = Pattern.compile("<tr class=\"body copy\".*?>.*?</tr>");
+		Matcher matcher = pattern.matcher(course);
+		ArrayList<String> rawSections = new ArrayList<String>();
+		while(matcher.find()){
+			rawSections.add(matcher.group());
+		}
+		getSectionAttributes(rawSections.get(0));
+	}
+	private static void getSectionAttributes(String section) {
+		Pattern pattern = Pattern.compile("<td style.*?>.*?</td>");
+		Matcher matcher = pattern.matcher(section);
+		String[] attributes = new String[11]; 
+		// all sections have 11 <td> tags though not all are needed
+		for(int i=0; i<11 ; i++){
+			matcher.find();
+			attributes[i] = removeTags(matcher.group()).trim();
+			System.out.println(attributes[i]);
+		}
+		
+	}
 	/**
 	 * Retrieves courses with regex
 	 * @param text
 	 */
 	private static void processCourses(String text){
-		
 		Pattern pattern = Pattern.compile("COMPSCI[-\\ ]\\d{3}(?:(?!div_course_details).)*?div_course_details");
 		Matcher matcher = pattern.matcher(text);
-		
 		int courseid = 1;
-		
 		while (matcher.find()){
-			
 			String g = matcher.group();
-			
 			_ds.addCourse(courseid+"", slurpTitle(g),slurpCourseNumber(g));
-			
 			processSections(courseid,g);
-			
 			courseid++;
 		}
 	}
