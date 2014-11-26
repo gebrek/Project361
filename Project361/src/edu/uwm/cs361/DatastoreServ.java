@@ -263,6 +263,7 @@ public class DatastoreServ {
 		
 		staff.setName(nameIn);
 		staff.setPassword(password);
+		staff.setPermissions(stafftype);
 		
 		_pm.makePersistent(staff);
 	}
