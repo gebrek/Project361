@@ -95,8 +95,11 @@ public class ViewStaffServlet extends HttpServlet{
 		+					"</td>"
 		+				"</tr>";
 		
-		for(Staff user:users){
-			if(user.getName().equals(staff)){					
+		Staff user = null;
+		if (!staff.isEmpty() && staff != null)
+			user = data.getStaff(staff);
+		
+		if(user != null){					
 				http+=	"<tr>"
 				+			"<td class='view-staff'>"
 				+				"Name:<br>"
@@ -123,7 +126,6 @@ public class ViewStaffServlet extends HttpServlet{
 				+				user.getHomePhone() + "<br>"
 				+			"</td>"
 				+		"</tr>";
-			}
 		}
 		
 		http+= 		"</table>"

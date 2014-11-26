@@ -235,7 +235,7 @@ public class DatastoreServ {
 	 * @return Staff object from ds
 	 */
 	public Staff getStaff(String staff) {
-		System.out.println("Tried getting: " + staff);
+
 		Query q = _pm.newQuery(Staff.class);
 			
 		q.setFilter("name=='"+staff+"'");
