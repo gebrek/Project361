@@ -141,6 +141,15 @@ public class DatastoreServ {
 		
 		_pm.makePersistent(course);
 	}
+	public void addCourse(Course course){
+		_pm.makePersistent(course);
+	}
+	public void addCourseAll(List<Course> courses){
+//		for(Course c : courses){
+//			addCourse(c);
+//		}
+		_pm.makePersistentAll(courses);
+	}
 	
 	/**
 	 * Adds the section to datastore
@@ -158,7 +167,6 @@ public class DatastoreServ {
 	public void addSection(String sectionid, String courseid, String units,
 			String designation, String hours, String days,
 			String dates, String secInstructor, String room) {
-		
 		String[] temp = designation.split(" ");
 		
 		Section section = new Section();
@@ -174,6 +182,12 @@ public class DatastoreServ {
 		section.setUnits(units);
 		
 		_pm.makePersistent(section);
+	}
+	public void addSection(Section section){
+		_pm.makePersistent(section);
+	}
+	public void addSectionAll(List<Section> sections){
+		_pm.makePersistentAll(sections);
 	}
 	
 	/**
@@ -267,6 +281,6 @@ public class DatastoreServ {
 		
 		_pm.makePersistent(staff);
 	}
-
+	
 	
 }

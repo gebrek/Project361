@@ -18,7 +18,7 @@ import edu.uwm.cs361.DemeritDatastoreService;;
 @SuppressWarnings("serial")
 public class MyContactServlet extends HttpServlet{
 	ProjectServlet page = new ProjectServlet();
-	DemeritDatastoreService ds = new DemeritDatastoreService();
+	DatastoreServ ds = new DatastoreServ();
 	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
