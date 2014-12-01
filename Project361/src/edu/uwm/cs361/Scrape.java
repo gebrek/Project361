@@ -19,13 +19,7 @@ public class Scrape {
 	public static void getCourseListandStore() throws IOException{
 		
 		_ds.deleteCourses();
-//		getURL("file:/home/ovid/workspace2/UWM Online Schedule of Classes: Results.html");
-
 		getURL("http://www4.uwm.edu/schedule/index.cfm?a1=subject_details&subject=COMPSCI&strm=2149");
-	}
-	public static void main(String[] args) throws IOException{
-//		getURL("http://www4.uwm.edu/schedule/index.cfm?a1=subject_details&subject=COMPSCI&strm=2149");
-		getURL("file:/home/ovid/workspace2/UWM Online Schedule of Classes: Results.html");
 	}
 	
 	/**
