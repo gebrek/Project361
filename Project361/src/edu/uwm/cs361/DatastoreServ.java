@@ -158,7 +158,7 @@ public class DatastoreServ {
 	public void addSection(String sectionid, String courseid, String units,
 			String designation, String hours, String days,
 			String dates, String secInstructor, String room) {
-		
+		// hahaha holy shit
 		String[] temp = designation.split(" ");
 		
 		Section section = new Section();
@@ -174,6 +174,12 @@ public class DatastoreServ {
 		section.setUnits(units);
 		
 		_pm.makePersistent(section);
+	}
+	public void addSection(Section section){
+		_pm.makePersistent(section);
+	}
+	public void addSections(List<Section> sections){
+		_pm.makePersistent(sections);
 	}
 	
 	/**
@@ -266,6 +272,6 @@ public class DatastoreServ {
 		
 		_pm.makePersistent(staff);
 	}
-
+	
 	
 }

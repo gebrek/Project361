@@ -38,6 +38,32 @@ public class Section implements Comparable<Section>{
 	@Persistent
 	private String room;
 	
+	public Section(String secid, String crsid, String un, String ty, String sec,
+			String hrs, String dys, String dts, String inst, String rm){
+		sectionid = secid;
+		courseid = crsid;
+		units = un;
+		type = ty;
+		section = sec;
+		hours = hrs;
+		days = dys;
+		dates = dts;
+		instructor = inst;
+		room = rm;
+	}
+	public Section(){
+		sectionid = null;
+		courseid = null;
+		units = null;
+		type = null;
+		section = null;
+		hours = null;
+		days = null;
+		dates = null;
+		instructor = null;
+		room = null;
+	}
+	
 	/**
 	 * @return key for datastore
 	 */

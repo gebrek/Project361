@@ -3,6 +3,7 @@ package edu.uwm.cs361;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.*;
 
 public class Scrape {
@@ -45,38 +46,49 @@ public class Scrape {
 		}
 		in.close();
 //		processCourses(buf);
-		getAllCourses(buf);
+		ArrayList<Course> crs = getAllCourses(buf);
+		for(Course c : crs){
+			System.out.println(c.toString());
+		}
 	}
 	
-	private static void getAllCourses(String text) throws FileNotFoundException, UnsupportedEncodingException{
+	private static ArrayList<Course> getAllCourses(String text) throws FileNotFoundException, UnsupportedEncodingException{
 		Pattern pattern = Pattern.compile("<td class=\"body copy\">\\s*<span class=\"subhead\">.*?</div>\\s*</td>\\s*</tr>\\s*<tr>");
 		Matcher matcher = pattern.matcher(text);
 		ArrayList<String> rawCourses = new ArrayList<String>();
 		while(matcher.find()){
 			rawCourses.add(matcher.group());
 		}
-		getCourseAttributes(rawCourses.get(3));
-		getCourseSections(rawCourses.get(3));
+		ArrayList<Course> courses = new ArrayList<Course>();
+		for(String s : rawCourses){
+			courses.add(courses.size(),getCourseAttributes(s));
+		}
+		return courses;
 	}
-	private static void getCourseAttributes(String course){
+	private static Course getCourseAttributes(String course){
 		Pattern pattern = Pattern.compile("<span class=\"subhead\">.*?</span>");
 		Matcher matcher = pattern.matcher(course);
 		matcher.find();
 		String[] temp = removeTags(matcher.group()).split(":");
-		for(String s : temp){
-			System.out.println(s.trim());
-		}
+		String[] attr = new String[2];
+		attr[0] = temp[0].trim();
+		attr[1] = temp[1].trim();
+		return new Course(attr[0],attr[1],"",getCourseSections(course,attr));
 	}
-	private static void getCourseSections(String course) throws FileNotFoundException, UnsupportedEncodingException{
+	private static ArrayList<Section> getCourseSections(String course, String[] crs){
 		Pattern pattern = Pattern.compile("<tr class=\"body copy\".*?>.*?</tr>");
 		Matcher matcher = pattern.matcher(course);
 		ArrayList<String> rawSections = new ArrayList<String>();
 		while(matcher.find()){
 			rawSections.add(matcher.group());
 		}
-		getSectionAttributes(rawSections.get(0));
+		ArrayList<Section> secs = new ArrayList<Section>();
+		for(String s : rawSections){
+			secs.add(secs.size(),getSectionAttributes(s,crs));
+		}
+		return secs;
 	}
-	private static void getSectionAttributes(String section) {
+	private static Section getSectionAttributes(String section, String[] crs) {
 		Pattern pattern = Pattern.compile("<td style.*?>.*?</td>");
 		Matcher matcher = pattern.matcher(section);
 		String[] attributes = new String[11]; 
@@ -84,9 +96,10 @@ public class Scrape {
 		for(int i=0; i<11 ; i++){
 			matcher.find();
 			attributes[i] = removeTags(matcher.group()).trim();
-			System.out.println(attributes[i]);
 		}
-		
+		return new Section(attributes[3],crs[0],attributes[2],attributes[3].substring(0,3),
+				attributes[3].substring(attributes[3].length()-3, attributes[3].length()),
+				attributes[5],attributes[6],attributes[7],attributes[8],attributes[9]);
 	}
 	/**
 	 * Retrieves courses with regex
