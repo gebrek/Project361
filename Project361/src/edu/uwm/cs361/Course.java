@@ -15,7 +15,7 @@ public class Course implements Comparable<Course>{
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;
-	@Persistent(mappedBy = "courseid")
+	@Persistent(mappedBy = "course")
 	private List<Section> sections;
 	@Persistent
 	private String courseid;
@@ -61,6 +61,12 @@ public class Course implements Comparable<Course>{
 		this.title = title;
 	}
 	
+	public List<Section> getSections(){
+		return this.sections;
+	}
+	public void setSections(List<Section> secs){
+		this.sections = secs;
+	}
 	/**
 	 * 
 	 * @return Course id (locale number used for reference in datastore)
@@ -120,7 +126,7 @@ public class Course implements Comparable<Course>{
 	 */
 	@Override
 	public String toString() {
-		return "Course [designation=" + courseid + ", title=" + title
+		return "Course [courseid=" + courseid + ", title=" + title
 				+ ", sections=" + sections + "]";
 	}
 

@@ -37,9 +37,11 @@ public class Section implements Comparable<Section>{
 	private String instructor;
 	@Persistent
 	private String room;
+	@Persistent
+	private Course course;
 	
 	public Section(String secid, String crsid, String un, String ty, String sec,
-			String hrs, String dys, String dts, String inst, String rm){
+			String hrs, String dys, String dts, String inst, String rm, Course crs){
 		sectionid = secid;
 		courseid = crsid;
 		units = un;
@@ -50,6 +52,7 @@ public class Section implements Comparable<Section>{
 		dates = dts;
 		instructor = inst;
 		room = rm;
+		course = crs;
 	}
 	public Section(){
 		sectionid = null;
@@ -62,6 +65,7 @@ public class Section implements Comparable<Section>{
 		dates = null;
 		instructor = null;
 		room = null;
+		course = null;
 	}
 	
 	/**
@@ -247,6 +251,14 @@ public class Section implements Comparable<Section>{
 				section, units, hours, days, instructor, room);
 	}
 
+	@Override
+	public String toString() {
+		return "Section [key=" + key + ", sectionid=" + sectionid
+				+ ", courseid=" + courseid + ", units=" + units + ", type="
+				+ type + ", section=" + section + ", hours=" + hours
+				+ ", days=" + days + ", dates=" + dates + ", instructor="
+				+ instructor + ", room=" + room + "]\n";
+	}
 	/**
 	 * Compares this section to s. Works like a standard compare, compare key = section number
 	 */

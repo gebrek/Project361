@@ -19,7 +19,8 @@ public class Scrape {
 	public static void getCourseListandStore() throws IOException{
 		
 		_ds.deleteCourses();
-		
+//		getURL("file:/home/ovid/workspace2/UWM Online Schedule of Classes: Results.html");
+
 		getURL("http://www4.uwm.edu/schedule/index.cfm?a1=subject_details&subject=COMPSCI&strm=2149");
 	}
 	public static void main(String[] args) throws IOException{
@@ -48,8 +49,14 @@ public class Scrape {
 //		processCourses(buf);
 		ArrayList<Course> crs = getAllCourses(buf);
 		for(Course c : crs){
-			System.out.println(c.toString());
+			for(Section s : c.getSections()){
+				System.out.println(c.getID() + "\t:\t" + s.getID() + ":" + s.getSection());
+			}
 		}
+		_ds.addCourseAll(crs);
+//		for(Course c : crs){
+//			_ds.addSections(c.getSections());
+//		}
 	}
 	
 	private static ArrayList<Course> getAllCourses(String text) throws FileNotFoundException, UnsupportedEncodingException{
@@ -73,9 +80,13 @@ public class Scrape {
 		String[] attr = new String[2];
 		attr[0] = temp[0].trim();
 		attr[1] = temp[1].trim();
-		return new Course(attr[0],attr[1],"",getCourseSections(course,attr));
+		//COMPSCI 101(111)
+		//COMPSCI-201
+		Course c = new Course(attr[0],attr[1],attr[0].substring(8, 11),null);
+		c.setSections(getCourseSections(course,c));
+		return c;
 	}
-	private static ArrayList<Section> getCourseSections(String course, String[] crs){
+	private static ArrayList<Section> getCourseSections(String course, Course crs){
 		Pattern pattern = Pattern.compile("<tr class=\"body copy\".*?>.*?</tr>");
 		Matcher matcher = pattern.matcher(course);
 		ArrayList<String> rawSections = new ArrayList<String>();
@@ -84,11 +95,12 @@ public class Scrape {
 		}
 		ArrayList<Section> secs = new ArrayList<Section>();
 		for(String s : rawSections){
+			if(getSectionAttributes(s,crs)==null) continue;
 			secs.add(secs.size(),getSectionAttributes(s,crs));
 		}
 		return secs;
 	}
-	private static Section getSectionAttributes(String section, String[] crs) {
+	private static Section getSectionAttributes(String section, Course crs) {
 		Pattern pattern = Pattern.compile("<td style.*?>.*?</td>");
 		Matcher matcher = pattern.matcher(section);
 		String[] attributes = new String[11]; 
@@ -97,9 +109,13 @@ public class Scrape {
 			matcher.find();
 			attributes[i] = removeTags(matcher.group()).trim();
 		}
-		return new Section(attributes[3],crs[0],attributes[2],attributes[3].substring(0,3),
+		// a couple sections are stubs that only contain less than minimum information
+		if(attributes[3].equals("&nbsp;")){
+			return null;
+		}
+		return new Section(attributes[3],crs.getID(),attributes[2],attributes[3].substring(0,3),
 				attributes[3].substring(attributes[3].length()-3, attributes[3].length()),
-				attributes[5],attributes[6],attributes[7],attributes[8],attributes[9]);
+				attributes[5],attributes[6],attributes[7],attributes[8],attributes[9],crs);
 	}
 	/**
 	 * Retrieves courses with regex
