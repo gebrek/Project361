@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.servlet.http.*;
 
+import edu.uwm.cs361.*;
+
 @SuppressWarnings("serial")
 public class ProjectServlet extends HttpServlet {
 	
@@ -16,6 +18,8 @@ public class ProjectServlet extends HttpServlet {
 	public ProjectServlet(){};
 
 	DatastoreServ data = new DatastoreServ();
+	Staff user = null;
+	String username = null;
 	
 	/*
 	 * (non-Javadoc)
@@ -41,6 +45,10 @@ public class ProjectServlet extends HttpServlet {
 		}
 		http += "</div>"
 		+		"</form>";
+		
+		user = null;
+		username = null;
+		user = checkLogin(req, resp);
 		banner(req,resp);
 		layout(http,req,resp);
 		menu(req,resp);
@@ -60,8 +68,8 @@ public class ProjectServlet extends HttpServlet {
 	 */
 	public void banner(HttpServletRequest req, HttpServletResponse resp)throws IOException{
 		
-		boolean loggedIn = checkLogin(req, resp);
-		if (!loggedIn)
+		//Staff loggedIn = checkLogin(req, resp);
+		if (user == null && !username.equals("admin@uwm.edu"))
 		{
 			resp.sendRedirect("/index.html");
 		}
@@ -197,8 +205,25 @@ public class ProjectServlet extends HttpServlet {
 //		resp.getWriter().println("				</ul>");
 //		resp.getWriter().println("			</li>");
 //		resp.getWriter().println("		</ul>");
+//		resp.getWriter().println("		<ul class=\"buttons-outline\">");
+//		resp.getWriter().println("			<li> <a href=\"/logout\">Logout</a></li>");
+//		resp.getWriter().println("		</ul>");
+		resp.getWriter().println("	</div>");
+		resp.getWriter().println("</div>");
+		
+		resp.getWriter().println("<div class=\"menu-logout\">");					
+		resp.getWriter().println("	<div class=\"buttons-logout\">");		
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
-		resp.getWriter().println("			<li> <a href=\"/logout\">Logout</a></li>");
+		resp.getWriter().println("			<li> <a href='#'>Logout</a>");
+		resp.getWriter().println("				<ul class=\"buttons-outline\">");
+												if(user != null){
+		resp.getWriter().println("					<li><a href='/logout'>" + user.getEmail().toString() + "</a></li>");
+												}
+												else
+		resp.getWriter().println("					<li><a href='/logout'> admin@uwm.edu </a></li>");
+												
+		resp.getWriter().println("				</ul>");
+		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");
 		resp.getWriter().println("	</div>");
 		resp.getWriter().println("</div>");
@@ -214,10 +239,9 @@ public class ProjectServlet extends HttpServlet {
 	 * @return
 	 * @throws IOException
 	 */
-	public boolean checkLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public Staff checkLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
 		//use for sprint3
-		String username = null;
 
 		Cookie[] cookies = req.getCookies();
 
@@ -225,11 +249,20 @@ public class ProjectServlet extends HttpServlet {
 			for (Cookie c : cookies) {
 				if (c.getName().equals("username")) {
 					username = c.getValue();
-					return true;
 				}
 			}
 		}
-		return false;
+		if(username == null)
+			return null;
+
+		List<Staff> staffList = data.getAllStaff();
+		for(Staff usern:staffList){
+			if(usern.getEmail().toString().equals(username)){
+				return usern;
+			}
+		}
+
+		return user;
 
 	}
 }
