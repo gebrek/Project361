@@ -17,7 +17,7 @@ public class EditMyContactServlet extends HttpServlet{
 			throws IOException {
 
 		page.banner(req,resp);
-		page.layout(displayForm(req,resp, new ArrayList<String>(), page.user.getName()), req, resp);
+		page.layout(displayForm(req,resp, new ArrayList<String>(), page.getCurrentUser().getName()), req, resp);
 		page.menu(req,resp);
 		
 	}
@@ -87,11 +87,11 @@ public class EditMyContactServlet extends HttpServlet{
 		
 		if (errors.size() > 0) {
 			page.banner(req,resp);
-			page.layout(displayForm (req,resp,errors, page.user.getName()),req,resp);
+			page.layout(displayForm (req,resp,errors, page.getCurrentUser().getName()),req,resp);
 			page.menu(req,resp);
 		} else {
 			data.updateStaff(username, firstname, password, stafftype);
-			data.updateStaffContact(page.user.getName(), office, officePhone, homeAddress, homePhone);
+			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone);
 			
 			String http = "";
 			
