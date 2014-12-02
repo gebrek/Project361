@@ -47,7 +47,7 @@ public class ProjectServlet extends HttpServlet {
 		+ 			"<div id=\"sub\">";
 		
 		ArrayList<Staff> users = data.getAllStaff();
-		http += "Ther is " + users.size() + " users.<br><br>";
+		http += "There is " + users.size() + " users.<br><br>";
 		for(Staff user:users){
 			http += "Name: " + user.getName() + "<br>";
 			
