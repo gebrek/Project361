@@ -82,7 +82,7 @@ public class ViewStaffServlet extends HttpServlet{
 													http += "<option>" + user.getName() + "</option>";
 											}
 										}
-										else if(!page.user.getPermissions().equals("Instructor")){
+										else if(!page.getCurrentUser().getPermissions().equals("Instructor")){
 											http += "<option disabled>Instructor's</option>";		
 											for(Staff user:users){
 												if(!user.getPermissions().equals("TA"))

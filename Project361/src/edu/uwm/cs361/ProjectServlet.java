@@ -18,8 +18,17 @@ public class ProjectServlet extends HttpServlet {
 	public ProjectServlet(){};
 
 	DatastoreServ data = new DatastoreServ();
-	Staff user = null;
+	private Staff user = null;
 	String username = null;
+	
+	/**
+	 * 
+	 * @return Staff which is currently logged in
+	 */
+	public Staff getCurrentUser()
+	{
+		return user;
+	}
 	
 	/*
 	 * (non-Javadoc)

@@ -27,7 +27,7 @@ public class ViewMyContactServlet extends HttpServlet{
 		//get the value from the dropdown
 		
 		page.banner(req,resp);
-		page.layout(displayForm(req,resp,page.user.getName()),req,resp);
+		page.layout(displayForm(req,resp,page.getCurrentUser().getName()),req,resp);
 		page.menu(req,resp);
 	}
 	
