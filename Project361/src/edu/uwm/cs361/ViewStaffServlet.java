@@ -75,10 +75,19 @@ public class ViewStaffServlet extends HttpServlet{
 		+							"Staff:"
 		+							"<select id='staffname' name='staffname' class='staff-select staff-view-margin'>"
 		+									"<option value = '' selected> Select a Person </option>";
-										http += "<option disabled>Instructor's</option>";		
-										for(Staff user:users){
-											if(!user.getPermissions().equals("TA"))
-												http += "<option>" + user.getName() + "</option>";
+										if(page.username.equals("admin@uwm.edu")){
+											http += "<option disabled>Instructor's</option>";		
+											for(Staff user:users){
+												if(!user.getPermissions().equals("TA"))
+													http += "<option>" + user.getName() + "</option>";
+											}
+										}
+										else if(!page.user.getPermissions().equals("Instructor")){
+											http += "<option disabled>Instructor's</option>";		
+											for(Staff user:users){
+												if(!user.getPermissions().equals("TA"))
+													http += "<option>" + user.getName() + "</option>";
+											}
 										}
 										http += "<option disabled>TA's</option>";
 										for(Staff user:users){
@@ -131,6 +140,16 @@ public class ViewStaffServlet extends HttpServlet{
 		http+= 		"</table>"
 		+		"</div>"
 		+	"</form>";
+		
+//		http += "<form method='Get' action='/editStaff'>"
+//		+			"<table>"
+//		+				"<tr>"
+//		+					"<td>"
+//		+						"<input class='view-edit-staff' type='submit' value='Edit' />"
+//		+					"</td>"
+//		+				"</tr>"
+//		+			"</table>"
+//		+		"</form>";
 		return http;
 	}
 
