@@ -559,6 +559,32 @@ input
 	left:-200px;
 	width:400px
 }
+.view-mycontact-result
+{
+	top:25px;
+	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
+	color:#ffffff;;
+	position:relative;
+	left:15px;
+}
+
+.view-mycontact
+{
+	top:25px;
+	left: 100px;
+	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
+	color:#FFE000;;
+	position:relative;
+}
+.view-mycontact-result1
+{
+	top:25px;
+	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
+	color:#ffffff;;
+	position:relative;
+	left:115px;
+	width:400px
+}
 .view-course
 {
 	top:5px;

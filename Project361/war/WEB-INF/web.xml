@@ -29,12 +29,21 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>MyContactServlet</servlet-name>
-		<servlet-class>edu.uwm.cs361.MyContactServlet</servlet-class>
+		<servlet-name>EditMyContactServlet</servlet-name>
+		<servlet-class>edu.uwm.cs361.EditMyContactServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>MyContactServlet</servlet-name>
-		<url-pattern>/myContact</url-pattern>
+		<servlet-name>EditMyContactServlet</servlet-name>
+		<url-pattern>/editMyContact</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ViewMyContactServlet</servlet-name>
+		<servlet-class>edu.uwm.cs361.ViewMyContactServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ViewMyContactServlet</servlet-name>
+		<url-pattern>/viewMyContact</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

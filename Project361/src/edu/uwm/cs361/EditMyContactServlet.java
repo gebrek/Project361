@@ -3,11 +3,12 @@ package edu.uwm.cs361;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.*;
 
 
 @SuppressWarnings("serial")
-public class MyContactServlet extends HttpServlet{
+public class EditMyContactServlet extends HttpServlet{
 	ProjectServlet page = new ProjectServlet();
 	DatastoreServ data = new DatastoreServ();
 	
@@ -45,7 +46,12 @@ public class MyContactServlet extends HttpServlet{
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		
-		String toEdit = req.getParameter("staff");
+
+		//get all the inputs
+		String username = req.getParameter("username");
+		String password = req.getParameter("password");
+		String firstname = req.getParameter("firstname");
+		String stafftype = req.getParameter("stafftype");
 		String officePhone = req.getParameter("officePhone");
 		String office = req.getParameter("office");
 		String homeAddress = req.getParameter("homeAddress");
@@ -56,6 +62,19 @@ public class MyContactServlet extends HttpServlet{
 		officePhone = formatPhone(officePhone);
 		homePhone = formatPhone(homePhone);
 		
+		//check for the empty inputs
+		if(username != null ){
+			username = username.toLowerCase();
+			if (password.isEmpty()) {
+				errors.add("Password is required.");
+			} 
+			if (firstname.isEmpty()) {
+				errors.add("First is required.");
+			} 
+			if (stafftype.isEmpty()) {
+				errors.add("Staff Type is required.");
+			}
+		}
 		if (officePhone.length() != 10)
 			errors.add("Enter 10 digit phone number for office phone");
 		if (office == null || office.length() < 6)
@@ -68,19 +87,22 @@ public class MyContactServlet extends HttpServlet{
 		
 		if (errors.size() > 0) {
 			page.banner(req,resp);
-			page.layout(displayForm (req,resp,errors, toEdit),req,resp);
+			page.layout(displayForm (req,resp,errors, page.user.getName()),req,resp);
 			page.menu(req,resp);
 		} else {
-	
-			data.updateStaffContact(toEdit, office, officePhone, homeAddress, homePhone);
+			data.updateStaff(username, firstname, password, stafftype);
+			data.updateStaffContact(page.user.getName(), office, officePhone, homeAddress, homePhone);
 			
 			String http = "";
 			
-			http += "<form id=\"ccf\" method=\"GET\" action=\"/myContact\">"
+			http += "<form id=\"ccf\" method=\"GET\" action=\"/viewMyContact\">"
 			+			"<div id=\"title-create-staff\">"
 			+				"Edit Contact info: " + req.getParameter("staff")
 			+			"</div>"
 			+ 			"<div id=\"sub\">"
+			+				"UserName: " + username + "<br>" 
+			+				"Name: " + firstname + "<br><br>"  
+			+				"Staff Type: " + stafftype + "<br>" 
 			+				"Office: " + office + "<br>" 
 			+				"Office Phone: " + officePhone + "<br>" 
 			+				"Home Address: " + homeAddress + "<br>" 
@@ -120,15 +142,10 @@ public class MyContactServlet extends HttpServlet{
 		resp.setContentType("text/html");
 		String http = "";
 		
-		http += "<form id=\"ccf\" method=\"POST\" action=\"/editStaffContact\">"
+		http += "<form id=\"ccf\" method=\"POST\" action=\"/editMyContact\">"
 		+			"<div id=\"title-create-staff\">"
 		+				"Edit Contact info: " + staff
 		+			"</div>";
-		
-		String office = staffToUpdate.getOfficeLoc();
-		String officePhone = staffToUpdate.getOfficePhone();
-		String homeAddress = staffToUpdate.getHomeAddress();
-		String homePhone = staffToUpdate.getHomePhone();
 		
 
 		if (errors.size() > 0) {
@@ -145,11 +162,18 @@ public class MyContactServlet extends HttpServlet{
 		+				"<table>"
 		+					"<tr>"
 		+						"<td class=\"form\" >"
-		+							"<input class='createStaffInput' type=\"hidden\" id='staff' name='staff' value='" + staff + "'/><br>"
-		+							"Office: <input class='createStaffInput' type=\"text\" id='officeLoc' name='office' value='" + office + "'required/><br>"
-		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + officePhone + "'required/><br>"
-		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + homeAddress + "'required/><br>"
-		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + homePhone + "'required/><br>"
+		+							"Username *: <input readonly class='createStaffInput' type=\"text\" id='username' name='username' value='" + staffToUpdate.getEmail() + "'/><br>"
+		+							"Password *: <input class='createStaffInput' type=\"password\" id='password' name='password' value='" + staffToUpdate.getPassword() + "'required/><br>"
+		+							"Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + staffToUpdate.getName() + "'required/><br>"
+		+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + staffToUpdate.getPermissions() + "' required>"
+		+											"<option value = '' selected> Select a Type </option>"
+		+											"<option> Instructor </option>"
+		+											"<option> TA </option>"
+		+										"</select><br>"
+		+							"Office: <input class='createStaffInput' type=\"text\" id='officeLoc' name='office' value='" + staffToUpdate.getOfficeLoc() + "'required/><br>"
+		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + staffToUpdate.getOfficePhone() + "'required/><br>"
+		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + staffToUpdate.getHomeAddress() + "'required/><br>"
+		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + staffToUpdate.getHomePhone() + "'required/><br>"
 		+						"</td>"
 		+					"</tr>"
 		+				"</table>"
