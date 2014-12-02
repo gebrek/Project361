@@ -21,8 +21,8 @@ public class Staff {
 	private String name;
 	@Persistent//(mappedBy = "instructor")
 	private ArrayList<Section> sectionsTaught;
-	//@Persistent
-	//private String officeHours;
+	@Persistent
+	private ArrayList<String> officeHours;
 	@Persistent
 	private String permissions;
 	@Persistent
@@ -74,7 +74,43 @@ public class Staff {
 	public String key() {
 		return key.toString();
 	}
-	
+	/**
+	 * 
+	 * @return string list of office hours
+	 */
+	public ArrayList<String> getOfficeHours(){
+		return officeHours;
+	}
+	/**
+	 * pushes argument to officeHours
+	 * @param hours
+	 */
+	public void addOfficeHours(String hours){
+		officeHours.add(hours);
+	}
+	/**
+	 * removes argument from officeHours if it exists
+	 * @param hours
+	 */
+	public void removeOfficeHours(String hours){
+		officeHours.remove(hours);
+	}
+	/**
+	 * tries to change an existing element of officeHours
+	 * does nothing if oldHours does not exist in officeHours
+	 * @param oldHours
+	 * @param newHours
+	 */
+	public void modifyOfficeHours(String oldHours, String newHours){
+		if(officeHours.indexOf(oldHours) >= 0)
+			officeHours.set(officeHours.indexOf(oldHours), newHours);
+	}
+	/**
+	 * empties officeHours
+	 */
+	public void removeOfficeHoursAll(){
+		officeHours.clear();
+	}
 	/**
 	 * getOfficeLoc
 	 * 
