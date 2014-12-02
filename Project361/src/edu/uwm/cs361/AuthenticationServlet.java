@@ -48,8 +48,8 @@ public class AuthenticationServlet extends HttpServlet {
 				// staff.getPassword());
 
 				if (staff.getEmail().equalsIgnoreCase(username)) {
-					System.out.println("" + password.length());
-					System.out.println("" + staff.getPassword().length());
+					//System.out.println("" + password.length());
+					//System.out.println("" + staff.getPassword().length());
 
 					if (staff.getPassword().equals(password)) {
 						// System.out.println("Passes matched");
