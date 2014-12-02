@@ -36,11 +36,9 @@ public class Scrape {
 			if(inputLine.trim().isEmpty()) {
 				continue;
 			}
-//			buf += removeTags(inputLine).trim() + " ";
 			buf += inputLine;
 		}
 		in.close();
-//		processCourses(buf);
 		ArrayList<Course> crs = getAllCourses(buf);
 		for(Course c : crs){
 			for(Section s : c.getSections()){
@@ -48,12 +46,38 @@ public class Scrape {
 			}
 		}
 		_ds.addCourseAll(crs);
-//		for(Course c : crs){
-//			_ds.addSections(c.getSections());
-//		}
 	}
 	
-	private static ArrayList<Course> getAllCourses(String text) throws FileNotFoundException, UnsupportedEncodingException{
+	/*
+	 * scraping repeatedly narrows the scope of text being processed until it reaches 
+	 * a portion which may easily be read in as fields for creating objects. the
+	 * overall structure of the page is as follows
+	 * * (head
+	 * *   ((course1 ID title
+	 * *      ((section1 <fields>)
+	 * *       (section2 <fields>)
+	 * *       ...))
+	 * *    (course2 ID title
+	 * *      ((section1 <fields>)
+	 * *       ...))
+	 * *    ...)
+	 * *   tail)
+	 * 
+	 * the process is relatively simple. 
+	 * getAllCourses discards head and tail and calls getCourseAttributes on everything that looks like a course
+	 * getCourseAttributes gathers information about the course including its sections via getCourseSections
+	 * getCourseSections is similar to getAllCourses; calling getSectionAttributes on everything that looks like a section
+	 * by the time getSectionAttributes is called, the text being parsed is regular and small enough that we can simply
+	 * 		construct a Section based on the content of the td tags 
+	 * that Section is then returned and the next one processed until no more remain
+	 * then the Course including those Sections is returned and the next one processed until no more remain
+	 */
+	
+	/**
+	 * @param text
+	 * @return list of all courses scraped
+	 */
+	private static ArrayList<Course> getAllCourses(String text){
 		Pattern pattern = Pattern.compile("<td class=\"body copy\">\\s*<span class=\"subhead\">.*?</div>\\s*</td>\\s*</tr>\\s*<tr>");
 		Matcher matcher = pattern.matcher(text);
 		ArrayList<String> rawCourses = new ArrayList<String>();
@@ -66,6 +90,10 @@ public class Scrape {
 		}
 		return courses;
 	}
+	/**
+	 * @param course
+	 * @return
+	 */
 	private static Course getCourseAttributes(String course){
 		Pattern pattern = Pattern.compile("<span class=\"subhead\">.*?</span>");
 		Matcher matcher = pattern.matcher(course);
@@ -80,6 +108,11 @@ public class Scrape {
 		c.setSections(getCourseSections(course,c));
 		return c;
 	}
+	/**
+	 * @param course
+	 * @param crs
+	 * @return
+	 */
 	private static ArrayList<Section> getCourseSections(String course, Course crs){
 		Pattern pattern = Pattern.compile("<tr class=\"body copy\".*?>.*?</tr>");
 		Matcher matcher = pattern.matcher(course);
@@ -94,6 +127,11 @@ public class Scrape {
 		}
 		return secs;
 	}
+	/**
+	 * @param section
+	 * @param crs
+	 * @return
+	 */
 	private static Section getSectionAttributes(String section, Course crs) {
 		Pattern pattern = Pattern.compile("<td style.*?>.*?</td>");
 		Matcher matcher = pattern.matcher(section);
@@ -111,39 +149,6 @@ public class Scrape {
 				attributes[3].substring(attributes[3].length()-3, attributes[3].length()),
 				attributes[5],attributes[6],attributes[7],attributes[8],attributes[9],crs);
 	}
-	/**
-	 * Retrieves courses with regex
-	 * @param text
-	 */
-	private static void processCourses(String text){
-		Pattern pattern = Pattern.compile("COMPSCI[-\\ ]\\d{3}(?:(?!div_course_details).)*?div_course_details");
-		Matcher matcher = pattern.matcher(text);
-		int courseid = 1;
-		while (matcher.find()){
-			String g = matcher.group();
-			_ds.addCourse(courseid+"", slurpTitle(g),slurpCourseNumber(g));
-			processSections(courseid,g);
-			courseid++;
-		}
-	}
-	
-
-	/**
-	 * Retrieves sections with regex from text
-	 * @param id
-	 * @param text
-	 */
-	private static void processSections(int id, String text){
-		
-		for(String str : getSections(text)){
-			
-			_ds.addSection(_sectionID+"", id+"", slurpUnits(str), slurpSecDesignation(str), 
-				slurpHours(str), slurpDays(str), slurpDates(str), 
-				slurpInstructor(str), slurpRoom(str));
-			
-			_sectionID++;
-		}
-	}
 	
 	/**
 	 * Removes unnecessary tags from line
@@ -152,141 +157,5 @@ public class Scrape {
 	private static String removeTags(String line){
 		// who can see anything with all those angle brackets everywhere?
 		return line.replaceAll("<[^<>]*>", ""); // regex a neat
-	}
-	
-	/**
-	 * Removes "nbsp" from text 
-	 * @param text
-	 * @return
-	 */
-	private static String killnbsp(String text){
-		// ended up only needing this in one place
-		// maybe should just factor it back it
-		return text.replaceAll("&nbsp;", "");
-	}
-	
-	/**
-	 * Uses passed regex expression to retrieve various course info 
-	 * @param text
-	 * @param regex
-	 * @return
-	 */
-	private static String slurper(String text, String regex){
-		
-		String group; 
-		
-		try {
-			
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(text);
-		matcher.find();
-		
-		group = matcher.group();
-		
-		} catch (IllegalStateException e) {
-			
-			return "";
-		}
-		
-		return group;
-	}
-	
-	/**
-	 * Gets course number 
-	 * @param text
-	 * @return
-	 */
-	private static String slurpCourseNumber(String text){
-		
-		String number = slurper(text, "^.*?(?=:)");
-		
-		return number.replaceFirst(".*?(?=\\d)", "");
-	}
-	
-	/**
-	 * Gets course title
-	 * 
-	 * @param text
-	 * @return
-	 */
-	private static String slurpTitle(String text){
-		return slurper(text, "(?<=:).*?(?=\\()").trim();
-	}
-	
-	/**
-	 * Gets courses sections
-	 * @param text
-	 * @return
-	 */
-	private static String[] getSections(String text){
-		// it sure would be nice if java had a map function
-		return text.replaceFirst("^.*?\\(FEE\\)", "").split("\\(FEE\\)");
-	}
-
-	/**
-	 * Gets courses units
-	 * @param text
-	 * @return
-	 */
-	private static String slurpUnits(String text){
-		return killnbsp(slurper(text, "^.*?(?=[A-Z])")).trim();
-	}
-	
-	/**
-	 * gets sections designation
-	 * @param text
-	 * @return
-	 */
-	private static String slurpSecDesignation(String text){
-		return slurper(text,"[A-Z]{3} \\d{3}");
-	}
-	/**
-	 * gets sections hours
-	 * @param text
-	 * @return
-	 */
-	private static String slurpHours(String text){
-		return slurper(text, "(?<=\\d{5}).*?(?=\\s{3})").trim();
-	}
-	/**
-	 * gets sections days
-	 * @param text
-	 * @return
-	 */
-	private static String slurpDays(String text){
-		return slurper(text,"(?<=\\s)[MTWRF\\-]{1,5}(?=\\s)");
-	}
-	/**
-	 * gets sections dates
-	 * @param text
-	 * @return
-	 */
-	private static String slurpDates(String text){
-		return slurper(text,"\\d{2}/\\d{2}-\\d{2}/\\d{2}");
-	}
-	/**
-	 * gets sections instuctor
-	 * @param text
-	 * @return
-	 */
-	private static String slurpInstructor(String text){
-		try{
-			return slurper(text, "[A-Z][a-z]+, [A-Z][a-z]+");
-		}
-		catch(Exception e){
-			return "";
-		}
-	}
-	/**
-	 * gets sections room
-	 * @param text
-	 * @return
-	 */
-	private static String slurpRoom(String text){
-		String step = slurpInstructor(text);
-		if(step.isEmpty())
-			return slurper(text.replaceFirst("^.{10}", ""),"(?<=;).*?(?=&)").trim(); // probably a better way to do this
-		return slurper(text,"(?<=" + step + ").*?(?=&)").trim();
-		// regex a best
 	}
 }
