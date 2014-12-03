@@ -134,7 +134,16 @@ public class EditSectionServlet extends HttpServlet {
 			html += "<option disabled> CS " + course.getNumber() + "</option>";
 			
 			for (Section section : sections) {
-				
+			
+				if (!page.getUsername().equals("admin@uwm.edu"))
+				{
+					if (page.getCurrentUser().getPermissions().equals("Instructor"))
+					{
+						if(!section.getInstructor().equalsIgnoreCase(page.getCurrentUser().getName()))
+							continue;
+					}
+				}
+
 				html += "<option value='"+course.getNumber() + " " + section.getID()+"'>"
 						+ "CS " + course.getNumber() + " - "
 						+ section.getType() + " " + section.getSection()

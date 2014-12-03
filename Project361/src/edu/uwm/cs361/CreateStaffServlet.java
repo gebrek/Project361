@@ -155,7 +155,7 @@ public class CreateStaffServlet extends HttpServlet{
 		+						"<td class=\"form\">"
 		+							"Username *: <input class='createStaffInput' type=\"text\" id='username' name='username' value='" + username + "' placeholder=\"format: you@uwm.edu\" pattern=\"^[_a-zA-Z0-9-]+@uwm.edu\" required/><br>"
 		+							"Password *: <input class='createStaffInput' type=\"password\" id='password' name='password' value='" + password + "'required/><br>"
-		+							"Confirm password *: <input class='createStaffInput' type=\"password\" id='passwordConfirm' name='passwordConfirm' required/><br>"
+		+							"Confirm pass *: <input class='createStaffInput' type=\"password\" id='passwordConfirm' name='passwordConfirm' required/><br>"
 		+							"First Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + firstname + "'required/><br>"
 		+							"Last Name *: <input class='createStaffInput' type=\"text\" id='lastname' name='lastname' value='" + lastname + "'required/><br>"
 		+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + stafftype + "'required>"
