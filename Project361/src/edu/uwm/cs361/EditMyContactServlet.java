@@ -91,7 +91,7 @@ public class EditMyContactServlet extends HttpServlet{
 			page.menu(req,resp);
 		} else {
 			data.updateStaff(username, firstname, password, null);
-			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone);
+ 			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone);
 			
 			String http = "";
 			
