@@ -243,7 +243,7 @@ public class DatastoreServ {
 	 * @param homePhone 10 digit phone for home
 	 */
 	public void updateStaffContact(String toEdit, String office,
-			String officePhone, String homeAddress, String homePhone) {
+			String officePhone, String homeAddress, String homePhone, String hours) {
 
 		Query q = _pm.newQuery(Staff.class);
 		q.setFilter("name=='"+toEdit+"'");
@@ -255,6 +255,7 @@ public class DatastoreServ {
 		staff.setOfficePhone(officePhone);
 		staff.setHomeAddress(homeAddress);
 		staff.setHomePhone(homePhone);
+		staff.addOfficeHours(hours);
 		
 		_pm.makePersistent(staff);
 	}

@@ -16,6 +16,27 @@ public class EditMyContactServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
+		String username = req.getParameter("username") != null ? req.getParameter("username") : "";
+		username = username.toLowerCase();
+		String password = req.getParameter("password") != null ? req.getParameter("password") : "";
+		String firstname = req.getParameter("firstname") != null ? req.getParameter("firstname") : "";
+		String office = req.getParameter("office") != null ? req.getParameter("office") : "";
+		String officePhone = req.getParameter("officePhone") != null ? req.getParameter("officePhone") : "";
+		String homeAddress = req.getParameter("homeAddress") != null ? req.getParameter("homeAddress") : "";
+		String homePhone = req.getParameter("homePhone") != null ? req.getParameter("homePhone") : "";
+		String day = req.getParameter("day")!= null ? req.getParameter("day") : "";
+		String firststart = req.getParameter("firststart")!= null ? req.getParameter("firststart") : "";
+		String firstend = req.getParameter("firstend")!= null ? req.getParameter("firstend") : "";
+		String secondstart = req.getParameter("secondstart")!= null ? req.getParameter("secondstart") : "";
+		String secondend = req.getParameter("secondend")!= null ? req.getParameter("secondend") : "";
+
+			
+		if(!day.isEmpty() && !firststart.isEmpty() && !firstend.isEmpty() 
+				&& !secondstart.isEmpty() && !secondend.isEmpty() ){
+			String hours = day + "->" + firststart + ":" + firstend + "--" + secondstart+ ":" + secondend;
+			data.updateStaff(username, firstname, password, null);
+			data.updateStaffContact(username, office, officePhone, homeAddress, homePhone, hours);
+		}
 		page.banner(req,resp);
 		page.layout(displayForm(req,resp, new ArrayList<String>(), page.getCurrentUser().getName()), req, resp);
 		page.menu(req,resp);
@@ -56,6 +77,13 @@ public class EditMyContactServlet extends HttpServlet{
 		String office = req.getParameter("office");
 		String homeAddress = req.getParameter("homeAddress");
 		String homePhone = req.getParameter("homePhone");
+		String day = req.getParameter("day");
+		String firststart = req.getParameter("firststart");
+		String firstend = req.getParameter("firstend");
+		String secondstart = req.getParameter("secondstart");
+		String secondend = req.getParameter("secondend");
+		
+		String hours = day + "->" + firststart + ":" + firstend + "--" + secondstart+ ":" + secondend;
 		
 		List<String> errors = new ArrayList<String>();
 		
@@ -91,7 +119,7 @@ public class EditMyContactServlet extends HttpServlet{
 			page.menu(req,resp);
 		} else {
 			data.updateStaff(username, firstname, password, null);
- 			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone);
+ 			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone, hours);
 			
 			String http = "";
 			
@@ -127,7 +155,6 @@ public class EditMyContactServlet extends HttpServlet{
 	 */
 	private String displayForm(HttpServletRequest req, HttpServletResponse resp, List<String> errors, String staff) throws IOException
 	{	
-		
 		List<Staff> staffList = data.getAllStaff();
 		Staff staffToUpdate = null;
 		for (Staff i : staffList) {
@@ -141,7 +168,7 @@ public class EditMyContactServlet extends HttpServlet{
 		resp.setContentType("text/html");
 		String http = "";
 		
-		http += "<form id=\"ccf\" method=\"POST\" action=\"/editMyContact\">"
+		http += "<form id=\"ccf-edit-contact\" method=\"POST\" action=\"/editMyContact\">"
 		+			"<div id=\"title-create-staff\">"
 		+				"Edit Contact info: " + staff
 		+			"</div>";
@@ -169,10 +196,55 @@ public class EditMyContactServlet extends HttpServlet{
 		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + staffToUpdate.getOfficePhone() + "'required/><br>"
 		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + staffToUpdate.getHomeAddress() + "'required/><br>"
 		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + staffToUpdate.getHomePhone() + "'required/><br>"
+		+							"Office Hours: <br>";
+									List<String> listhours = staffToUpdate.getOfficeHours();
+									if(!listhours.isEmpty()){
+										for(String i: listhours){
+											http += "<div class='view-mycontact-result'>" + i + "</div><br>";
+										}
+									}
+		http+= 							"<select class='officehour-select officeHourInput' id='day' name='day' required>"
+		+								"<option value = 'Mon' selected> Mon </option>"
+		+								"<option> Tue </option>"
+		+								"<option> Wed </option>"
+		+								"<option> Thur </option>"
+		+								"<option> Fri </option>"
+		+							"</select>"
+		+							"<div class='start'>-></div>"
+		+ 							"<select class='officehour-select officeHourInput' id='firststart' name='firststart' required>"
+		+								"<option value = '0' selected> 0 </option>";
+										for(int i = 1; i <=12; ++i){
+											http+="<option>"+ i +"</option>";
+										}
+		http+=						"</select>"
+		+							"<div class='start'>:</div>"
+		+ 							"<select class='officehour-select officeHourInput' id='firstend' name='firstend' required>"
+		+								"<option value = '0' selected> 0 </option>";
+										for(int i = 5; i <=60; ){
+											http+="<option>"+ i +"</option>";
+											i += 5;
+										}
+		http+=						"</select>"
+		+							"<div class='start'>--</div>"
+		+ 							"<select class='officehour-select officeHourInput' id='secondstart' name='secondstart' required>"
+		+								"<option value = '0' selected> 0 </option>";
+										for(int i = 1; i <=12; ++i){
+											http+="<option>"+ i +"</option>";
+										}
+		http+=						"</select>"
+				+							"<div class='start'>:</div>"
+		+ 							"<select class='officehour-select officeHourInput' id='secondend' name='secondend' required>"
+		+								"<option value = '0' selected> 0 </option>";
+										for(int i = 5; i <=60; ){
+											http+="<option>"+ i +"</option>";
+											i += 5;
+										}
+		http+=						"</select><br>"
 		+						"</td>"
 		+					"</tr>"
 		+				"</table>"
-		+				"<input class=\"submit\" type=\"submit\" value=\"Submit\" />"
+		+				"<input class='add-hours' type='submit' value='Add' formmethod='get' />"
+		+				"<input class='submit' type='submit' value='Submit' formmethod='post' />"
 		+			"</div>"
 		+		"</form>";
 		
