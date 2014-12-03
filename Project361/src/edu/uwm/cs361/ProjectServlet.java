@@ -30,6 +30,11 @@ public class ProjectServlet extends HttpServlet {
 		return user;
 	}
 	
+	public String getUsername()
+	{
+		return username;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)

@@ -102,7 +102,7 @@ public class EditSectionServlet extends HttpServlet {
 				+ "<select id='staff' name='staff' class='staff-select staff-view-margin'>";
 		
 		List<Staff> staffList = ds.getAllStaff();
-		
+		html += "<option selected disabled>"+ "Select staff" +"</option>";
 		for(Staff staffer:staffList) {
 			
 			html += "<option value='"+staffer.getName()+"'>"+staffer.getName()+"</option>";
@@ -125,6 +125,8 @@ public class EditSectionServlet extends HttpServlet {
 		String html = "<div id=\"sub\">Select a course for assignment: </div>"
 						+"<select id='section' name='section' class='staff-select'>";
 		
+		html += "<option selected disabled>"+ "Select section" +"</option>";
+		
 		for (Course course : myCourses) {
 			
 			List<Section> sections = ds.getSection("courseid=='"+course.getID()+"'");
@@ -132,8 +134,17 @@ public class EditSectionServlet extends HttpServlet {
 			html += "<option disabled> CS " + course.getNumber() + "</option>";
 			
 			for (Section section : sections) {
-				
-				html += "<option value='"+section.getID()+"'>"
+			
+				if (!page.getUsername().equals("admin@uwm.edu"))
+				{
+					if (page.getCurrentUser().getPermissions().equals("Instructor"))
+					{
+						if(!section.getInstructor().equalsIgnoreCase(page.getCurrentUser().getName()))
+							continue;
+					}
+				}
+
+				html += "<option value='"+course.getNumber() + " " + section.getID()+"'>"
 						+ "CS " + course.getNumber() + " - "
 						+ section.getType() + " " + section.getSection()
 						+ "</option>";

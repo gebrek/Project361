@@ -82,6 +82,7 @@ public class EditStaffServlet extends HttpServlet{
 		//get all the inputs
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
+		String password2 = req.getParameter("passwordConfirm");
 		String firstname = req.getParameter("firstname");
 		String stafftype = req.getParameter("stafftype");
 
@@ -100,6 +101,10 @@ public class EditStaffServlet extends HttpServlet{
 				errors.add("Staff Type is required.");
 			}
 		}
+		
+		//check password
+		if (!password.equals(password2))
+			errors.add("Passwords do not match.");
 		
 		//any error, reprint the form
 		if (errors.size() > 0) {
@@ -151,25 +156,7 @@ public class EditStaffServlet extends HttpServlet{
 		+				"Edit Staff"
 		+			"</div>"
 		+			"<div id=\"sub\">";
-//		+				"<table>"
-//		+					"<tr>"
-//		+						"<td class='form'>"
-//		+							"Staff:"
-//		+							"<select id='staff' name='staff' class='staff-select'>"
-//		+									"<option value = '' selected> Select a Person </option>";
-//										http += "<option disabled>Instructor's</option>";		
-//										for(Entity user:users){
-//											if(!user.getProperty(data.TYPE).equals("TA"))
-//													http += "<option>" + data.getOurKey(user.getKey()) + "</option>";
-//										}
-//										http += "<option disabled>TA's</option>";
-//										for(Entity user:users){
-//											if(user.getProperty(data.TYPE).equals("TA"))
-//												http += "<option>" + data.getOurKey(user.getKey()) + "</option>";
-//										}
-//		http +=						"</select><br><br>"
-//		+						"</td>"
-//		+					"</tr>";
+
 				Staff user = data.getStaff(staff);
 		
 				if (errors.size() > 0) {
@@ -186,12 +173,24 @@ public class EditStaffServlet extends HttpServlet{
 				+						"<td class=\"form\">"
 				+							"Username *: <input readonly class='createStaffInput' type=\"text\" id='username' name='username' value='" + user.getEmail() + "'/><br>"
 				+							"Password *: <input class='createStaffInput' type=\"password\" id='password' name='password' value='" + user.getPassword() + "'required/><br>"
+				+							"Confirm password *: <input class='createStaffInput' type=\"password\" id='passwordConfirm' name='passwordConfirm' required/><br>"
 				+							"Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + user.getName() + "'required/><br>"
+				
 				+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + user.getPermissions() + "' required>"
-				+											"<option value = '' selected> Select a Type </option>"
-				+											"<option> Instructor </option>"
-				+											"<option> TA </option>"
-				+										"</select><br>"
+				+											"<option value = '' selected> Select a Type </option>";
+															if (user.getPermissions().equals("Instructor"))
+															{
+																http += "<option selected> Instructor </option>"
+				+														"<option> TA </option>";
+															}
+															else
+															{
+																http += "<option> Instructor </option>"
+				+														"<option selected> TA </option>";
+															}
+
+				http +=										"</select><br>"
+				
 				+						"</td>"
 				+					"</tr>";
 
