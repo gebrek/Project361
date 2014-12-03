@@ -236,17 +236,17 @@ public class DatastoreServ {
 	/**
 	 * Updates the staffs contact info in datastore
 	 * 
-	 * @param toEdit Staff name to edit
+	 * @param toEditEmail Email of staff to edit
 	 * @param office Office location
 	 * @param officePhone 10 digit phone for office
 	 * @param homeAddress home address
 	 * @param homePhone 10 digit phone for home
 	 */
-	public void updateStaffContact(String toEdit, String office,
+	public void updateStaffContact(String toEditEmail, String office,
 			String officePhone, String homeAddress, String homePhone, String hours) {
 
 		Query q = _pm.newQuery(Staff.class);
-		q.setFilter("name=='"+toEdit+"'");
+		q.setFilter("email=='"+toEditEmail+"'");
 		
 		List<Staff> staffList = (List<Staff>) q.execute(); 
 		Staff staff = staffList.get(0);
