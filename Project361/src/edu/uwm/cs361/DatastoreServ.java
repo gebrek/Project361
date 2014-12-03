@@ -210,11 +210,27 @@ public class DatastoreServ {
 	 */
 	public void editSection(String sectionid, String staff) {
 		
-		Section section = getSection("sectionid=='"+sectionid+"'").get(0);
+		String[] tokens = sectionid.split(" ");
 		
-		section.setInstructor(staff);
+		List<Course> myCourses = getAllCourses();
+		for (Course course : myCourses) {
+			
+			if(course.getNumber().equals(tokens[0]))
+			{
+				List<Section> sections = course.getSections();
+				for (Section section : sections)
+				{
+					if (section.getSection().equals(tokens[2]))
+					{
+						section.setInstructor(staff);
+						_pm.makePersistent(section);
+					}
+				}
+			}
+			break;
+
+		}
 		
-		_pm.makePersistent(section);
 	}
 	
 	/**
