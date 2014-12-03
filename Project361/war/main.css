@@ -524,6 +524,11 @@ input
 	font: 1.5em/40px Verdana, Arial, Helvetica, sans-serif;
 	border-radius: 15px;
 }
+.submit:hover
+{
+	background: #363636;
+	cursor: pointer;
+}
 
 .view-staff
 {
@@ -606,6 +611,12 @@ input
 	background: #4A4949;
 	font: 1.0em/20px Verdana, Arial, Helvetica, sans-serif;
 	border-radius: 15px;
+}
+
+.view-submit-staff:hover
+{
+	background: #363636;
+	cursor: pointer;
 }
 .view-edit-staff
 {

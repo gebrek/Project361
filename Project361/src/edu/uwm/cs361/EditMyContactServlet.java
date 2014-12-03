@@ -97,7 +97,7 @@ public class EditMyContactServlet extends HttpServlet{
 			
 			http += "<form id=\"ccf\" method=\"GET\" action=\"/viewMyContact\">"
 			+			"<div id=\"title-create-staff\">"
-			+				"Edit Contact info: " + req.getParameter("staff")
+			+				"Edit Contact info: " + username
 			+			"</div>"
 			+ 			"<div id=\"sub\">"
 			+				"UserName: " + username + "<br>" 
