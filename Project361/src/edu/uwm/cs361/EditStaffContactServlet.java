@@ -98,7 +98,7 @@ public class EditStaffContactServlet extends HttpServlet{
 		
 		if (officePhone.length() != 10)
 			errors.add("Enter 10 digit phone number for office phone");
-		if (office == null || office.length() < 6)
+		if (office == null || office.length() < 4)
 			errors.add("Office location or \"none\" is required.");
 		if (homeAddress == null || homeAddress.isEmpty())
 			errors.add("Home address is required.");

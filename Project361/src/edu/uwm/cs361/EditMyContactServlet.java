@@ -50,8 +50,8 @@ public class EditMyContactServlet extends HttpServlet{
 		//get all the inputs
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
+		String password2 = req.getParameter("passwordConfirm");
 		String firstname = req.getParameter("firstname");
-		String stafftype = req.getParameter("stafftype");
 		String officePhone = req.getParameter("officePhone");
 		String office = req.getParameter("office");
 		String homeAddress = req.getParameter("homeAddress");
@@ -71,26 +71,26 @@ public class EditMyContactServlet extends HttpServlet{
 			if (firstname.isEmpty()) {
 				errors.add("First is required.");
 			} 
-			if (stafftype.isEmpty()) {
-				errors.add("Staff Type is required.");
-			}
 		}
 		if (officePhone.length() != 10)
 			errors.add("Enter 10 digit phone number for office phone");
-		if (office == null || office.length() < 6)
+		if (office == null || office.length() < 4)
 			errors.add("Office location or \"none\" is required.");
 		if (homeAddress == null || homeAddress.isEmpty())
 			errors.add("Home address is required.");
 		if (homePhone.length() != 10)
 			errors.add("Enter 10 digit phone number for home phone");
 		
+		//check passwords
+		if (!password.equals(password2))
+			errors.add("Passwords do not match.");
 		
 		if (errors.size() > 0) {
 			page.banner(req,resp);
 			page.layout(displayForm (req,resp,errors, page.getCurrentUser().getName()),req,resp);
 			page.menu(req,resp);
 		} else {
-			data.updateStaff(username, firstname, password, stafftype);
+			data.updateStaff(username, firstname, password, null);
 			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone);
 			
 			String http = "";
@@ -101,8 +101,7 @@ public class EditMyContactServlet extends HttpServlet{
 			+			"</div>"
 			+ 			"<div id=\"sub\">"
 			+				"UserName: " + username + "<br>" 
-			+				"Name: " + firstname + "<br><br>"  
-			+				"Staff Type: " + stafftype + "<br>" 
+			+				"Name: " + firstname + "<br><br>"   
 			+				"Office: " + office + "<br>" 
 			+				"Office Phone: " + officePhone + "<br>" 
 			+				"Home Address: " + homeAddress + "<br>" 
@@ -164,12 +163,8 @@ public class EditMyContactServlet extends HttpServlet{
 		+						"<td class=\"form\" >"
 		+							"Username *: <input readonly class='createStaffInput' type=\"text\" id='username' name='username' value='" + staffToUpdate.getEmail() + "'/><br>"
 		+							"Password *: <input class='createStaffInput' type=\"password\" id='password' name='password' value='" + staffToUpdate.getPassword() + "'required/><br>"
+		+							"Confirm pass *: <input class='createStaffInput' type=\"password\" id='passwordConfirm' name='passwordConfirm' required/><br>"
 		+							"Name *: <input class='createStaffInput' type=\"text\" id='firstname' name='firstname' value='" + staffToUpdate.getName() + "'required/><br>"
-		+							"Staff Type: <select class='staff-select createStaffInput' id='stafftype' name='stafftype' value='" + staffToUpdate.getPermissions() + "' required>"
-		+											"<option value = '' selected> Select a Type </option>"
-		+											"<option> Instructor </option>"
-		+											"<option> TA </option>"
-		+										"</select><br>"
 		+							"Office: <input class='createStaffInput' type=\"text\" id='officeLoc' name='office' value='" + staffToUpdate.getOfficeLoc() + "'required/><br>"
 		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + staffToUpdate.getOfficePhone() + "'required/><br>"
 		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + staffToUpdate.getHomeAddress() + "'required/><br>"

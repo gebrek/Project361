@@ -243,6 +243,7 @@ public class DatastoreServ {
 		_pm.makePersistent(staff);
 	}
 	
+	
 	/**
 	 * Returns a particular staff from datastore
 	 * @param staff Staffs full name with space
@@ -277,7 +278,8 @@ public class DatastoreServ {
 		
 		staff.setName(nameIn);
 		staff.setPassword(password);
-		staff.setPermissions(stafftype);
+		if (stafftype != null && !stafftype.isEmpty())
+			staff.setPermissions(stafftype);
 		
 		_pm.makePersistent(staff);
 	}
