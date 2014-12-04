@@ -61,6 +61,8 @@ public class EditStaffContactServlet extends HttpServlet{
 		}
 	}
 	
+	
+	
 	/**
 	 * Formats the phone for storage, removing all non-digits
 	 * @param number 10 digit phone number

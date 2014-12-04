@@ -71,6 +71,45 @@ public class EditStaffServlet extends HttpServlet{
 		}
 	}
 	
+	@Override
+	public void doDelete(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
+
+		String username = req.getParameter("username") != null ? req.getParameter("username") : "";
+		username = username.toLowerCase();
+		String password = req.getParameter("password") != null ? req.getParameter("password") : "";
+		String firstname = req.getParameter("firstname") != null ? req.getParameter("firstname") : "";
+		
+		List<String> errors = new ArrayList<String>();
+			
+		if(!username.isEmpty()){
+			//data.deletestaff(username);
+			
+			String http = "";
+			
+			http += "<form id=\"ccf\" method=\"get\" action=\"/editStaff\">"
+			+			"<div id=\"title-create-staff\">"
+			+				"Staff Delete Conformation"
+			+			"</div>"
+			+ 			"<div id=\"sub\">"
+			+				"UserName: " + username + "<br>" 
+			+				"Name: " + firstname + "<br><br>"  
+			+				"The User has been Delete.<br><br><br><br><br><br>"
+			+				"<input class=\"submit\" type=\"submit\" value=\"Back\" />"
+			+			"</div>"
+			+		"</form>";
+			page.banner(req,resp);
+			page.layout(http,req,resp);
+			page.menu(req,resp);
+		}
+		else{
+			errors.add("Username couldnt be found.");
+			page.banner(req,resp);
+			page.layout(displayForm(req,resp, errors, page.getCurrentUser().getName()), req, resp);
+			page.menu(req,resp);
+		}
+		
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)

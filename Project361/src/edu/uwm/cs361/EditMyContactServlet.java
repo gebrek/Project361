@@ -24,24 +24,55 @@ public class EditMyContactServlet extends HttpServlet{
 		String officePhone = req.getParameter("officePhone") != null ? req.getParameter("officePhone") : "";
 		String homeAddress = req.getParameter("homeAddress") != null ? req.getParameter("homeAddress") : "";
 		String homePhone = req.getParameter("homePhone") != null ? req.getParameter("homePhone") : "";
-		String day = req.getParameter("day")!= null ? req.getParameter("day") : "";
-		String firststart = req.getParameter("firststart")!= null ? req.getParameter("firststart") : "";
-		String firstend = req.getParameter("firstend")!= null ? req.getParameter("firstend") : "";
-		String secondstart = req.getParameter("secondstart")!= null ? req.getParameter("secondstart") : "";
-		String secondend = req.getParameter("secondend")!= null ? req.getParameter("secondend") : "";
-
+		String day = req.getParameter("day") != null ? req.getParameter("day") : "";
+		String firststart = req.getParameter("firststart") != null ? req.getParameter("firststart") : "";
+		String firstend = req.getParameter("firstend") != null ? req.getParameter("firstend") : "";
+		String firstam = req.getParameter("firstam") != null ? req.getParameter("firstam") : "";
+		String secondstart = req.getParameter("secondstart") != null ? req.getParameter("secondstart") : "";
+		String secondend = req.getParameter("secondend") != null ? req.getParameter("secondend") : "";
+		String firstpm = req.getParameter("firstpm") != null ? req.getParameter("firstpm") : "";
+		
+		List<String> errors = new ArrayList<String>();
 			
 		if(!day.isEmpty() && !firststart.isEmpty() && !firstend.isEmpty() 
-				&& !secondstart.isEmpty() && !secondend.isEmpty() ){
-			String hours = day + "->" + firststart + ":" + firstend + "--" + secondstart+ ":" + secondend;
+				&& !secondstart.isEmpty() && !secondend.isEmpty() 
+				&& !firstam.isEmpty() && !firstpm.isEmpty() ){
+			
+			if(firststart.length() <= 1){
+				firststart = "0" + firststart;
+			}
+			if(firstend.length() <= 1){
+				firstend = "0" + firstend;
+			}
+			if(secondstart.length() <= 1){
+				secondstart = "0" + secondstart;
+			}
+			if(secondend.length() <= 1){
+				secondend = "0" + secondend;
+			}
+			
+			String hours = day + "-> " + firststart + " : " + firstend + " " + firstam +" -- " + secondstart+ " : " + secondend + " " + firstpm;
+			
+			double start = Double.parseDouble(firststart + "." + firstend);
+			double end = Double.parseDouble(secondstart + "." + secondend);
+			
+			if(start > end){
+				errors.add("The Starting time is bigger then the End time.");
+
+				page.banner(req,resp);
+				page.layout(displayForm(req,resp, errors, page.getCurrentUser().getName()), req, resp);
+				page.menu(req,resp);
+			}
+			
 			data.updateStaff(username, firstname, password, null);
 			data.updateStaffContact(username, office, officePhone, homeAddress, homePhone, hours);
 		}
 		page.banner(req,resp);
-		page.layout(displayForm(req,resp, new ArrayList<String>(), page.getCurrentUser().getName()), req, resp);
+		page.layout(displayForm(req,resp, errors, page.getCurrentUser().getName()), req, resp);
 		page.menu(req,resp);
 		
 	}
+
 	
 	/**
 	 * Formats the phone for storage, removing all non-digits
@@ -80,10 +111,25 @@ public class EditMyContactServlet extends HttpServlet{
 		String day = req.getParameter("day");
 		String firststart = req.getParameter("firststart");
 		String firstend = req.getParameter("firstend");
+		String firstam = req.getParameter("firstam");
 		String secondstart = req.getParameter("secondstart");
 		String secondend = req.getParameter("secondend");
+		String firstpm = req.getParameter("firstpm");
+
+		if(firststart.length() <= 1){
+			firststart = "0" + firststart;
+		}
+		if(firstend.length() <= 1){
+			firstend = "0" + firstend;
+		}
+		if(secondstart.length() <= 1){
+			secondstart = "0" + secondstart;
+		}
+		if(secondend.length() <= 1){
+			secondend = "0" + secondend;
+		}
 		
-		String hours = day + "->" + firststart + ":" + firstend + "--" + secondstart+ ":" + secondend;
+		String hours = day + "-> " + firststart + " : " + firstend + " " + firstam +" -- " + secondstart+ " : " + secondend + " " + firstpm;
 		
 		List<String> errors = new ArrayList<String>();
 		
@@ -119,7 +165,7 @@ public class EditMyContactServlet extends HttpServlet{
 			page.menu(req,resp);
 		} else {
 			data.updateStaff(username, firstname, password, null);
- 			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone, hours);
+ 			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone, null);
 			
 			String http = "";
 			
@@ -212,34 +258,42 @@ public class EditMyContactServlet extends HttpServlet{
 		+							"</select>"
 		+							"<div class='start'>-></div>"
 		+ 							"<select class='officehour-select officeHourInput' id='firststart' name='firststart' required>"
-		+								"<option value = '0' selected> 0 </option>";
+		+								"<option value = '00' selected> 00 </option>";
 										for(int i = 1; i <=12; ++i){
 											http+="<option>"+ i +"</option>";
 										}
 		http+=						"</select>"
 		+							"<div class='start'>:</div>"
 		+ 							"<select class='officehour-select officeHourInput' id='firstend' name='firstend' required>"
-		+								"<option value = '0' selected> 0 </option>";
+		+								"<option value = '00' selected> 00 </option>";
 										for(int i = 5; i <=60; ){
 											http+="<option>"+ i +"</option>";
 											i += 5;
 										}
 		http+=						"</select>"
+		+ 							"<select class='officehour-select officeHourInput' id='firstam' name='firstam' required>"
+		+								"<option value = 'am' selected> am </option>"
+		+								"<option> pm </option>"
+		+							"</select>"
 		+							"<div class='start'>--</div>"
-		+ 							"<select class='officehour-select officeHourInput' id='secondstart' name='secondstart' required>"
+		+ 							"<select class='officehour-select officeHourInput2' id='secondstart' name='secondstart' required>"
 		+								"<option value = '0' selected> 0 </option>";
 										for(int i = 1; i <=12; ++i){
 											http+="<option>"+ i +"</option>";
 										}
 		http+=						"</select>"
-				+							"<div class='start'>:</div>"
-		+ 							"<select class='officehour-select officeHourInput' id='secondend' name='secondend' required>"
+		+							"<div class='start2'>:</div>"
+		+ 							"<select class='officehour-select officeHourInput2' id='secondend' name='secondend' required>"
 		+								"<option value = '0' selected> 0 </option>";
 										for(int i = 5; i <=60; ){
 											http+="<option>"+ i +"</option>";
 											i += 5;
 										}
-		http+=						"</select><br>"
+		http+=						"</select>"
+		+ 							"<select class='officehour-select officeHourInput2' id='secondpm' name='secondpm' required>"
+		+								"<option value = 'am' selected> am </option>"
+		+								"<option> pm </option>"
+		+							"</select><br>"
 		+						"</td>"
 		+					"</tr>"
 		+				"</table>"

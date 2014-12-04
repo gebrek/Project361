@@ -492,13 +492,18 @@ input
 }
 .officeHourInput
 {	
-	margin-left: 0px;
-	margin-right: 45px;
+	margin-top: 30px;
+}
+.officeHourInput2
+{	
 	margin-top: 30px;
 }
 .start {
 	display: -webkit-inline-box;
-	margin-left: -45px;
+}
+
+.start2 {
+	display: -webkit-inline-box;
 }
 .staff-select 
 {
@@ -567,7 +572,7 @@ input
 }
 .add-hours
 {
-	margin-left: 420px;
+	margin-left: 630px;
 	margin-top: -45px;
 	width: 126px;
 	display: block;
