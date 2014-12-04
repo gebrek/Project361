@@ -118,6 +118,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     	<servlet-name>AuthenticateLogin</servlet-name>
     	<url-pattern>/authenticateLogin</url-pattern>   
 	</servlet-mapping>
+	
+	<servlet>
+    	<servlet-name>EmailServlet</servlet-name>
+    	<servlet-class>edu.uwm.cs361.EmailRequestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+    	<servlet-name>EmailServlet</servlet-name>
+    	<url-pattern>/emailRequest</url-pattern>   
+	</servlet-mapping>
 
 
 	<welcome-file-list>
