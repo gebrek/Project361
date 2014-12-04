@@ -26,9 +26,8 @@ public class ScrapeServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.setContentType("text/html");
-		page.banner(req,resp);
-		page.courseListLayout(buildPage(),req,resp);
-		page.menu(req,resp);
+		Scrape.getCourseListandStore();
+		resp.sendRedirect("/courseList");
 	}
 
 	@Override
@@ -36,24 +35,5 @@ public class ScrapeServlet extends HttpServlet{
 			throws IOException {
 	}
 	
-	/**
-	 * Builds pages main content
-	 * @return
-	 * @throws IOException
-	 */
-	private String buildPage() throws IOException {
-		
-		Scrape.getCourseListandStore();
-		String http = "";
-		http += "<form id=\"ccflist\">"
-		+			"<div id=\"title-create-staff\">"
-		+				"Scrapping Course List Conformation"
-		+			"</div>";
-		http += 	"<div id=\"sub\">"
-		+					"The Course Scrapping is done."
-		+			"</div>"
-		+		"</form>";
-		return http;
-	}
 		
 }
