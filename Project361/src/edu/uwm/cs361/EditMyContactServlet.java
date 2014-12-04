@@ -216,7 +216,7 @@ public class EditMyContactServlet extends HttpServlet{
 		
 		http += "<form id=\"ccf-edit-contact\" method=\"POST\" action=\"/editMyContact\">"
 		+			"<div id=\"title-create-staff\">"
-		+				"Edit Contact info: " + staff
+		+				"Edit Account Details: " + staff
 		+			"</div>";
 		
 

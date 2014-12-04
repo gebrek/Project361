@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class AuthenticationServlet extends HttpServlet {
 
+	
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
+		
 		String username = req.getParameter("login");
 		String password = req.getParameter("password");
 

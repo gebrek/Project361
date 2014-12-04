@@ -164,7 +164,7 @@ public class EditStaffContactServlet extends HttpServlet{
 		
 		http += "<form id=\"ccf\" method=\"POST\" action=\"/editStaffContact\">"
 		+			"<div id=\"title-create-staff\">"
-		+				"Edit Contact info: " + staff
+		+				"Edit Account Details: " + staff
 		+			"</div>";
 		
 		String office = staffToUpdate.getOfficeLoc();

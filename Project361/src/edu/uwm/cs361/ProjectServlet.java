@@ -240,9 +240,9 @@ public class ProjectServlet extends HttpServlet {
 		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
-		resp.getWriter().println("			<li> <a href=\"#\"> My Contact</a>");
+		resp.getWriter().println("			<li> <a href=\"#\">Account Settings</a>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
-		resp.getWriter().println("					<li><a href=\"/viewMyContact\">View My Contact</a></li>");
+		resp.getWriter().println("					<li><a href=\"/viewMyContact\">View Account</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
 		resp.getWriter().println("					<li><a href=\"/editMyContact\"> Edit My Contact</a></li>");
@@ -264,9 +264,9 @@ public class ProjectServlet extends HttpServlet {
 		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
-		resp.getWriter().println("			<li> <a href=\"#\"> My Contact</a>");
+		resp.getWriter().println("			<li> <a href=\"#\">Account Settings</a>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
-		resp.getWriter().println("					<li><a href=\"/viewMyContact\">View My Contact</a></li>");
+		resp.getWriter().println("					<li><a href=\"/viewMyContact\">View Account</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
 		resp.getWriter().println("					<li><a href=\"/editMyContact\"> Edit My Contact</a></li>");

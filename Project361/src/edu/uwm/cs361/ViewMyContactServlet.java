@@ -58,7 +58,7 @@ public class ViewMyContactServlet extends HttpServlet{
 
 		http += "<form id=\"ccf\" method=\"POST\" action=\"/viewMyContact\">"
 		+			"<div id=\"title-create-staff\">"
-		+				"My contact info"
+		+				"Account Details"
 		+			"</div>";
 
 		http += 	"<div id=\"sub\">"
