@@ -104,8 +104,8 @@ public class EditSectionServlet extends HttpServlet {
 		List<Staff> staffList = ds.getAllStaff();
 		html += "<option selected disabled>"+ "Select staff" +"</option>";
 		for(Staff staffer:staffList) {
-			
-			html += "<option value='"+staffer.getName()+"'>"+staffer.getName()+"</option>";
+			if (staffer.getPermissions().equals("TA"))
+				html += "<option value='"+staffer.getName()+"'>"+staffer.getName()+"</option>";
 		}
 		
 		html += "</select>";
