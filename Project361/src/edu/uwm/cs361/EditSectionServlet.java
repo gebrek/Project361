@@ -103,10 +103,21 @@ public class EditSectionServlet extends HttpServlet {
 		
 		List<Staff> staffList = ds.getAllStaff();
 		html += "<option selected disabled>"+ "Select staff" +"</option>";
-		for(Staff staffer:staffList) {
-			if (staffer.getPermissions().equals("TA"))
-				html += "<option value='"+staffer.getName()+"'>"+staffer.getName()+"</option>";
+		
+		if(page.username.equals("admin@uwm.edu")){
+			html += "<option disabled>Instructor's</option>";		
+			for(Staff user:staffList){
+				if(!user.getPermissions().equals("TA"))
+					html += "<option>" + user.getName() + "</option>";
+			}
 		}
+		if(page.username.equals("admin@uwm.edu"))
+			html += "<option disabled>TA's</option>";
+		for(Staff user:staffList){
+			if(user.getPermissions().equals("TA"))
+				html += "<option>" + user.getName() + "</option>";
+		}
+		
 		
 		html += "</select>";
 		
