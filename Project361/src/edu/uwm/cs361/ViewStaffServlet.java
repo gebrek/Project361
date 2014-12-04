@@ -141,15 +141,6 @@ public class ViewStaffServlet extends HttpServlet{
 		+		"</div>"
 		+	"</form>";
 		
-//		http += "<form method='Get' action='/editStaff'>"
-//		+			"<table>"
-//		+				"<tr>"
-//		+					"<td>"
-//		+						"<input class='view-edit-staff' type='submit' value='Edit' />"
-//		+					"</td>"
-//		+				"</tr>"
-//		+			"</table>"
-//		+		"</form>";
 		return http;
 	}
 
