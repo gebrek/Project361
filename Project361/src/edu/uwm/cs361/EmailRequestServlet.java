@@ -45,7 +45,7 @@ public class EmailRequestServlet extends HttpServlet
 		List<Staff> users = data.getAllStaff();
 
 		//option 1
-		if (requestSelection.equalsIgnoreCase(""))
+		if (requestSelection.equalsIgnoreCase("missing contact info"))
 		{
 			System.out.println("Got option 1");
 			
@@ -65,7 +65,7 @@ public class EmailRequestServlet extends HttpServlet
 		}
 		//option 2
 		else {
-			System.out.println("Got option 1");
+			System.out.println("Got option 2");
 			/*
 			try {
 				Message msg = new MimeMessage(session);
@@ -113,7 +113,6 @@ public class EmailRequestServlet extends HttpServlet
 		+				"<table>"
 		+					"<tr>"
 		+						"<td class='form'>"
-		+							"Staff:"
 		+							"<select id='requesttype' name='requesttype' class='staff-select staff-view-margin' required>"
 		+									"<option value = '' selected> Select a request </option>";		
 											http += "<option>missing contact info</option>";
@@ -132,14 +131,25 @@ public class EmailRequestServlet extends HttpServlet
 		{			
 			http+=	"<tr>"
 			+			"<td class='view-staff'>"
-			+				"Email request for " + request + " has been sent.<br>"
+			+				"Email request for " + request + " has been sent.<br><br>"
 			+			"</td>"
 			+		"</tr>";
 		}
+					
+		http+= 		"</table>";
+		http+= 		"<table>"
+		+				"<tr>"
+		+					"<td class='view-staff'>"
+		+						"Missing contact info: automated email message requesting all staff who have missing info to update<br>"
+		+ 						"Outdated contact info: automated email message requesting all staff verify current info is up to date"
+		+					"</td>"
+		+				"</tr>";
+		http+= 		"</table>";
 		
-		http+= 		"</table>"
-		+		"</div>"
+		http +=		"</div>"
 		+	"</form>";
+		
+		
 		
 		return http;
 	}
