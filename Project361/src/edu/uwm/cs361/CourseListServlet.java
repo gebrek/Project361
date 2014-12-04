@@ -35,50 +35,7 @@ public class CourseListServlet extends HttpServlet{
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 	}
-	/*
-	private String buildPage(){
-		String http = "";
-//		String http = "<table>\n";
-		http += "<form id=\"ccflist\">"
-		+			"<div id=\"title-create-staff\">"
-		+				"Course List"
-		+			"</div>";
-		http += 	"<div id=\"sub\">"
-		+				"<table class='courselist'>";
-
-		Query q = new Query(ds.COURSE);
-		List<Entity> courseListEnts = ds.getDatastore().prepare(q).asList(FetchOptions.Builder.withDefaults());
-		
-			List<Course> courseList;
-			for(Entity courseEnt : courseListEnts){
-				try{
-					//System.out.println("...");
-					ArrayList<Section> sectionList = new ArrayList<Section>();
-					String sList = courseEnt.getProperty(ds.SECTION_LIST).toString();
-					String[] sListArr = ds.makeDelStringToArray(sList);
-					
-					for(int i = 0; i < sListArr.length; ++i) {
-						//System.out.println(""+sListArr[i]);
-						Entity sEnt = ds.getSection(ds.getOurKey(courseEnt.getKey()) + " " + sListArr[i].replaceAll("~", ""));
-						//System.out.println(sEnt.toString());
-						sectionList.add(new Section(sEnt));
-					}
-					
-					Course curCourse = new Course(courseEnt);
-					curCourse.setSections(sectionList);
-					
-					http+=curCourse.toHtmlTable();
-				} catch(Exception e) {
-					e.printStackTrace();
-					//System.out.println("I Failed");
-				}
-			}
-		http +=				"</table>"
-		+			"</div>"
-		+		"</form>";
-		return http;
-	}
-	*/
+	
 	/**
 	 * Build the main page content 
 	 * @return String containing built html code
@@ -86,9 +43,12 @@ public class CourseListServlet extends HttpServlet{
 	private String buildPage(){
 		String http = "";
 		http += "<form id=\"ccflist\">"
-		+			"<div id=\"title-create-staff\">"
-		+				"Course List"
-		+			"</div>";
+		+			"<div id=\"title-create-staff\">";
+		if (page.getCurrentUser().equals("admin@uwm.edu"))
+			http +=				"Course List";
+		else
+			http +=				"My Sections";
+		http +=			"</div>";
 		http += 	"<div id=\"sub1\">"
 		+				"<table class='courselist'>";
 		List<Course> courses = ds.getAllCourses();
