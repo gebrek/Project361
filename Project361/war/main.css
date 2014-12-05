@@ -564,6 +564,20 @@ input
 	font: 1.5em/40px Verdana, Arial, Helvetica, sans-serif;
 	border-radius: 15px;
 }
+.delete
+{
+	margin-left: 600px;
+	margin-top: -200px;
+	width: 175px;
+	display: block;
+	height: 32px;
+	box-shadow: 0px 0px 16px rgba(218, 218, 218, 0.51);
+	border: 1px solid #FFFFFF;
+	color: #FFFFFF;
+	background: #4A4949;
+	font: 1.0em/26px Verdana, Arial, Helvetica, sans-serif;
+	border-radius: 15px;
+}
 
 .submit:hover
 {
@@ -625,6 +639,15 @@ input
 	width:400px
 }
 .view-mycontact-result
+{
+	top:25px;
+	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
+	color:#ffffff;;
+	position:relative;
+	left:15px;
+}
+
+.edit-mycontact-result
 {
 	top:25px;
 	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;

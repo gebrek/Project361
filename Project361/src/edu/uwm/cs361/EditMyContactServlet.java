@@ -31,48 +31,69 @@ public class EditMyContactServlet extends HttpServlet{
 		String secondstart = req.getParameter("secondstart") != null ? req.getParameter("secondstart") : "";
 		String secondend = req.getParameter("secondend") != null ? req.getParameter("secondend") : "";
 		String firstpm = req.getParameter("firstpm") != null ? req.getParameter("firstpm") : "";
-		
-		List<String> errors = new ArrayList<String>();
-			
-		if(!day.isEmpty() && !firststart.isEmpty() && !firstend.isEmpty() 
-				&& !secondstart.isEmpty() && !secondend.isEmpty() 
-				&& !firstam.isEmpty() && !firstpm.isEmpty() ){
-			
-			if(firststart.length() <= 1){
-				firststart = "0" + firststart;
-			}
-			if(firstend.length() <= 1){
-				firstend = "0" + firstend;
-			}
-			if(secondstart.length() <= 1){
-				secondstart = "0" + secondstart;
-			}
-			if(secondend.length() <= 1){
-				secondend = "0" + secondend;
-			}
-			
-			String hours = day + "-> " + firststart + " : " + firstend + " " + firstam +" -- " + secondstart+ " : " + secondend + " " + firstpm;
-			
-			double start = Double.parseDouble(firststart + "." + firstend);
-			double end = Double.parseDouble(secondstart + "." + secondend);
-			
-			if(start > end){
-				errors.add("The Starting time is bigger then the End time.");
+		String delete = req.getParameter("delete") != null ? req.getParameter("delete") : "";
 
-				page.banner(req,resp);
-				page.layout(displayForm(req,resp, errors, page.getCurrentUser().getName()), req, resp);
-				page.menu(req,resp);
+		List<String> errors = new ArrayList<String>();
+		
+		if(!delete.isEmpty()){
+			if(delete.equals("Delete All")){
+				page.getCurrentUser().removeOfficeHoursAll();
 			}
-			
-			data.updateStaff(username, firstname, password, null);
-			data.updateStaffContact(username, office, officePhone, homeAddress, homePhone, hours);
+		}
+		else{
+			if(!day.isEmpty() && !firststart.isEmpty() && !firstend.isEmpty() 
+					&& !secondstart.isEmpty() && !secondend.isEmpty() 
+					&& !firstam.isEmpty() && !firstpm.isEmpty() ){
+				
+				if(firststart.length() <= 1){
+					firststart = "0" + firststart;
+				}
+				if(firstend.length() <= 1){
+					firstend = "0" + firstend;
+				}
+				if(secondstart.length() <= 1){
+					secondstart = "0" + secondstart;
+				}
+				if(secondend.length() <= 1){
+					secondend = "0" + secondend;
+				}
+				
+				String hours = day + "-> " + firststart + " : " + firstend + " " + firstam +" -- " + secondstart+ " : " + secondend + " " + firstpm;
+				
+				double start = Double.parseDouble(firststart + "." + firstend);
+				double end = Double.parseDouble(secondstart + "." + secondend);
+				if(start <= 0 && end <= 0){
+					errors.add("Please select the time at the bottom.");
+				}
+				else
+				{
+					boolean newhours = true;
+					for(String i : page.getCurrentUser().getOfficeHours()){
+						if(i.contains(day)){
+							page.getCurrentUser().modifyOfficeHours(i, hours);
+							newhours = false;
+							break;
+						}
+					}
+					
+					if(newhours){
+						if(start > end){
+							errors.add("The Starting time is bigger then the End time.");
+						}
+						else{
+							page.getCurrentUser().addOfficeHours(hours);
+							data.updateStaff(username, firstname, password, null);
+							data.updateStaffContact(username, office, officePhone, homeAddress, homePhone);
+						}
+					}
+				}
+			}
 		}
 		page.banner(req,resp);
 		page.layout(displayForm(req,resp, errors, page.getCurrentUser().getName()), req, resp);
 		page.menu(req,resp);
 		
 	}
-
 	
 	/**
 	 * Formats the phone for storage, removing all non-digits
@@ -108,29 +129,7 @@ public class EditMyContactServlet extends HttpServlet{
 		String office = req.getParameter("office");
 		String homeAddress = req.getParameter("homeAddress");
 		String homePhone = req.getParameter("homePhone");
-		String day = req.getParameter("day");
-		String firststart = req.getParameter("firststart");
-		String firstend = req.getParameter("firstend");
-		String firstam = req.getParameter("firstam");
-		String secondstart = req.getParameter("secondstart");
-		String secondend = req.getParameter("secondend");
-		String firstpm = req.getParameter("firstpm");
 
-		if(firststart.length() <= 1){
-			firststart = "0" + firststart;
-		}
-		if(firstend.length() <= 1){
-			firstend = "0" + firstend;
-		}
-		if(secondstart.length() <= 1){
-			secondstart = "0" + secondstart;
-		}
-		if(secondend.length() <= 1){
-			secondend = "0" + secondend;
-		}
-		
-		String hours = day + "-> " + firststart + " : " + firstend + " " + firstam +" -- " + secondstart+ " : " + secondend + " " + firstpm;
-		
 		List<String> errors = new ArrayList<String>();
 		
 		officePhone = formatPhone(officePhone);
@@ -165,7 +164,7 @@ public class EditMyContactServlet extends HttpServlet{
 			page.menu(req,resp);
 		} else {
 			data.updateStaff(username, firstname, password, null);
- 			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone, null);
+ 			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone);
 			
 			String http = "";
 			
@@ -246,7 +245,7 @@ public class EditMyContactServlet extends HttpServlet{
 									List<String> listhours = staffToUpdate.getOfficeHours();
 									if(!listhours.isEmpty()){
 										for(String i: listhours){
-											http += "<div class='view-mycontact-result'>" + i + "</div><br>";
+											http += "<div class='edit-mycontact-result'>" + i + "</div><br>";
 										}
 									}
 		http+= 							"<select class='officehour-select officeHourInput' id='day' name='day' required>"
@@ -290,7 +289,7 @@ public class EditMyContactServlet extends HttpServlet{
 											i += 5;
 										}
 		http+=						"</select>"
-		+ 							"<select class='officehour-select officeHourInput2' id='secondpm' name='secondpm' required>"
+		+ 							"<select class='officehour-select officeHourInput2' id='firstpm' name='firstpm' required>"
 		+								"<option value = 'am' selected> am </option>"
 		+								"<option> pm </option>"
 		+							"</select><br>"
@@ -299,6 +298,7 @@ public class EditMyContactServlet extends HttpServlet{
 		+				"</table>"
 		+				"<input class='add-hours' type='submit' value='Add' formmethod='get' />"
 		+				"<input class='submit' type='submit' value='Submit' formmethod='post' />"
+		+				"<input class='delete' name= 'delete' type='submit' value='Delete All' formmethod='get' />"
 		+			"</div>"
 		+		"</form>";
 		
