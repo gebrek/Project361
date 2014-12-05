@@ -215,7 +215,7 @@ public class EditMyContactServlet extends HttpServlet{
 		
 		http += "<form id=\"ccf-edit-contact\" method=\"POST\" action=\"/editMyContact\">"
 		+			"<div id=\"title-create-staff\">"
-		+				"Edit Account Details: " + staff
+		+				"Edit Account: " + staff
 		+			"</div>";
 		
 
@@ -243,7 +243,7 @@ public class EditMyContactServlet extends HttpServlet{
 		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + staffToUpdate.getHomePhone() + "'required/><br>"
 		+							"Office Hours: <br>";
 									List<String> listhours = staffToUpdate.getOfficeHours();
-									if(!listhours.isEmpty()){
+									if(listhours != null && !listhours.isEmpty()){
 										for(String i: listhours){
 											http += "<div class='edit-mycontact-result'>" + i + "</div><br>";
 										}
