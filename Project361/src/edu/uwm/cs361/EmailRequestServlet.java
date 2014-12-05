@@ -40,8 +40,6 @@ public class EmailRequestServlet extends HttpServlet
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
 		
-		String msgBody = "...";
-		
 		List<Staff> users = data.getAllStaff();
 		
 		
@@ -56,8 +54,8 @@ public class EmailRequestServlet extends HttpServlet
 							Message msg = new MimeMessage(session);
 							msg.setFrom(new InternetAddress("demeritsquad@gmail.com", "System Admin"));
 							msg.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail(), user.getName()));
-							msg.setSubject("Our records indicate you have yet missing contact information. Please login to http://1-dot-squadcs361.appspot.com and update your information.");
-							msg.setText(msgBody);
+							msg.setSubject("Missing account details");
+							msg.setText("Our records indicate you have yet missing contact information. Please login to http://1-dot-squadcs361.appspot.com and update your information.");
 							Transport.send(msg);
 						} catch (Exception e) {
 						}
@@ -76,8 +74,8 @@ public class EmailRequestServlet extends HttpServlet
 						Message msg = new MimeMessage(session);
 						msg.setFrom(new InternetAddress("demeritsquad@gmail.com", "System Admin"));
 						msg.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail(), user.getName()));
-						msg.setSubject("Our records may have out of date contact information. Please login to http://1-dot-squadcs361.appspot.com and update your information.");
-						msg.setText(msgBody);
+						msg.setSubject("Missing account details");
+						msg.setText("Our records may have out of date contact information. Please login to http://1-dot-squadcs361.appspot.com and update your information.");
 						Transport.send(msg);
 					} catch (Exception e) {
 					}
