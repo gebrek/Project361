@@ -41,7 +41,14 @@ public class EditSectionServlet extends HttpServlet {
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String delete = req.getParameter("delete");
+		String section = req.getParameter("section");
 		
+		if(delete != null && !delete.isEmpty()){
+			if(delete.equals("Delete")){
+				//data.deleteSection(section);
+			}
+		}
 		doGet(req, resp);
 	}
 
@@ -73,7 +80,8 @@ public class EditSectionServlet extends HttpServlet {
 				+			"<div id=\"title-create-staff\">"
 				+				"Add Staff To Section"
 				+			"</div>"
-				+ (_req.getParameter("submit") != null ? "<div id='title-create-staff'>Successfully Saved</div>" : "")
+				+ (_req.getParameter("submit") != null ? "<ul class='errors'><li>Successfully Saved</li></ul>": "")
+				+ (_req.getParameter("delete") != null ? "<ul class='errors'><li>Successfully Deleted</li></ul>": "")
 				);
 	}
 	
@@ -85,7 +93,8 @@ public class EditSectionServlet extends HttpServlet {
 	private void endForm() throws IOException {
 		
 		_resp.getWriter().println( ""
-										+ "<input class='submit' name='submit' type='submit' value='Submit' />"
+										+ "<input class='submit-section' name='submit' type='submit' value='Submit' />"
+										+ "<input class='delete-section' name='delete' type='submit' value='Delete Section' />"
 										+ "</div></form></div>"
 										+ "</div>"
 										);

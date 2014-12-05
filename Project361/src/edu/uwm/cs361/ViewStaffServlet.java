@@ -24,7 +24,7 @@ public class ViewStaffServlet extends HttpServlet{
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		page.banner(req,resp);
-		page.layout(displayForm(req,resp,""),req,resp);
+		page.layout(displayForm(req,resp,"",""),req,resp);
 		page.menu(req,resp);
 	}
 	
@@ -38,9 +38,19 @@ public class ViewStaffServlet extends HttpServlet{
 		
 		//get the value from the dropdown
 		String staffName = req.getParameter("staffname");
+		String delete = req.getParameter("delete");
+		String delConf = "";
+		
+		if(!delete.isEmpty()){
+			if(delete.equals("Delete")){
+				//data.deleteStaff(staffname);
+				delConf = staffName + " has been Deleted successfully.";
+				staffName = "";
+			}
+		}
 		
 		page.banner(req,resp);
-		page.layout(displayForm(req,resp,staffName),req,resp);
+		page.layout(displayForm(req,resp,staffName, delConf),req,resp);
 		page.menu(req,resp);
 		
 	}
@@ -54,7 +64,7 @@ public class ViewStaffServlet extends HttpServlet{
 	 * @return
 	 * @throws IOException
 	 */
-	private String displayForm(HttpServletRequest req, HttpServletResponse resp, String staff) throws IOException
+	private String displayForm(HttpServletRequest req, HttpServletResponse resp, String staff, String delconf) throws IOException
 	{
 		resp.setContentType("text/html");
 		String http = "";
@@ -67,6 +77,12 @@ public class ViewStaffServlet extends HttpServlet{
 		+			"<div id=\"title-create-staff\">"
 		+				"View Staff"
 		+			"</div>";
+		
+		if (!delconf.isEmpty()) {
+			http += "<ul class='errors'>"
+					+	"  <li>" + delconf + "</li>"
+					+ "</ul>";
+		}
 
 		http += 	"<div id=\"sub\">"
 		+				"<table>"
@@ -101,6 +117,7 @@ public class ViewStaffServlet extends HttpServlet{
 		+					"<td></td>"
 		+					"<td>"
 		+						"<input class='view-submit-staff' type='submit' value='Submit' />"
+		+						"<input class='view-delete-staff' name='delete' type='submit' value='Delete' />"
 		+					"</td>"
 		+				"</tr>";
 		
