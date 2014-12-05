@@ -611,7 +611,13 @@ input
 	color:#FFE000;;
 	position:relative;
 }
-
+.view-staff-hours
+{
+	top:25px;
+	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
+	color:#FFE000;;
+	position:relative;
+}
 .view-staff-result
 {
 	top:25px;
@@ -644,22 +650,26 @@ input
 	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
 	color:#ffffff;;
 	position:relative;
-	left:15px;
+	left:-160px;
 }
 
 .edit-mycontact-result
 {
-	top:25px;
 	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
 	color:#ffffff;;
 	position:relative;
-	left:15px;
+	left:200px;
 }
-
+.view-mycontact-hours
+{
+	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
+	color:#ffffff;;
+	position:relative;
+	left:110px;
+}
 .view-mycontact
 {
 	top:25px;
-	left: 100px;
 	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
 	color:#FFE000;;
 	position:relative;
@@ -670,7 +680,7 @@ input
 	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
 	color:#ffffff;;
 	position:relative;
-	left:115px;
+	left:15px;
 	width:400px
 }
 .view-course

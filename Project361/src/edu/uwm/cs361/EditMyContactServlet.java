@@ -241,11 +241,11 @@ public class EditMyContactServlet extends HttpServlet{
 		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + staffToUpdate.getOfficePhone() + "'required/><br>"
 		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + staffToUpdate.getHomeAddress() + "'required/><br>"
 		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + staffToUpdate.getHomePhone() + "'required/><br>"
-		+							"Office Hours: <br>";
+		+							"Office Hours:";
 									List<String> listhours = staffToUpdate.getOfficeHours();
 									if(listhours != null && !listhours.isEmpty()){
 										for(String i: listhours){
-											http += "<div class='edit-mycontact-result'>" + i + "</div><br>";
+											http += "<div class='edit-mycontact-result'>" + i + "</div>";
 										}
 									}
 		http+= 							"<select class='officehour-select officeHourInput' id='day' name='day' required>"
