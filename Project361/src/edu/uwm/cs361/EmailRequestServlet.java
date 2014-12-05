@@ -43,49 +43,64 @@ public class EmailRequestServlet extends HttpServlet
 		String msgBody = "...";
 		
 		List<Staff> users = data.getAllStaff();
-
-		//option 1
-		if (requestSelection.equalsIgnoreCase("missing contact info"))
-		{
-			System.out.println("Got option 1");
-			
-			/*
-			try {
-				Message msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("demeritsquad@gmail.com", "Demerit Squad"));
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(req.getParameter("email"), req.getParameter("email")));
-				msg.setSubject("Test Email");
-				msg.setText(msgBody);
-				Transport.send(msg);
-			} catch (Exception e) {
-				resp.getWriter().println("Problem sending email to " + req.getParameter("email") + ".");
-				return;
+		
+		
+			//option 1
+			if (requestSelection.equalsIgnoreCase("missing contact info"))
+			{
+				for(Staff user:users)
+				{
+					if (hasEmptyContact(user))
+					{
+						try {
+							Message msg = new MimeMessage(session);
+							msg.setFrom(new InternetAddress("demeritsquad@gmail.com", "System Admin"));
+							msg.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail(), user.getName()));
+							msg.setSubject("Our records indicate you have yet missing contact information. Please login to http://1-dot-squadcs361.appspot.com and update your information.");
+							msg.setText(msgBody);
+							Transport.send(msg);
+						} catch (Exception e) {
+						}
+					}
+				}
+				
+				
 			}
-			*/
+			//option 2
+			else {
+				
+				for(Staff user:users)
+				{
+					
+					try {
+						Message msg = new MimeMessage(session);
+						msg.setFrom(new InternetAddress("demeritsquad@gmail.com", "System Admin"));
+						msg.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail(), user.getName()));
+						msg.setSubject("Our records may have out of date contact information. Please login to http://1-dot-squadcs361.appspot.com and update your information.");
+						msg.setText(msgBody);
+						Transport.send(msg);
+					} catch (Exception e) {
+					}
+					
+				}
 		}
-		//option 2
-		else {
-			System.out.println("Got option 2");
-			/*
-			try {
-				Message msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("eric@eric-fritz.com", "Eric Fritz"));
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(req.getParameter("email"), req.getParameter("email")));
-				msg.setSubject("Test Email");
-				msg.setText(msgBody);
-				Transport.send(msg);
-			} catch (Exception e) {
-				resp.getWriter().println("Problem sending email to " + req.getParameter("email") + ".");
-				return;
-			}
-			*/
-		}
+		
 		page.banner(req,resp);
 		page.layout(displayForm(req,resp,requestSelection),req,resp);
 		page.menu(req,resp);
 
 	}
 	
+	private boolean hasEmptyContact(Staff user) {
+		
+		if(user.getHomeAddress().isEmpty() || user.getHomePhone().isEmpty() || 
+				user.getOfficeLoc().isEmpty() || user.getOfficeHours().isEmpty())
+			return true;
+		
+		else
+			return false;
+	}
+
 	/**
 	 * display form will list all the information for the staff
 	 * 
