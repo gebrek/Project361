@@ -41,7 +41,7 @@ public class ViewStaffServlet extends HttpServlet{
 		String delete = req.getParameter("delete");
 		String delConf = "";
 		
-		if(!delete.isEmpty()){
+		if(delete != null && !delete.isEmpty()){
 			if(delete.equals("Delete")){
 				//data.deleteStaff(staffname);
 				delConf = staffName + " has been Deleted successfully.";
@@ -142,7 +142,7 @@ public class ViewStaffServlet extends HttpServlet{
 				+			"<td class='view-staff1'>"
 				+				"Office:<br>"
 				+				"Office Phone:<br>"
-				+				"Address:<br>"
+				+				"Address:<br><br>"
 				+				"Home Phone:<br>"
 				+			"</td>"
 				+			"<td class='view-staff-result1'>"
