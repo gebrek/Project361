@@ -294,8 +294,27 @@ public class EditMyContactServlet extends HttpServlet{
 		+								"<option> pm </option>"
 		+							"</select><br>"
 		+						"</td>"
-		+					"</tr>"
-		+				"</table>"
+		+					"</tr>";
+
+		if (!page.username.equals("admin@uwm.edu") && page.getCurrentUser().getPermissions().equals("TA"))
+		{
+			http +=					"<tr>"
+			+							"<td class=\"form\" >"
+			+							"Teaching skills:"
+			+							"<input class='createStaffInput' type=\"text\" id='teachingSkills' name='teachingSkills'"; 
+										List<String> listskills = page.getCurrentUser().getSkills();
+										if(listskills != null && !listskills.isEmpty()){
+											http += "value='";
+											for(String i: listskills){
+												http += "<div class='view-mycontact-hours'>" + i + "</div>";
+											}
+											http += "'";
+										}
+			http +=						"</td>"
+			+					"</tr>";
+		}
+		
+		http +=			"</table>"
 		+				"<input class='add-hours' type='submit' value='Add' formmethod='get' />"
 		+				"<input class='submit' type='submit' value='Submit' formmethod='post' />"
 		+				"<input class='delete' name= 'delete' type='submit' value='Delete All' formmethod='get' />"

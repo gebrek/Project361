@@ -154,6 +154,21 @@ public class ViewStaffServlet extends HttpServlet{
 				+				user.getHomeAddress() + "<br>"
 				+			"</td>"
 				+		"</tr>";
+
+				if (user.getPermissions().equals("TA"))
+				{
+					http +=	"<tr>" 
+					+			"<td class='view-staff-hours'>"
+					+				"<br><br>Teaching Proficiencies:";
+									List<String> listskills = user.getSkills();
+									if(listskills != null && !listskills.isEmpty()){
+										for(String i: listskills){
+											http += "<div class='view-mycontact-hours'>" + i + "</div>";
+										}
+									}
+					http+=		"</td>"
+					+		"</tr>";
+				}
 		}
 		
 		http+= 		"</table>"
