@@ -41,13 +41,11 @@ public class EditSectionServlet extends HttpServlet {
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		String delete = req.getParameter("delete");
+
 		String section = req.getParameter("section");
 		
-		if(delete != null && !delete.isEmpty()){
-			if(delete.equals("Delete")){
+		if(section != null){
 				//data.deleteSection(section);
-			}
 		}
 		doGet(req, resp);
 	}
@@ -80,8 +78,8 @@ public class EditSectionServlet extends HttpServlet {
 				+			"<div id=\"title-create-staff\">"
 				+				"Edit Section"
 				+			"</div>"
-				+ (_req.getParameter("submit") != null ? "<ul class='errors'><li>Successfully Saved</li></ul>": "")
-				+ (_req.getParameter("delete") != null ? "<ul class='errors'><li>Successfully Deleted</li></ul>": "")
+				//+ (_req.getParameter("submit") != null ? "<ul class='errors'><li>Successfully Saved</li></ul>": "")
+				//+ (_req.getParameter("delete") != null ? "<ul class='errors'><li>Successfully Deleted</li></ul>": "")
 				);
 	}
 	
@@ -92,12 +90,11 @@ public class EditSectionServlet extends HttpServlet {
 	 */
 	private void endForm() throws IOException {
 		
-		_resp.getWriter().println( ""
-										+ "<input class='submit-section' name='submit' type='submit' value='Assign Instructor' />"
-										+ "<input class='delete-section' name='delete' type='submit' value='Delete Section' />"
-										+ "</div></form></div>"
-										+ "</div>"
-										);
+		_resp.getWriter().println( "<input class='submit-section' type='submit' value='Assign Instructor' />");
+		if (page.getUsername().equals("admin@uwm.edu"))
+			_resp.getWriter().println("<input class='delete-section' type='submit' value='Delete Section' />");
+		_resp.getWriter().println("</div></form></div>");
+		_resp.getWriter().println("</div>");
 	}
 
 	/**
@@ -108,7 +105,7 @@ public class EditSectionServlet extends HttpServlet {
 	private void displayStaff() throws IOException {
 		
 		String html = "<br><div id=\"sub\">Select a staff to assign: </div>"
-				+ "<select id='staff' name='staff' class='staff-select staff-view-margin' required>";
+				+ "<select required id='staff' name='staff' class='staff-select staff-view-margin'>";
 		
 		List<Staff> staffList = ds.getAllStaff();
 		html += "<option selected disabled>"+ "Select staff" +"</option>";
@@ -158,10 +155,8 @@ public class EditSectionServlet extends HttpServlet {
 				if (!page.getUsername().equals("admin@uwm.edu"))
 				{
 					if (page.getCurrentUser().getPermissions().equals("Instructor"))
-					{
 						if(!section.getInstructor().equalsIgnoreCase(page.getCurrentUser().getName()))
 							continue;
-					}
 				}
 
 				html += "<option value='"+course.getNumber() + " " + section.getID()+"'>"
@@ -181,7 +176,7 @@ public class EditSectionServlet extends HttpServlet {
 	 */
 	private void handleSubmit() {
 		
-		if(_req.getParameter("submit") != null) {
+		if(_req.getParameter("staff") != null && _req.getParameter("section") != null) {
 			
 			ds.editSection(_req.getParameter("section"), _req.getParameter("staff"));
 		}

@@ -1,19 +1,16 @@
 package edu.uwm.cs361;
 
-import java.awt.Window;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.*;
 
-import edu.uwm.cs361.*;
-
 @SuppressWarnings("serial")
 public class ProjectServlet extends HttpServlet {
 	
 	/**
-	 * Constuctor for page
+	 * Constructor for page
 	 */
 	public ProjectServlet(){};
 

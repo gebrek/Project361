@@ -116,9 +116,11 @@ public class ViewStaffServlet extends HttpServlet{
 		+					"<tr>"
 		+					"<td></td>"
 		+					"<td>"
-		+						"<input class='view-submit-staff' type='submit' value='View' />"
-		+						"<input class='view-delete-staff' name='delete' type='submit' value='Delete' />"
-		+					"</td>"
+		+						"<input class='view-submit-staff' type='submit' value='View' />";
+		if (page.getUsername().equals("admin@uwm.edu"))
+			http +=						"<input class='view-delete-staff' name='delete' type='submit' value='Delete' />";
+		
+		http +=					"</td>"
 		+				"</tr>";
 		
 		Staff user = null;
