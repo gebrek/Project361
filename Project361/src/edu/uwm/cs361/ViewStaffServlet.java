@@ -142,14 +142,14 @@ public class ViewStaffServlet extends HttpServlet{
 				+			"<td class='view-staff1'>"
 				+				"Office:<br>"
 				+				"Office Phone:<br>"
-				+				"Address:<br><br>"
 				+				"Home Phone:<br>"
+				+				"Address:<br>"
 				+			"</td>"
 				+			"<td class='view-staff-result1'>"
 				+				user.getOfficeLoc() + "<br>"
 				+				user.getOfficePhone() + "<br>"
-				+				user.getHomeAddress() + "<br>"
 				+				user.getHomePhone() + "<br>"
+				+				user.getHomeAddress() + "<br>"
 				+			"</td>"
 				+		"</tr>";
 		}

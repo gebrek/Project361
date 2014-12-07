@@ -199,19 +199,16 @@ public class ProjectServlet extends HttpServlet {
 									}
 									else if(user.getPermissions().equals("Instructor")){
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
-		resp.getWriter().println("			<li> <a href=\"#\">Staff</a>");
-		resp.getWriter().println("				<ul class=\"buttons-outline\">");
-		resp.getWriter().println("					<li><a href=\"/viewStaff\"> View Staff</a></li>");
-		resp.getWriter().println("				</ul>");
+		resp.getWriter().println("			<li> <a href=\"/viewStaff\">View TA's</a>");
 		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");	
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
-		resp.getWriter().println("			<li> <a href=\"#\"> Course</a>");
+		resp.getWriter().println("			<li> <a href=\"#\"> Manages Courses</a>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
 		resp.getWriter().println("					<li><a href=\"/courseList\">Course List</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
-		resp.getWriter().println("					<li><a href=\"/editSection\">Edit Section</a></li>");
+		resp.getWriter().println("					<li><a href=\"/editSection\">Assign TA</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");
