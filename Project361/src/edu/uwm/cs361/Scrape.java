@@ -40,11 +40,7 @@ public class Scrape {
 		}
 		in.close();
 		ArrayList<Course> crs = getAllCourses(buf);
-		for(Course c : crs){
-			for(Section s : c.getSections()){
-				System.out.println(c.getID() + "\t:\t" + s.getID() + ":" + s.getSection());
-			}
-		}
+		
 		_ds.addCourseAll(crs);
 	}
 	
