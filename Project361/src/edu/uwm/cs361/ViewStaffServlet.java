@@ -116,9 +116,11 @@ public class ViewStaffServlet extends HttpServlet{
 		+					"<tr>"
 		+					"<td></td>"
 		+					"<td>"
-		+						"<input class='view-submit-staff' type='submit' value='View' />"
-		+						"<input class='view-delete-staff' name='delete' type='submit' value='Delete' />"
-		+					"</td>"
+		+						"<input class='view-submit-staff' type='submit' value='View' />";
+		if (page.getUsername().equals("admin@uwm.edu"))
+			http +=						"<input class='view-delete-staff' name='delete' type='submit' value='Delete' />";
+		
+		http +=					"</td>"
 		+				"</tr>";
 		
 		Staff user = null;
@@ -142,14 +144,14 @@ public class ViewStaffServlet extends HttpServlet{
 				+			"<td class='view-staff1'>"
 				+				"Office:<br>"
 				+				"Office Phone:<br>"
-				+				"Address:<br><br>"
 				+				"Home Phone:<br>"
+				+				"Address:<br>"
 				+			"</td>"
 				+			"<td class='view-staff-result1'>"
 				+				user.getOfficeLoc() + "<br>"
 				+				user.getOfficePhone() + "<br>"
-				+				user.getHomeAddress() + "<br>"
 				+				user.getHomePhone() + "<br>"
+				+				user.getHomeAddress() + "<br>"
 				+			"</td>"
 				+		"</tr>";
 		}
