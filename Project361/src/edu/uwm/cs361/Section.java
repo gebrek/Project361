@@ -39,6 +39,8 @@ public class Section implements Comparable<Section>{
 	private String room;
 	@Persistent
 	private Course course;
+	@Persistent
+	public boolean edited;
 	
 	public Section(String secid, String crsid, String un, String ty, String sec,
 			String hrs, String dys, String dts, String inst, String rm, Course crs){
@@ -53,6 +55,7 @@ public class Section implements Comparable<Section>{
 		instructor = inst;
 		room = rm;
 		course = crs;
+		edited = false;
 	}
 	public Section(){
 		sectionid = null;
@@ -66,6 +69,7 @@ public class Section implements Comparable<Section>{
 		instructor = null;
 		room = null;
 		course = null;
+		edited = false;
 	}
 	
 	/**
@@ -250,7 +254,11 @@ public class Section implements Comparable<Section>{
 		return String.format("<tr class='border_bottom'><td></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
 				section, units, hours, days, instructor, room);
 	}
-
+	@Override 
+	public boolean equals(Object o){
+		Section s = (Section) o;
+		return (courseid.equals(s.courseid) && sectionid.equals(s.sectionid));
+	}
 	@Override
 	public String toString() {
 		return "Section [key=" + key + ", sectionid=" + sectionid

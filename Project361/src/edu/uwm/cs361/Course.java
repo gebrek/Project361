@@ -98,6 +98,15 @@ public class Course implements Comparable<Course>{
 	public void setNumber(String number) {
 		this.number = number;
 	}
+	public void mergeSections(Course other){
+		for(Section sn : this.sections){
+			for(Section so : other.sections){
+				if(so.edited && sn.equals(so)){
+					this.sections.set(this.sections.indexOf(sn), so);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * 
@@ -128,6 +137,11 @@ public class Course implements Comparable<Course>{
 	public String toString() {
 		return "Course [courseid=" + courseid + ", title=" + title
 				+ ", sections=" + sections + "]";
+	}
+	@Override
+	public boolean equals(Object o){
+		Course c = (Course) o;
+		return courseid.equals(c.courseid);
 	}
 
 	@Override

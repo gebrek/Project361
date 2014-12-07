@@ -10,6 +10,14 @@ import javax.jdo.Query;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Entity;
+import javax.jdo.Query;
 
 public class DatastoreServ {
 	
@@ -67,7 +75,6 @@ public class DatastoreServ {
 	 * @param query Use this to find specific course. See jdo queries
 	 * @return Course list. Use list.get(0) for the course being searched for
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Course> getCourse(String query){
 		
 		Query q = _pm.newQuery(Course.class);
@@ -80,6 +87,13 @@ public class DatastoreServ {
 		List<Course> courseList = (List<Course>)q.execute();
 		if(courseList != null) Collections.sort(courseList);
 		return courseList;
+	}
+	public Course getCoursebyCourse(Course c){
+		try{
+			return getCourse("courseid == '" + c.getID() + "'").get(0);
+		}catch(Exception e){
+			return null;
+		}
 	}
 	
 	/**
@@ -98,6 +112,13 @@ public class DatastoreServ {
 		}
 		
 		return (List<Section>) q.execute() ;
+	}
+	public Section getSectionbySection(Section s){
+		try{
+			return getSection("courseid == '" + s.getCourseid() + "' && sectionid == '" + s.getSection() + "'").get(0);
+		}catch(Exception e){
+			return null;
+		}
 	}
 	
 	/**
@@ -145,9 +166,6 @@ public class DatastoreServ {
 		_pm.makePersistent(course);
 	}
 	public void addCourseAll(List<Course> courses){
-//		for(Course c : courses){
-//			addCourse(c);
-//		}
 		_pm.makePersistentAll(courses);
 	}
 	
@@ -189,6 +207,7 @@ public class DatastoreServ {
 	public void addSectionAll(List<Section> sections){
 		_pm.makePersistentAll(sections);
 	}
+
 	
 	/**
 	 * Deletes all courses form datastore
@@ -223,11 +242,12 @@ public class DatastoreServ {
 					if (section.getSection().equals(tokens[2]))
 					{
 						section.setInstructor(staff);
+						section.edited = true;
 						_pm.makePersistent(section);
 					}
 				}
 			}
-			break;
+//			break;
 
 		}
 		

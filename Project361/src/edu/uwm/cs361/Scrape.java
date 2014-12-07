@@ -17,7 +17,6 @@ public class Scrape {
 	 * @throws IOException
 	 */
 	public static void getCourseListandStore() throws IOException{
-		
 		_ds.deleteCourses();
 		getURL("http://www4.uwm.edu/schedule/index.cfm?a1=subject_details&subject=COMPSCI&strm=2149");
 	}
@@ -40,11 +39,15 @@ public class Scrape {
 		}
 		in.close();
 		ArrayList<Course> crs = getAllCourses(buf);
-		for(Course c : crs){
-			for(Section s : c.getSections()){
-				System.out.println(c.getID() + "\t:\t" + s.getID() + ":" + s.getSection());
-			}
-		}
+//		List<Course> old = _ds.getAllCourses();
+//		for(Course cn : crs){
+//			for(Course co : old){
+//				if(cn.equals(co)){
+//					cn.mergeSections(co);
+//				}
+//			}
+//		}
+//		_ds.deleteCourses();
 		_ds.addCourseAll(crs);
 	}
 	
