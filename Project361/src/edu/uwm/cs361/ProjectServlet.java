@@ -277,8 +277,6 @@ public class ProjectServlet extends HttpServlet {
 	 * @throws IOException
 	 */
 	public Staff checkLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		
-		//use for sprint3
 
 		Cookie[] cookies = req.getCookies();
 
@@ -299,7 +297,7 @@ public class ProjectServlet extends HttpServlet {
 			}
 		}
 
-		return user;
+		return null;
 
 	}
 }

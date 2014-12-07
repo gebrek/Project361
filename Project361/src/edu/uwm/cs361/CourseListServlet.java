@@ -41,10 +41,11 @@ public class CourseListServlet extends HttpServlet{
 	 * @return String containing built html code
 	 */
 	private String buildPage(){
+		
 		String http = "";
 		http += "<form id=\"ccflist\">"
 		+			"<div id=\"title-create-staff\">";
-		if (page.getCurrentUser().equals("admin@uwm.edu"))
+		if (page.username.equals("admin@uwm.edu"))
 			http +=				"Course List";
 		else
 			http +=				"My Sections";
