@@ -78,7 +78,7 @@ public class EditSectionServlet extends HttpServlet {
 				+ "<div class=\"page-after-banner\">"
 				+ "<form id='ccf' method='POST' action='editSection'>"
 				+			"<div id=\"title-create-staff\">"
-				+				"Add Staff To Section"
+				+				"Edit Section"
 				+			"</div>"
 				+ (_req.getParameter("submit") != null ? "<ul class='errors'><li>Successfully Saved</li></ul>": "")
 				+ (_req.getParameter("delete") != null ? "<ul class='errors'><li>Successfully Deleted</li></ul>": "")
@@ -93,7 +93,7 @@ public class EditSectionServlet extends HttpServlet {
 	private void endForm() throws IOException {
 		
 		_resp.getWriter().println( ""
-										+ "<input class='submit-section' name='submit' type='submit' value='Submit' />"
+										+ "<input class='submit-section' name='submit' type='submit' value='Assign Instructor' />"
 										+ "<input class='delete-section' name='delete' type='submit' value='Delete Section' />"
 										+ "</div></form></div>"
 										+ "</div>"
@@ -108,7 +108,7 @@ public class EditSectionServlet extends HttpServlet {
 	private void displayStaff() throws IOException {
 		
 		String html = "<br><div id=\"sub\">Select a staff to assign: </div>"
-				+ "<select id='staff' name='staff' class='staff-select staff-view-margin'>";
+				+ "<select id='staff' name='staff' class='staff-select staff-view-margin' required>";
 		
 		List<Staff> staffList = ds.getAllStaff();
 		html += "<option selected disabled>"+ "Select staff" +"</option>";
@@ -143,7 +143,7 @@ public class EditSectionServlet extends HttpServlet {
 		List<Course> myCourses = ds.getAllCourses();
 		
 		String html = "<div id=\"sub\">Select a course for assignment: </div>"
-						+"<select id='section' name='section' class='staff-select'>";
+						+"<select id='section' name='section' class='staff-select' required>";
 		
 		html += "<option selected disabled>"+ "Select section" +"</option>";
 		

@@ -189,7 +189,7 @@ public class ProjectServlet extends HttpServlet {
 		resp.getWriter().println("					<li><a href=\"/courseList\">Course List</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
-		resp.getWriter().println("					<li><a href=\"/editSection\">Assign Instructors</a></li>");
+		resp.getWriter().println("					<li><a href=\"/editSection\">Edit Section</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");
@@ -211,7 +211,7 @@ public class ProjectServlet extends HttpServlet {
 		resp.getWriter().println("					<li><a href=\"/courseList\">Course List</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
-		resp.getWriter().println("					<li><a href=\"/editSection\"> Edit Section</a></li>");
+		resp.getWriter().println("					<li><a href=\"/editSection\">Edit Section</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");
