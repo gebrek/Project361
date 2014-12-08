@@ -554,7 +554,7 @@ input
 {
 	margin-left: 487px;
 	margin-top: 60px;
-	width: 270px;
+	width: 220px;
 	display: block;
 	height: 45px;
 	box-shadow: 0px 0px 16px rgba(218, 218, 218, 0.51);
@@ -575,22 +575,32 @@ input
 	border: 1px solid #FFFFFF;
 	color: #FFFFFF;
 	background: #4A4949;
-	font: 1.5em/40px Verdana, Arial, Helvetica, sans-serif;
+	font: 1.0em/40px Verdana, Arial, Helvetica, sans-serif;
 	border-radius: 15px;
+}
+.submit-section:hover
+{
+	background: #363636;
+	cursor: pointer;
 }
 .delete
 {
-	margin-left: 600px;
-	margin-top: -200px;
-	width: 175px;
+	margin-left: 540px;
+	margin-top: 10px;
+	width: 160px;
 	display: block;
-	height: 32px;
+	height: 45px;
 	box-shadow: 0px 0px 16px rgba(218, 218, 218, 0.51);
 	border: 1px solid #FFFFFF;
 	color: #FFFFFF;
 	background: #4A4949;
-	font: 1.0em/26px Verdana, Arial, Helvetica, sans-serif;
+	font: 1.0em/40px Verdana, Arial, Helvetica, sans-serif;
 	border-radius: 15px;
+}
+.delete:hover
+{
+	background: #363636;
+	cursor: pointer;
 }
 .delete-section
 {
@@ -614,7 +624,7 @@ input
 }
 .add-hours
 {
-	margin-left: 630px;
+	margin-left: 575px;
 	margin-top: -45px;
 	width: 126px;
 	display: block;
@@ -623,7 +633,7 @@ input
 	border: 1px solid #FFFFFF;
 	color: #FFFFFF;
 	background: #4A4949;
-	font: 1.5em/40px Verdana, Arial, Helvetica, sans-serif;
+	font: 1.0em/40px Verdana, Arial, Helvetica, sans-serif;
 	border-radius: 15px;
 }
 
@@ -657,8 +667,8 @@ input
 
 .view-staff1
 {
-	top:40px;
-	left:-450px;
+	top:25px;
+	left:-360px;
 	font:1.0em/30px Verdana, Arial, Helvetica, sans-serif;
 	color:#FFE000;;
 	position:relative;
@@ -666,11 +676,11 @@ input
 }
 .view-staff-result1
 {
-	top:40px;
+	top:25px;
 	font: 1.0em/30px Verdana, Arial, Helvetica, sans-serif;
 	color:#ffffff;;
 	position:relative;
-	left:-400px;
+	left:-350px;
 	width:400px
 }
 .view-mycontact-result
@@ -722,9 +732,9 @@ input
 
 .view-submit-staff
 {
-	margin-left: 100px;
+	margin-left: 61px;
 	margin-top: -40px;
-	width: 200px; 
+	width: 135px;
 	display: block;
 	height: 40px;
 	box-shadow: 0px 0px 16px rgba(218, 218, 218, 0.51);
@@ -737,9 +747,9 @@ input
 
 .view-delete-staff
 {
-	margin-left: 315px;
+	margin-left: 220px;
 	margin-top: -40px;
-	width: 200px; 
+	width: 145px;
 	display: block;
 	height: 40px;
 	box-shadow: 0px 0px 16px rgba(218, 218, 218, 0.51);
@@ -749,7 +759,11 @@ input
 	font: 1.0em/20px Verdana, Arial, Helvetica, sans-serif;
 	border-radius: 15px;
 }
-
+.view-delete-staff:hover
+{
+	background: #363636;
+	cursor: pointer;
+}
 .view-submit-staff:hover
 {
 	background: #363636;

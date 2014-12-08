@@ -78,8 +78,7 @@ public class EditSectionServlet extends HttpServlet {
 				+			"<div id=\"title-create-staff\">"
 				+				"Edit Section"
 				+			"</div>"
-				//+ (_req.getParameter("submit") != null ? "<ul class='errors'><li>Successfully Saved</li></ul>": "")
-				//+ (_req.getParameter("delete") != null ? "<ul class='errors'><li>Successfully Deleted</li></ul>": "")
+				+ (_req.getParameter("submit") != null ? "<ul class='errors'><li>Successfully Saved</li></ul>": "")
 				);
 	}
 	
@@ -91,8 +90,6 @@ public class EditSectionServlet extends HttpServlet {
 	private void endForm() throws IOException {
 		
 		_resp.getWriter().println( "<input class='submit-section' type='submit' value='Assign Instructor' />");
-		if (page.getUsername().equals("admin@uwm.edu"))
-			_resp.getWriter().println("<input class='delete-section' type='submit' value='Delete Section' />");
 		_resp.getWriter().println("</div></form></div>");
 		_resp.getWriter().println("</div>");
 	}

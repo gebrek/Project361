@@ -94,17 +94,6 @@ public class ViewMyContactServlet extends HttpServlet{
 				+				user.getHomeAddress() + "<br>"
 				+				user.getHomePhone() + "<br>"
 				+			"</td>"
-				+		"</tr>"
-				+		"<tr>"
-				+			"<td class='view-staff-hours'>"
-				+				"Office Hours:";
-								List<String> listhours = page.getCurrentUser().getOfficeHours();
-								if(listhours != null && !listhours.isEmpty()){
-									for(String i: listhours){
-										http += "<div class='view-mycontact-hours'>" + i + "</div>";
-									}
-								}
-				http+=		"</td>"
 				+		"</tr>";
 				if (!page.username.equals("admin@uwm.edu") && page.getCurrentUser().getPermissions().equals("TA"))
 				{
@@ -120,6 +109,18 @@ public class ViewMyContactServlet extends HttpServlet{
 					http+=		"</td>"
 					+		"</tr>";
 				}
+
+				http+=	"<tr>"
+				+			"<td class='view-staff-hours'>"
+				+				"Office Hours:";
+								List<String> listhours = page.getCurrentUser().getOfficeHours();
+								if(listhours != null && !listhours.isEmpty()){
+									for(String i: listhours){
+										http += "<div class='view-mycontact-hours'>" + i + "</div>";
+									}
+								}
+				http+=		"</td>"
+				+		"</tr>";
 		}
 		
 		http+= 		"</table>"
