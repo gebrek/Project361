@@ -68,11 +68,13 @@ public class EditMyContactServlet extends HttpServlet{
 				else
 				{
 					boolean newhours = true;
-					for(String i : page.getCurrentUser().getOfficeHours()){
-						if(i.contains(day)){
-							page.getCurrentUser().modifyOfficeHours(i, hours);
-							newhours = false;
-							break;
+					if(page.getCurrentUser().getOfficeHours() != null){
+						for(String i : page.getCurrentUser().getOfficeHours()){
+							if(i.contains(day)){
+								page.getCurrentUser().modifyOfficeHours(i, hours);
+								newhours = false;
+								break;
+							}
 						}
 					}
 					
@@ -164,11 +166,11 @@ public class EditMyContactServlet extends HttpServlet{
 			page.menu(req,resp);
 		} else {
 			data.updateStaff(username, firstname, password, null);
- 			data.updateStaffContact(page.getCurrentUser().getName(), office, officePhone, homeAddress, homePhone);
+ 			data.updateStaffContact(username, office, officePhone, homeAddress, homePhone);
 			
 			String http = "";
 			
-			http += "<form id=\"ccf\" method=\"GET\" action=\"/viewMyContact\">"
+			http += "<form id=\"ccf\" method=\"GET\" action=\"/editMyContact\">"
 			+			"<div id=\"title-create-staff\">"
 			+				"Edit Contact info: " + username
 			+			"</div>"
@@ -240,15 +242,31 @@ public class EditMyContactServlet extends HttpServlet{
 		+							"Office: <input class='createStaffInput' type=\"text\" id='officeLoc' name='office' value='" + staffToUpdate.getOfficeLoc() + "'required/><br>"
 		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + staffToUpdate.getOfficePhone() + "'required/><br>"
 		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + staffToUpdate.getHomeAddress() + "'required/><br>"
-		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + staffToUpdate.getHomePhone() + "'required/><br>"
-		+							"Office Hours:";
+		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + staffToUpdate.getHomePhone() + "'required/><br>";
+									if (!page.username.equals("admin@uwm.edu") && page.getCurrentUser().getPermissions().equals("TA"))
+									{
+		http +=							"Teaching skills:"
+		+									"<input class='createStaffInput' type=\"text\" id='teachingSkills' name='teachingSkills' value='"; 
+											List<String> listskills = page.getCurrentUser().getSkills();
+											if(listskills != null && !listskills.isEmpty()){
+												String skills ="";
+												for(String i: listskills){
+													skills += " " + i;
+												}
+												http+= skills;
+											}
+											
+											http+= "'required/><br>";
+									
+									}
+		http+=						"Office Hours:<br>";
 									List<String> listhours = staffToUpdate.getOfficeHours();
 									if(listhours != null && !listhours.isEmpty()){
 										for(String i: listhours){
 											http += "<div class='edit-mycontact-result'>" + i + "</div>";
 										}
 									}
-		http+= 							"<select class='officehour-select officeHourInput' id='day' name='day' required>"
+		http+= 						"<select class='officehour-select officeHourInput' id='day' name='day' required>"
 		+								"<option value = 'Mon' selected> Mon </option>"
 		+								"<option> Tue </option>"
 		+								"<option> Wed </option>"
@@ -294,11 +312,14 @@ public class EditMyContactServlet extends HttpServlet{
 		+								"<option> pm </option>"
 		+							"</select><br>"
 		+						"</td>"
-		+					"</tr>"
-		+				"</table>"
+		+					"</tr>";
+
+
+		
+		http +=			"</table>"
 		+				"<input class='add-hours' type='submit' value='Add' formmethod='get' />"
+		+				"<input class='delete' name= 'delete' type='submit' value='Delete Hours' formmethod='get' />"
 		+				"<input class='submit' type='submit' value='Submit' formmethod='post' />"
-		+				"<input class='delete' name= 'delete' type='submit' value='Delete All' formmethod='get' />"
 		+			"</div>"
 		+		"</form>";
 		

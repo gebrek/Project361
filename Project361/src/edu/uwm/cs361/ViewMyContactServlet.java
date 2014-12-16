@@ -94,8 +94,23 @@ public class ViewMyContactServlet extends HttpServlet{
 				+				user.getHomeAddress() + "<br>"
 				+				user.getHomePhone() + "<br>"
 				+			"</td>"
-				+		"</tr>"
-				+		"<tr>"
+				+		"</tr>";
+				if (!page.username.equals("admin@uwm.edu") && page.getCurrentUser().getPermissions().equals("TA"))
+				{
+					http +=	"<tr>" 
+					+			"<td class='view-staff-hours'>"
+					+				"Teaching Proficiencies:";
+									List<String> listskills = page.getCurrentUser().getSkills();
+									if(listskills != null && !listskills.isEmpty()){
+										for(String i: listskills){
+											http += "<div class='view-mycontact-hours'>" + i + "</div>";
+										}
+									}
+					http+=		"</td>"
+					+		"</tr>";
+				}
+
+				http+=	"<tr>"
 				+			"<td class='view-staff-hours'>"
 				+				"Office Hours:";
 								List<String> listhours = page.getCurrentUser().getOfficeHours();
@@ -112,15 +127,6 @@ public class ViewMyContactServlet extends HttpServlet{
 		+		"</div>"
 		+	"</form>";
 		
-//		http += "<form method='Get' action='/editStaff'>"
-//		+			"<table>"
-//		+				"<tr>"
-//		+					"<td>"
-//		+						"<input class='view-edit-staff' type='submit' value='Edit' />"
-//		+					"</td>"
-//		+				"</tr>"
-//		+			"</table>"
-//		+		"</form>";
 		return http;
 	}
 

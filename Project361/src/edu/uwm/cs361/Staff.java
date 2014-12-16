@@ -1,6 +1,7 @@
 package edu.uwm.cs361;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -279,6 +280,11 @@ public class Staff {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public List<String> getSkills() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

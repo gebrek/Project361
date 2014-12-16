@@ -81,6 +81,7 @@ public class ProjectServlet extends HttpServlet {
 		
 		//Staff loggedIn = checkLogin(req, resp);
 
+		//HEQ -- username.isEmpty() should crash when no user logged in... null.isEmpty() crashes
 		user = checkLogin(req, resp);
 		if (user == null && username.isEmpty())
 		{
