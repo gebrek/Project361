@@ -127,6 +127,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     	<servlet-name>EmailServlet</servlet-name>
     	<url-pattern>/emailRequest</url-pattern>   
 	</servlet-mapping>
+	
+	<servlet>
+    	<servlet-name>StaffHomeServlet</servlet-name>
+    	<servlet-class>edu.uwm.cs361.StaffHomeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+    	<servlet-name>StaffHomeServlet</servlet-name>
+    	<url-pattern>/staffHome</url-pattern>   
+	</servlet-mapping>
 
 
 	<welcome-file-list>

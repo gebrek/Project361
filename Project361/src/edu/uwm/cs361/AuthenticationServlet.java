@@ -58,7 +58,7 @@ public class AuthenticationServlet extends HttpServlet {
 						validUser = true;
 						Cookie c = new Cookie("username", username);
 						resp.addCookie(c);
-						resp.sendRedirect("/project");
+						resp.sendRedirect("/staffHome");
 						break;
 					} else {
 						// System.out.println("Passes failed");

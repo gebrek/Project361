@@ -904,9 +904,10 @@ tbody tr .ad_home_course_listing {
 }
 
 .page-after-banner #month {
-	width: 90%;
+	width: 1100;
 	height: auto;
 	display: block;
+	margin-left: -175;
 }
 /*.page-after-banner #month, th, td {
 	border: 1px dotted #FDFC00;
@@ -914,7 +915,7 @@ tbody tr .ad_home_course_listing {
 }*/
 
 .page-after-banner #month, .office_hours {
-	margin-left: 18px;
+	
 	margin-top: 10px;
 }
 
@@ -931,7 +932,8 @@ tbody tr .ad_home_course_listing {
 	text-align: right;
 }
 .events .event_details {
-	text-align: center;
+	text-align: left;
+	width: 12%
 	
 }
 .events .event_details:hover {
