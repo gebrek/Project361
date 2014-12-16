@@ -13,14 +13,13 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 @PersistenceCapable
 public class Staff {
-	// email name sectionsTaught officeHours permissions password
 	
 	@Persistent
 	private String email;
 	@Persistent
 	private String name;
 	@Persistent//(mappedBy = "instructor")
-	private ArrayList<Section> sectionsTaught;
+	private ArrayList<String> sectionsTaught;
 	@Persistent
 	private ArrayList<String> officeHours;
 	@Persistent
@@ -48,7 +47,7 @@ public class Staff {
 	 * @param staffType String - Instructor / TA
 	 * @param pass String - password
 	 */
-	public Staff(String email, String name, ArrayList<Section> secs, String staffType, String pass){	
+	public Staff(String email, String name, ArrayList<String> secs, String staffType, String pass){	
 		this.email = email;
 		this.name = name;
 		sectionsTaught = secs;
@@ -222,7 +221,7 @@ public class Staff {
 	 * 
 	 * @return ArrayList of sections taught by staff
 	 */
-	public ArrayList<Section> getSectionsTaught() {
+	public ArrayList<String> getSectionsTaught() {
 		return sectionsTaught;
 	}
 	
@@ -231,8 +230,11 @@ public class Staff {
 	 * 
 	 * @param sectionsTaught Array list with new sections taught
 	 */
-	public void setSectionsTaught(ArrayList<Section> sectionsTaught) {
+	public void setSectionsTaught(ArrayList<String> sectionsTaught) {
 		this.sectionsTaught = sectionsTaught;
+	}
+	public void addSectionTaught(Section s){
+		sectionsTaught.add(s.getCourseid() + " " + s.getSection());
 	}
 	/*
 	public String getOfficeHours() {

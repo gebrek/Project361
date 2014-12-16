@@ -246,8 +246,9 @@ public class DatastoreServ {
 						_pm.makePersistent(section);
 					}
 				}
+				break;
 			}
-//			break;
+//			
 
 		}
 		
