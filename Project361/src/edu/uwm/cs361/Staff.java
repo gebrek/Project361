@@ -20,7 +20,7 @@ public class Staff {
 	@Persistent
 	private String name;
 	@Persistent//(mappedBy = "instructor")
-	private ArrayList<String> sectionsTaught;
+	private ArrayList<Key> sectionsTaught;
 	@Persistent
 	private ArrayList<String> officeHours;
 	@Persistent
@@ -50,10 +50,9 @@ public class Staff {
 	 * @param staffType String - Instructor / TA
 	 * @param pass String - password
 	 */
-	public Staff(String email, String name, ArrayList<String> secs, String staffType, String pass){	
+	public Staff(String email, String name, ArrayList<Section> secs, String staffType, String pass){	
 		this.email = email;
 		this.name = name;
-		sectionsTaught = secs;
 		//officeHours = of;
 		permissions = staffType;
 		password = pass;
@@ -62,6 +61,10 @@ public class Staff {
 		officePhone = "";
 		homeAddress = "";
 		homePhone = "";
+
+		for(Section s : secs){
+			sectionsTaught.add(s.getKey());
+		}
 		
 		key = KeyFactory.createKey(Staff.class.getSimpleName(), name);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -224,8 +227,15 @@ public class Staff {
 	 * 
 	 * @return ArrayList of sections taught by staff
 	 */
-	public ArrayList<String> getSectionsTaught() {
-		return sectionsTaught;
+	public ArrayList<Section> getSectionsTaught() {
+		ArrayList<Section> ss = new ArrayList<Section>();
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		for(Key k : sectionsTaught){
+			if(pm.getObjectById(k) instanceof Section){
+				ss.add((Section) pm.getObjectById(k));
+			}
+		}
+		return ss;
 	}
 	
 	/**
@@ -233,11 +243,14 @@ public class Staff {
 	 * 
 	 * @param sectionsTaught Array list with new sections taught
 	 */
-	public void setSectionsTaught(ArrayList<String> sectionsTaught) {
-		this.sectionsTaught = sectionsTaught;
+	public void setSectionsTaught(ArrayList<Section> st) {
+		sectionsTaught.clear();
+		for(Section s : st){
+			sectionsTaught.add(s.getKey());
+		}
 	}
 	public void addSectionTaught(Section s){
-		sectionsTaught.add(s.getCourseid() + " " + s.getSection());
+		sectionsTaught.add(s.getKey());
 	}
 	/*
 	public String getOfficeHours() {
