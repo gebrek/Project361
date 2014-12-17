@@ -38,6 +38,8 @@ public class Staff {
 	private String homeAddress;
 	@Persistent
 	private String homePhone;
+	@Persistent
+	private ArrayList<String> skills;
 	
 	/**
 	 * Staff constructor
@@ -282,10 +284,17 @@ public class Staff {
 		this.password = password;
 	}
 
-	public List<String> getSkills() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<String> getSkills() {
+		return skills;
 	}
-	
+	public void addSkill(String skillname){
+		skills.add(skillname);
+	}
+	public boolean removeSkill(String skillname){
+		return skills.remove(skillname);
+	}
+	public void setSkills(ArrayList<String> newSkills){
+		skills = newSkills;
+	}
 	
 }
