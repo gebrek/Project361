@@ -62,8 +62,11 @@ public class Staff {
 		homeAddress = "";
 		homePhone = "";
 
-		for(Section s : secs){
-			sectionsTaught.add(s.getKey());
+		if (secs != null)
+		{
+			for(Section s : secs){
+				sectionsTaught.add(s.getKey());
+			}
 		}
 		
 		key = KeyFactory.createKey(Staff.class.getSimpleName(), name);

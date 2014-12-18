@@ -96,7 +96,7 @@ public class CreateStaffServlet extends HttpServlet{
 			//Staff created confirmation page.
 			http += "<form id=\"ccf\" method=\"GET\" action=\"/createStaff\">"
 			+			"<div id=\"title-create-staff\">"
-			+				"Staff Created Conformation"
+			+				"Staff Created Confirmation"
 			+			"</div>"
 			+ 			"<div id=\"sub\">"
 			+				"UserName: " + username + "<br>" 
