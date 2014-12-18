@@ -78,7 +78,7 @@ public class EditSectionServlet extends HttpServlet {
 				+			"<div id=\"title-create-staff\">"
 				+				"Edit Section"
 				+			"</div>"
-				+ (_req.getParameter("submit") != null ? "<ul class='errors'><li>Successfully Saved</li></ul>": "")
+				+ (_req.getParameter("submitSect") != null ? "<ul class='success'><li>Successfully Saved</li></ul>": "")
 				);
 	}
 	
@@ -89,7 +89,7 @@ public class EditSectionServlet extends HttpServlet {
 	 */
 	private void endForm() throws IOException {
 		
-		_resp.getWriter().println( "<input class='submit-section' type='submit' value='Assign Instructor' />");
+		_resp.getWriter().println( "<input class='submit-section' type='submit' name = 'submitSect' value='Assign Instructor' />");
 		_resp.getWriter().println("</div></form></div>");
 		_resp.getWriter().println("</div>");
 	}
@@ -198,6 +198,8 @@ public class EditSectionServlet extends HttpServlet {
 			
 			Section toUpdateSection = ds.getSectionByName(section);
 			Staff toUpdateStaff= ds.getStaff(_req.getParameter("staff"));
+			
+			System.out.println("Editing: " + toUpdateSection + "\n" + toUpdateStaff);
 			
 			ds.editSectionsStaff(toUpdateSection, toUpdateStaff);
 		}
