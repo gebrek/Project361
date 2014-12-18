@@ -36,7 +36,7 @@ public class EditMyContactServlet extends HttpServlet{
 		List<String> errors = new ArrayList<String>();
 		
 		if(!delete.isEmpty()){
-			if(delete.equals("Delete All")){
+			if(delete.equals("Delete Hours")){
 				page.getCurrentUser().removeOfficeHoursAll();
 			}
 		}
