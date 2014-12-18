@@ -265,6 +265,9 @@ public class Section implements Comparable<Section>{
 	public String getRoom() {
 		return room;
 	}
+	public Course getCourse(){
+		return course;
+	}
 	
 	/**
 	 * 
@@ -284,6 +287,13 @@ public class Section implements Comparable<Section>{
 		
 		return String.format("<tr class='border_bottom'><td></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
 				section, units, hours, days, getInstructorName(), room);
+	}
+	public String toHtmlTRwithCourse(){
+		if (section.length() > 2)
+			section = section.substring(0, 3);
+		
+		return String.format("<tr class='border_bottom'><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
+				courseid.substring(8), section, units, hours, days, getInstructorName(), room);
 	}
 	@Override 
 	public boolean equals(Object o){

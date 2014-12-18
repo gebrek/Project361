@@ -52,10 +52,28 @@ public class CourseListServlet extends HttpServlet{
 		http +=			"</div>";
 		http += 	"<div id=\"sub1\">"
 		+				"<table class='courselist'>";
-		List<Course> courses = ds.getAllCourses();
-		for (Course c : courses) {
-			http += c.toHtmlTable();
+		
+		if (page.getUsername().equals("admin@uwm.edu"))
+		{
+			List<Course> courses = ds.getAllCourses();
+			http+= "<tr class='border_bottom'><td>Course</td><td>Section</td><td>Units</td><td>Hours</td><td>Days</td><td>Instructor</td><td>Room</td></tr>\n";
+
+			for (Course c : courses) {
+
+				http += c.toHtmlTable();
+			}
+		}else {
+			Staff staff = page.getCurrentUser();
+			List<Section> sections = staff.getSectionsTaught();
+			http+= "<tr class='border_bottom'><td>Course</td><td>Section</td><td>Units</td><td>Hours</td><td>Days</td><td>Instructor</td><td>Room</td></tr>\n";
+
+			for (Section s : sections) {
+				System.out.println(s.toHtmlTRwithCourse());
+				http += s.toHtmlTRwithCourse();
+			}
 		}
+		
+		
 		http +=				"</table>"
 		+			"</div>"
 		+		"</form>";
