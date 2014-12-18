@@ -168,10 +168,14 @@ public class EditSectionServlet extends HttpServlet {
 			 
 			Staff staff = page.getCurrentUser();
 			List<Section> sections = staff.getSectionsTaught();
+	
 				
 			for (Section section : sections) {
 				
 				String course = section.getCourseid();
+				course = course.replace("COMPSCI", "");
+				course = course.substring(1);
+				System.out.println("Course: " + course);
 
 				html += "<option value='"+ course + " " + section.getID()+"'>"
 						+ "CS " + course + " - "
@@ -199,7 +203,7 @@ public class EditSectionServlet extends HttpServlet {
 			Section toUpdateSection = ds.getSectionByName(section);
 			Staff toUpdateStaff= ds.getStaff(_req.getParameter("staff"));
 			
-			System.out.println("Editing: " + toUpdateSection + "\n" + toUpdateStaff);
+			System.out.println("Editing: " + section + "\n" + ds.getStaff(_req.getParameter("staff")));
 			
 			ds.editSectionsStaff(toUpdateSection, toUpdateStaff);
 		}
