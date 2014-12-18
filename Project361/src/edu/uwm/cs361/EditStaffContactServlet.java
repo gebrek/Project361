@@ -113,7 +113,7 @@ public class EditStaffContactServlet extends HttpServlet{
 			page.layout(displayForm (req,resp,errors, toEdit),req,resp);
 			page.menu(req,resp);
 		} else {
-	
+			toEdit = data.getStaff(toEdit).getEmail();
 			data.updateStaffContact(toEdit, office, officePhone, homeAddress, homePhone);
 			
 			String http = "";
