@@ -55,7 +55,8 @@ public class StaffHomeServlet extends HttpServlet{
 		
 		int officeIndex = -1;
 		
-		ArrayList<Integer> officeForCalendar = new ArrayList<Integer>(); 
+		ArrayList<Integer> officeForCalendar = new ArrayList<Integer>();
+		
 		for(String s : guy.getOfficeHours()) {
 			
 			int dayBump = -1;
