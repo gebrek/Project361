@@ -194,7 +194,9 @@ public class EditSectionServlet extends HttpServlet {
 		
 		if(_req.getParameter("staff") != null && _req.getParameter("section") != null) {
 			
-			Section toUpdateSection = ds.getSection(_req.getParameter("section")).get(0);
+			String section = _req.getParameter("section");
+			
+			Section toUpdateSection = ds.getSectionByName(section);
 			Staff toUpdateStaff= ds.getStaff(_req.getParameter("staff"));
 			
 			ds.editSectionsStaff(toUpdateSection, toUpdateStaff);

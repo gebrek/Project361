@@ -17,6 +17,7 @@ import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Entity;
+
 import javax.jdo.Query;
 
 public class DatastoreServ {
@@ -113,6 +114,31 @@ public class DatastoreServ {
 		
 		return (List<Section>) q.execute() ;
 	}
+	
+	public Section getSectionByName(String section)
+	{
+		String secNum = section.substring(8);
+		String courseNum = section.substring(0, 3);
+		
+		Query q = _pm.newQuery(Section.class);
+		
+		q.setFilter("section=='"+secNum+"'");
+		List<Section> sectionList = (List<Section>)q.execute();
+		
+		for (Section sec : sectionList)
+		{
+			System.out.println("Current course query: " +  courseNum);
+			System.out.println("Against: " + sec.getCourseid());
+			if (sec.getCourseid().contains(courseNum))
+			{
+				System.out.println("Found: " +  sec);
+				return sec;
+			}
+		}
+		
+		return null;
+	}
+	
 	public Section getSectionbySection(Section s){
 		try{
 			return getSection("courseid == '" + s.getCourseid() + "' && sectionid == '" + s.getSection() + "'").get(0);
