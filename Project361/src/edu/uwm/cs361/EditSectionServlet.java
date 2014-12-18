@@ -165,7 +165,7 @@ public class EditSectionServlet extends HttpServlet {
 		//if instructor - show those teaching
 		
 		else {
-			
+			 
 			Staff staff = page.getCurrentUser();
 			List<Section> sections = staff.getSectionsTaught();
 				
