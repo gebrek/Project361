@@ -57,41 +57,43 @@ public class StaffHomeServlet extends HttpServlet{
 		
 		ArrayList<Integer> officeForCalendar = new ArrayList<Integer>();
 		
-		for(String s : guy.getOfficeHours()) {
-			
-			int dayBump = -1;
-			for(int n = 0; n < days.length; ++n) {
-				if(s.contains(days[n].subSequence(0, 3))) dayBump = n;
+		if(guy.getOfficeHours() != null){
+			for(String s : guy.getOfficeHours()) {
+				
+				int dayBump = -1;
+				for(int n = 0; n < days.length; ++n) {
+					if(s.contains(days[n].subSequence(0, 3))) dayBump = n;
+				}
+				
+				String guyOfficeTime = s.substring(s.indexOf("> ")+1);
+				
+				String guyTimes[] = guyOfficeTime.split("--");
+				
+				String hourMinuteStart[] = guyTimes[0].split(":");
+				String hourMinuteEnd[] = guyTimes[1].split(":");
+				
+				int hourStart = Integer.parseInt(hourMinuteStart[0].trim());
+				int minuteStart = Integer.parseInt(hourMinuteStart[1].trim().substring(0, 2));
+				int amPmStart = hourMinuteStart[1].contains("a") ? 0 : 1;
+				int hourEnd = Integer.parseInt(hourMinuteEnd[0].trim());
+				int minuteEnd = Integer.parseInt(hourMinuteEnd[1].trim().substring(0, 2));
+				int amPmEnd = hourMinuteEnd[1].contains("a") ? 0 : 1;
+				
+				minuteStart = minuteStart >= 30 ? 1 : 0;
+				hourStart += amPmStart * 12;
+				int cellStart = (hourStart - startTime)*days.length*hourPieces + minuteStart*days.length + dayBump;
+				
+				minuteEnd = minuteEnd >= 30 ? 1 : 0;
+				hourEnd += amPmEnd * 12;
+				int cellEnd = (hourEnd - startTime)*days.length*hourPieces + minuteEnd*days.length + dayBump;
+				
+				for(int m = cellStart; m <= cellEnd; m+=7) {
+					officeForCalendar.add(m);
+				}
 			}
-			
-			String guyOfficeTime = s.substring(s.indexOf("> ")+1);
-			
-			String guyTimes[] = guyOfficeTime.split("--");
-			
-			String hourMinuteStart[] = guyTimes[0].split(":");
-			String hourMinuteEnd[] = guyTimes[1].split(":");
-			
-			int hourStart = Integer.parseInt(hourMinuteStart[0].trim());
-			int minuteStart = Integer.parseInt(hourMinuteStart[1].trim().substring(0, 2));
-			int amPmStart = hourMinuteStart[1].contains("a") ? 0 : 1;
-			int hourEnd = Integer.parseInt(hourMinuteEnd[0].trim());
-			int minuteEnd = Integer.parseInt(hourMinuteEnd[1].trim().substring(0, 2));
-			int amPmEnd = hourMinuteEnd[1].contains("a") ? 0 : 1;
-			
-			minuteStart = minuteStart >= 30 ? 1 : 0;
-			hourStart += amPmStart * 12;
-			int cellStart = (hourStart - startTime)*days.length*hourPieces + minuteStart*days.length + dayBump;
-			
-			minuteEnd = minuteEnd >= 30 ? 1 : 0;
-			hourEnd += amPmEnd * 12;
-			int cellEnd = (hourEnd - startTime)*days.length*hourPieces + minuteEnd*days.length + dayBump;
-			
-			for(int m = cellStart; m <= cellEnd; m+=7) {
-				officeForCalendar.add(m);
-			}
-		}
 		
-		Collections.sort(officeForCalendar);
+			Collections.sort(officeForCalendar);
+		}
 		
 		String http = "";
 		http += "<form id=\"ccf\">"

@@ -60,6 +60,12 @@ body, .layout {
 	font: 1em/20px Verdana, Arial, Helvetica, sans-serif;
 	margin-left: -37px;
 }
+.success
+{
+	color: #ffff00;
+	font: 1.5em/20px Verdana, Arial, Helvetica, sans-serif;
+	margin-left: -37px;
+}
 
 .home-page
 {

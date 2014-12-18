@@ -226,7 +226,12 @@ public class Section implements Comparable<Section>{
 	 */
 	public Staff getInstructor() {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		return (Staff) pm.getObjectById(Staff.class, instructor);
+		try{
+			return (Staff) pm.getObjectById(Staff.class, instructor);
+		} catch(Exception e) {
+			return null;
+		}
+		
 	}
 	/**
 	 * 
@@ -234,7 +239,8 @@ public class Section implements Comparable<Section>{
 	 */
 	public void setInstructor(Staff instructor) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		instructor = (Staff) pm.getObjectById(Staff.class, instructor);
+		Staff ins = (Staff) pm.getObjectById(Staff.class, instructor.getKey());
+		this.instructor = ins.getKey();
 		pm.close();
 	}
 	public String getInstructorName(){

@@ -239,8 +239,9 @@ public class Staff {
 		ArrayList<Section> ss = new ArrayList<Section>();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		for(Key k : sectionsTaught){
-			if(pm.getObjectById(k) instanceof Section){
-				ss.add((Section) pm.getObjectById(k));
+			
+			if(pm.getObjectById(Section.class, k) instanceof Section){
+				ss.add((Section) pm.getObjectById(Section.class, k));
 			}
 		}
 		pm.close();

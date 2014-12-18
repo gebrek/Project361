@@ -17,6 +17,7 @@ import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Entity;
+
 import javax.jdo.Query;
 
 public class DatastoreServ {
@@ -113,6 +114,29 @@ public class DatastoreServ {
 		
 		return (List<Section>) q.execute() ;
 	}
+	
+	public Section getSectionByName(String section)
+	{
+		String secNum = section.substring(section.length() - 3);
+		String courseNum = section.substring(0, 3);
+		
+		Query q = _pm.newQuery(Section.class);
+		
+		q.setFilter("section=='"+secNum+"'");
+		List<Section> sectionList = (List<Section>)q.execute();
+		
+		for (Section sec : sectionList)
+		{
+
+			if (sec.getCourseid().contains(courseNum))
+			{
+				return sec;
+			}
+		}
+		
+		return null;
+	}
+	
 	public Section getSectionbySection(Section s){
 		try{
 			return getSection("courseid == '" + s.getCourseid() + "' && sectionid == '" + s.getSection() + "'").get(0);
@@ -252,19 +276,27 @@ public class DatastoreServ {
 //		_pm.close();		
 //	}
 	public void editSectionsStaff(Section sec, Staff stf){
-		PersistenceManager pm = PMF.get().getPersistenceManager();
+//		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try{
-			Section s = pm.getObjectById(Section.class, sec.getKey());
-			Staff sf = pm.getObjectById(Staff.class, stf.getKey());
+			
+			Section s = _pm.getObjectById(Section.class, sec.getKey());
+			Staff sf = _pm.getObjectById(Staff.class, stf.getKey());
+			
 			if(s.getInstructor() != null){
-				Staff oldsf = pm.getObjectById(Staff.class, s.getInstructor().getKey());
+				
+				Staff oldsf = _pm.getObjectById(Staff.class, sec.getInstructor().getKey());
 				oldsf.removeSectionTaught(s);
 			}
 			s.setInstructor(sf);
 			sf.addSectionTaught(s);
+			_pm.makePersistent(s);
+			_pm.makePersistent(sf);
+			
 		}finally{
-			pm.close();
+//			pm.close();
 		}
+		
+		
 	}
 	
 	/**
