@@ -150,7 +150,7 @@ public class Scrape {
 		}
 		return new Section(attributes[3],crs.getID(),attributes[2],attributes[3].substring(0,3),
 				attributes[3].substring(attributes[3].length()-3, attributes[3].length()),
-				attributes[5],attributes[6],attributes[7],attributes[8],attributes[9],crs);
+				attributes[5],attributes[6],attributes[7],null,attributes[8],attributes[9],crs);
 	}
 	
 	/**

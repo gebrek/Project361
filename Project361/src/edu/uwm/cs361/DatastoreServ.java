@@ -193,7 +193,7 @@ public class DatastoreServ {
 		section.setDates(dates);
 		section.setDays(days);
 		section.setHours(hours);
-		section.setInstructor(secInstructor);
+		section.setFallbackInstructor(secInstructor);
 		section.setRoom(room);
 		section.setType(temp.length == 2 ? temp[0] : "");
 		section.setSection(temp.length == 2 ? temp[1] : "");
@@ -227,31 +227,44 @@ public class DatastoreServ {
 	 * @param sectionid Section's id
 	 * @param staff New instructor to teach section
 	 */
-	public void editSection(String sectionid, String staff) {
-		
-		String[] tokens = sectionid.split(" ");
-		
-		List<Course> myCourses = getAllCourses();
-		for (Course course : myCourses) {
-			
-			if(course.getNumber().equals(tokens[0]))
-			{
-				List<Section> sections = course.getSections();
-				for (Section section : sections)
-				{
-					if (section.getSection().equals(tokens[2]))
-					{
-						section.setInstructor(staff);
-						section.edited = true;
-						_pm.makePersistent(section);
-					}
-				}
-				break;
-			}
+//	public void editSection(String sectionid, String staff) {
+//		
+//		String[] tokens = sectionid.split(" ");
+//		
+//		List<Course> myCourses = getAllCourses();
+//		for (Course course : myCourses) {
 //			
-
+//			if(course.getNumber().equals(tokens[0]))
+//			{
+//				List<Section> sections = course.getSections();
+//				for (Section section : sections)
+//				{
+//					if (section.getSection().equals(tokens[2]))
+//					{
+//						section.setInstructor(staff);
+//						section.edited = true;
+//						_pm.makePersistent(section);
+//					}
+//				}
+//				break;
+//			}
+//		}
+//		_pm.close();		
+//	}
+	public void editSectionsStaff(Section sec, Staff stf){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try{
+			Section s = pm.getObjectById(Section.class, sec.getKey());
+			Staff sf = pm.getObjectById(Staff.class, stf.getKey());
+			if(s.getInstructor() != null){
+				Staff oldsf = pm.getObjectById(Staff.class, s.getInstructor().getKey());
+				oldsf.removeSectionTaught(s);
+			}
+			s.setInstructor(sf);
+			sf.addSectionTaught(s);
+		}finally{
+			pm.close();
 		}
-		
 	}
 	
 	/**

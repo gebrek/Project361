@@ -152,7 +152,7 @@ public class EditSectionServlet extends HttpServlet {
 				if (!page.getUsername().equals("admin@uwm.edu"))
 				{
 					if (page.getCurrentUser().getPermissions().equals("Instructor"))
-						if(!section.getInstructor().equalsIgnoreCase(page.getCurrentUser().getName()))
+						if(!section.getInstructorName().equalsIgnoreCase(page.getCurrentUser().getName()))
 							continue;
 				}
 

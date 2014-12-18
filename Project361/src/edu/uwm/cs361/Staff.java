@@ -76,8 +76,8 @@ public class Staff {
 	 * 
 	 * @return Key for datastore
 	 */
-	public String key() {
-		return key.toString();
+	public Key getKey() {
+		return key;
 	}
 	/**
 	 * 
@@ -235,6 +235,7 @@ public class Staff {
 				ss.add((Section) pm.getObjectById(k));
 			}
 		}
+		pm.close();
 		return ss;
 	}
 	
@@ -251,6 +252,9 @@ public class Staff {
 	}
 	public void addSectionTaught(Section s){
 		sectionsTaught.add(s.getKey());
+	}
+	public void removeSectionTaught(Section s){
+		sectionsTaught.remove(s.getKey());
 	}
 	/*
 	public String getOfficeHours() {

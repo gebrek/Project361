@@ -121,7 +121,6 @@ public class Course implements Comparable<Course>{
 		List<Section> sections = ds.getSection(null);
 		Collections.sort(sections);
 		for(Section s : sections){
-
 			if (s.getCourseid().equals(courseid))
 			{
 				str += s.toHtmlTR();

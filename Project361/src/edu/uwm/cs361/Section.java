@@ -34,7 +34,9 @@ public class Section implements Comparable<Section>{
 	@Persistent
 	private String dates;
 	@Persistent
-	private String instructor;
+	private Key instructor;
+	@Persistent
+	private String fallbackInstructor;
 	@Persistent
 	private String room;
 	@Persistent
@@ -43,7 +45,7 @@ public class Section implements Comparable<Section>{
 	public boolean edited;
 	
 	public Section(String secid, String crsid, String un, String ty, String sec,
-			String hrs, String dys, String dts, String inst, String rm, Course crs){
+			String hrs, String dys, String dts, Staff inst, String fbinst, String rm, Course crs){
 		sectionid = secid;
 		courseid = crsid;
 		units = un;
@@ -52,10 +54,16 @@ public class Section implements Comparable<Section>{
 		hours = hrs;
 		days = dys;
 		dates = dts;
-		instructor = inst;
 		room = rm;
 		course = crs;
 		edited = false;
+		fallbackInstructor = fbinst;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try{
+			instructor = inst.getKey();
+		}catch(Exception e){
+		}
+		pm.close();
 	}
 	public Section(){
 		sectionid = null;
@@ -216,17 +224,34 @@ public class Section implements Comparable<Section>{
 	 * 
 	 * @return Assigned instructors name
 	 */
-	public String getInstructor() {
-		return instructor;
+	public Staff getInstructor() {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		return (Staff) pm.getObjectById(Staff.class, instructor);
 	}
 	/**
 	 * 
 	 * @param instructor Instructors full name
 	 */
-	public void setInstructor(String instructor) {
-		this.instructor = instructor;
+	public void setInstructor(Staff instructor) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		instructor = (Staff) pm.getObjectById(Staff.class, instructor);
+		pm.close();
 	}
-	
+	public String getInstructorName(){
+		if(instructor == null){
+			return fallbackInstructor;
+		}else{
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			Staff inst = (Staff) pm.getObjectById(Staff.class, instructor);
+			return inst.getName();
+		}
+	}
+	public void setFallbackInstructor(String fbinst){
+		fallbackInstructor = fbinst;
+	}
+	public String getFallbackInstructor(){
+		return fallbackInstructor;
+	}
 	/**
 	 * 
 	 * @return meeting room location
@@ -252,7 +277,7 @@ public class Section implements Comparable<Section>{
 			section = section.substring(0, 3);
 		
 		return String.format("<tr class='border_bottom'><td></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
-				section, units, hours, days, instructor, room);
+				section, units, hours, days, getInstructorName(), room);
 	}
 	@Override 
 	public boolean equals(Object o){
@@ -265,7 +290,7 @@ public class Section implements Comparable<Section>{
 				+ ", courseid=" + courseid + ", units=" + units + ", type="
 				+ type + ", section=" + section + ", hours=" + hours
 				+ ", days=" + days + ", dates=" + dates + ", instructor="
-				+ instructor + ", room=" + room + "]\n";
+				+ getInstructorName() + ", room=" + room + "]\n";
 	}
 	/**
 	 * Compares this section to s. Works like a standard compare, compare key = section number
