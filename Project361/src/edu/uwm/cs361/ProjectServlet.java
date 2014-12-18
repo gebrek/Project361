@@ -197,7 +197,7 @@ public class ProjectServlet extends HttpServlet {
 									}
 									else if(user.getPermissions().equals("Instructor")){
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
-		resp.getWriter().println("			<li> <a href=\"/staffHome\">Staff Schedule</a>");
+		resp.getWriter().println("			<li> <a href=\"/staffHome\">Schedule</a>");
 		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");	
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
@@ -231,7 +231,6 @@ public class ProjectServlet extends HttpServlet {
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
 		resp.getWriter().println("			<li> <a href=\"/courseList\"> My Sections</a>");
 		resp.getWriter().println("			</li>");
-		resp.getWriter().println("		</ul>");
 		resp.getWriter().println("		</ul>");
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
 		resp.getWriter().println("			<li> <a href=\"#\"> Account</a>");
