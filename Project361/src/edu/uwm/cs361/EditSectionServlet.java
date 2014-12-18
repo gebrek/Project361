@@ -134,34 +134,53 @@ public class EditSectionServlet extends HttpServlet {
 	 */
 	private void diplayCourses() throws IOException {
 		
-		List<Course> myCourses = ds.getAllCourses();
 		
 		String html = "<div id=\"sub\">Select a course for assignment: </div>"
-						+"<select id='section' name='section' class='staff-select' required>";
-		
-		html += "<option selected disabled>"+ "Select section" +"</option>";
-		
-		for (Course course : myCourses) {
-			
-			List<Section> sections = ds.getSection("courseid=='"+course.getID()+"'");
-			
-			html += "<option disabled> CS " + course.getNumber() + "</option>";
-			
-			for (Section section : sections) {
-			
-				if (!page.getUsername().equals("admin@uwm.edu"))
-				{
-					if (page.getCurrentUser().getPermissions().equals("Instructor"))
-						if(!section.getInstructorName().equalsIgnoreCase(page.getCurrentUser().getName()))
-							continue;
-				}
+				+"<select id='section' name='section' class='staff-select' required>";
 
-				html += "<option value='"+course.getNumber() + " " + section.getID()+"'>"
-						+ "CS " + course.getNumber() + " - "
+		html += "<option selected disabled>"+ "Select section" +"</option>";
+
+		//if admin - show all
+		
+		if (page.getUsername().equals("admin@uwm.edu"))
+		{
+			List<Course> myCourses = ds.getAllCourses();
+			
+			for (Course course : myCourses) {
+				
+				List<Section> sections = ds.getSection("courseid=='"+course.getID()+"'");
+				
+				html += "<option disabled> CS " + course.getNumber() + "</option>";
+				
+				for (Section section : sections) {
+
+					html += "<option value='"+course.getNumber() + " " + section.getID()+"'>"
+							+ "CS " + course.getNumber() + " - "
+							+ section.getType() + " " + section.getSection()
+							+ "</option>";
+				}
+			}
+		}
+		
+		//if instructor - show those teaching
+		
+		else {
+			
+			Staff staff = page.getCurrentUser();
+			List<Section> sections = staff.getSectionsTaught();
+				
+			for (Section section : sections) {
+				
+				String course = section.getCourseid();
+
+				html += "<option value='"+ course + " " + section.getID()+"'>"
+						+ "CS " + course + " - "
 						+ section.getType() + " " + section.getSection()
 						+ "</option>";
 			}
 		}
+		
+		
 		
 		html += "</select>";
 		
@@ -175,7 +194,10 @@ public class EditSectionServlet extends HttpServlet {
 		
 		if(_req.getParameter("staff") != null && _req.getParameter("section") != null) {
 			
-			ds.editSection(_req.getParameter("section"), _req.getParameter("staff"));
+			Section toUpdateSection = ds.getSection(_req.getParameter("section")).get(0);
+			Staff toUpdateStaff= ds.getStaff(_req.getParameter("staff"));
+			
+			ds.editSectionsStaff(toUpdateSection, toUpdateStaff);
 		}
 	}
 }
