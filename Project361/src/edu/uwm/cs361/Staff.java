@@ -322,18 +322,34 @@ public class Staff {
 
 	/**
 	 * Returns a list containing this staffs teaching skills/profiniencies
-	 * List will be 
+	 * List will be undefined for calls on a non-TA staff
 	 * @return
 	 */
 	public ArrayList<String> getSkills() {
 		return skills;
 	}
+	
+	/**
+	 * Takes a string containing a skill, adds that skill to this staff
+	 * @param skillname
+	 */
 	public void addSkill(String skillname){
 		skills.add(skillname);
 	}
+	
+	/**
+	 * Takes a string containing a skill, removes that skill from this Staff's list of skills
+	 * @param skillname
+	 * @return
+	 */
 	public boolean removeSkill(String skillname){
 		return skills.remove(skillname);
 	}
+	
+	/**
+	 * Takes an array list of skills, replaces this staff's skills with the given list
+	 * @param newSkills
+	 */
 	public void setSkills(ArrayList<String> newSkills){
 		skills = newSkills;
 	}

@@ -46,7 +46,7 @@ public class StaffScheduleServlet extends HttpServlet{
 	}
 	
 	/**
-	 * display form will list all the information for the staff
+	 * display form will list all the schedule information for the staff
 	 * 
 	 * @param req
 	 * @param resp
