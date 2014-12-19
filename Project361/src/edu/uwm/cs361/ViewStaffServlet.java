@@ -89,7 +89,7 @@ public class ViewStaffServlet extends HttpServlet{
 		+				"<table>"
 		+					"<tr>"
 		+						"<td class='form'>"
-		+							"Staff:"
+		+							"Staff:" 
 		+							"<select id='staffname' name='staffname' class='staff-select staff-view-margin' required>"
 		+									"<option value = '' selected> Select a Person </option>";
 										if(page.username.equals("admin@uwm.edu")){
