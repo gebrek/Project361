@@ -116,11 +116,13 @@ public class EditStaffContactServlet extends HttpServlet{
 		} else {
 			Staff s = data.getStaff(toEdit);
 			toEdit = data.getStaff(toEdit).getEmail();
-			if( teachingSkills != null || !teachingSkills.isEmpty()){
+			if( teachingSkills != null){
 				String[] teachingSkillslist = teachingSkills.split(", ");
 				ArrayList<String> ts = new ArrayList<String>();
 				for(String i : teachingSkillslist){
-					ts.add(i);
+					if(i.trim().equals(""))
+						continue;
+					ts.add(i.trim());
 				}
 				s.setSkills(ts);
 			}
@@ -210,7 +212,7 @@ public class EditStaffContactServlet extends HttpServlet{
 											if(listskills != null && !listskills.isEmpty()){
 												String skills ="";
 												for(String i: listskills){
-													skills += " " + i;
+													skills += i + ", ";
 												}
 												http+= skills;
 											}

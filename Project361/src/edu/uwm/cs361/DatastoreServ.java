@@ -226,12 +226,13 @@ public class DatastoreServ {
 	 */
 	public ArrayList<Staff> staffBySkill(String skill){
 		ArrayList<Staff> ss = getAllStaff();
+		ArrayList<Staff> newlist = new ArrayList<Staff>();
 		for(Staff s : ss){
-			if(!s.getSkills().contains(skill)){
-				ss.remove(s);
+			if(s.getSkills().contains(skill)){
+				newlist.add(s);
 			}
 		}
-		return ss;
+		return newlist;
 	}
 	
 	/**

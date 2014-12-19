@@ -60,12 +60,32 @@ public class EditMyContactServlet extends HttpServlet{
 				
 				String hours = day + "-> " + firststart + " : " + firstend + " " + firstam +" -- " + secondstart+ " : " + secondend + " " + firstpm;
 				
+				if(firststart.equals("12")){
+					firststart = "0";
+				}
 				double start = Double.parseDouble(firststart + "." + firstend);
 				double end = Double.parseDouble(secondstart + "." + secondend);
+				
+				
+				if(firstam.equals("pm"))
+					start += 12.0;
+				if(firstpm.equals("pm"))
+					end += 12.0;
+				
+				int early = Integer.parseInt(firststart);
+				int late = Integer.parseInt(secondstart);
+				
+				if((early <= 8 && firstam.equals("am") || late >= 8 && firstpm.equals("pm")))
+				{
+					errors.add("Please make sure the time is between 8am to 8pm.");
+				}
 				if(start <= 0 && end <= 0){
 					errors.add("Please select the time at the bottom.");
 				}
-				else
+				if(start > end){
+					errors.add("Start time must come before end time.");
+				}
+				if(errors.isEmpty())
 				{
 					boolean newhours = true;
 					if(page.getCurrentUser().getOfficeHours() != null){
@@ -79,14 +99,10 @@ public class EditMyContactServlet extends HttpServlet{
 					}
 					
 					if(newhours){
-						if((start > end) && firstpm.equals("am")){
-							errors.add("The Starting time is bigger then the End time.");
-						}
-						else{
-							page.getCurrentUser().addOfficeHours(hours);
-							data.updateStaff(username, firstname, password, null);
-							data.updateStaffContact(username, office, officePhone, homeAddress, homePhone);
-						}
+						page.getCurrentUser().addOfficeHours(hours);
+						data.updateStaff(username, firstname, password, null);
+						data.updateStaffContact(username, office, officePhone, homeAddress, homePhone);
+						
 					}
 				}
 			}
@@ -170,7 +186,9 @@ public class EditMyContactServlet extends HttpServlet{
 				String[] teachingSkillslist = teachingSkills.split(", ");
 				ArrayList<String> ts = new ArrayList<String>();
 				for(String i : teachingSkillslist){
-					ts.add(i);
+					if(i.trim().equals(""))
+						continue;
+					ts.add(i.trim());
 				}
 				page.getCurrentUser().setSkills(ts);
 			}
@@ -237,7 +255,7 @@ public class EditMyContactServlet extends HttpServlet{
 			for (String error : errors) {
 				http +="  <li>" + error + "</li>";
 			}
-
+			
 			http += "</ul>";
 		}
 
@@ -261,7 +279,7 @@ public class EditMyContactServlet extends HttpServlet{
 											if(listskills != null && !listskills.isEmpty()){
 												String skills ="";
 												for(String i: listskills){
-													skills += " " + i;
+													skills += i + ", ";
 												}
 												http+= skills;
 											}
@@ -285,8 +303,8 @@ public class EditMyContactServlet extends HttpServlet{
 		+							"</select>"
 		+							"<div class='start'>-></div>"
 		+ 							"<select class='officehour-select officeHourInput' id='firststart' name='firststart' required>"
-		+								"<option value = '00' selected> 00 </option>";
-										for(int i = 1; i <=12; ++i){
+		+								"<option value = '1' selected> 1 </option>";
+										for(int i = 2; i <=12; ++i){
 											http+="<option>"+ i +"</option>";
 										}
 		http+=						"</select>"
@@ -304,8 +322,8 @@ public class EditMyContactServlet extends HttpServlet{
 		+							"</select>"
 		+							"<div class='start'>--</div>"
 		+ 							"<select class='officehour-select officeHourInput2' id='secondstart' name='secondstart' required>"
-		+								"<option value = '0' selected> 0 </option>";
-										for(int i = 1; i <=12; ++i){
+		+								"<option value = '1' selected> 1 </option>";
+										for(int i = 2; i <=12; ++i){
 											http+="<option>"+ i +"</option>";
 										}
 		http+=						"</select>"
