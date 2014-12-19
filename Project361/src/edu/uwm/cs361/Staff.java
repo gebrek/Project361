@@ -87,6 +87,11 @@ public class Staff {
 	 * @return string list of office hours
 	 */
 	public ArrayList<String> getOfficeHours(){
+		if(officeHours.isEmpty() || officeHours == null){
+			ArrayList<String> ss = new ArrayList<String>();
+			ss.add("");
+			return ss;
+		}
 		return officeHours;
 	}
 	/**
