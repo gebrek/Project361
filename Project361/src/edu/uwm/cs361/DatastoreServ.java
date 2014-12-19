@@ -193,6 +193,16 @@ public class DatastoreServ {
 		_pm.makePersistentAll(courses);
 	}
 	
+	public ArrayList<Staff> staffBySkill(String skill){
+		ArrayList<Staff> ss = getAllStaff();
+		for(Staff s : ss){
+			if(!s.getSkills().contains(skill)){
+				ss.remove(s);
+			}
+		}
+		return ss;
+	}
+	
 	/**
 	 * Adds the section to datastore
 	 * 
@@ -296,10 +306,7 @@ public class DatastoreServ {
 			_pm.makePersistent(sf);
 			
 		}finally{
-//			pm.close();
 		}
-		
-		
 	}
 	
 	/**

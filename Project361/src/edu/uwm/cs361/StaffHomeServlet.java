@@ -54,8 +54,9 @@ public class StaffHomeServlet extends HttpServlet{
 		int endTime = 23;
 		
 		
-		ArrayList<Integer> officeForCalendar = new ArrayList<Integer>(); 
-		if(guy.getOfficeHours() != null){
+		ArrayList<Integer> officeForCalendar = new ArrayList<Integer>();
+		
+		if(guy.getOfficeHours() != null && !guy.getOfficeHours().isEmpty() && !guy.getOfficeHours().get(0).equals("")){
 			
 			
 			for(String s : guy.getOfficeHours()) {
