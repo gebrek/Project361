@@ -56,15 +56,17 @@ body, .layout {
 
 .errors
 {
-	color: #ff0700;
+	color: #00D7FF;
 	font: 1em/20px Verdana, Arial, Helvetica, sans-serif;
 	margin-left: -37px;
+	list-style-type: none;
 }
 .success
 {
-	color: #ffff00;
+	color: #00D7FF;
 	font: 1.5em/20px Verdana, Arial, Helvetica, sans-serif;
 	margin-left: -37px;
+	list-style-type: none;
 }
 
 .home-page

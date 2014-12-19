@@ -202,8 +202,9 @@ public class EditStaffContactServlet extends HttpServlet{
 		+							"Office: <input class='createStaffInput' type=\"text\" id='officeLoc' name='office' value='" + office + "'required/><br>"
 		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + officePhone + "'required/><br>"
 		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + homeAddress + "'required/><br>"
-		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + homePhone + "'required/><br>"
-		+							"Teaching skills:"
+		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + homePhone + "'required/><br>";
+									if(staffToUpdate.getPermissions().equals("TA")){
+		http+=							"Teaching skills:"
 		+								"<input class='createStaffInput' type=\"text\" id='teachingSkills' name='teachingSkills' value='"; 
 											List<String> listskills = staffToUpdate.getSkills();
 											if(listskills != null && !listskills.isEmpty()){
@@ -214,6 +215,7 @@ public class EditStaffContactServlet extends HttpServlet{
 												http+= skills;
 											}
 											http+= "'/><br>";
+									}
 		http+=					"</td>"
 		+					"</tr>"
 		+				"</table>"
