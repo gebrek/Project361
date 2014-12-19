@@ -98,7 +98,13 @@ public class ProjectServlet extends HttpServlet {
 		+						"</head>");
 		
 		resp.getWriter().println("<div class=\"banner\">"
-		+							"<a class=\"plbrand mainlogo-link\" href=\"Admin_Home_Page.html\" title=\"UW-Milwaukee D2L\">"
+		+							"<a class=\"plbrand mainlogo-link\" href='");
+									if(username.equals("admin@uwm.edu")){
+										resp.getWriter().println("/project");
+									}
+									else
+										resp.getWriter().println("/staffHome");
+		resp.getWriter().println(	"' title=\"UW-Milwaukee D2L\">"
 		+								"<img class=\"mainlogo-img\" src=\"Images/UWM_D2L_banner_960w1.png\" alt=\"UW-Milwaukee D2L\">"
 		+							"</a>"
 		+						"</div>");
@@ -171,6 +177,9 @@ public class ProjectServlet extends HttpServlet {
 		resp.getWriter().println("					<li><a href=\"/createStaff\"> Create Staff</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
+		resp.getWriter().println("					<li><a href='/staffSchedule'> Staff Schedules</a></li>");
+		resp.getWriter().println("				</ul>");
+		resp.getWriter().println("				<ul class=\"buttons-outline\">");
 		resp.getWriter().println("					<li><a href=\"/viewStaff\"> View Staff</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
@@ -199,6 +208,13 @@ public class ProjectServlet extends HttpServlet {
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
 		resp.getWriter().println("			<li> <a href=\"/staffHome\">Schedule</a>");
 		resp.getWriter().println("			</li>");
+		resp.getWriter().println("		</ul>");
+		resp.getWriter().println("		<ul class=\"buttons-outline\">");
+		resp.getWriter().println("			<li> <a href=\"#\">Manage Staff</a>");
+		resp.getWriter().println("				<ul class=\"buttons-outline\">");
+		resp.getWriter().println("					<li><a href='/staffSchedule'> Staff Schedules</a></li>");
+		resp.getWriter().println("				</ul>");
+		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");	
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
 		resp.getWriter().println("			<li> <a href=\"#\"> Manages Courses</a>");
@@ -225,7 +241,7 @@ public class ProjectServlet extends HttpServlet {
 									}
 									else {	
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");
-		resp.getWriter().println("			<li> <a href=\"/staffHome\">Staff Schedule</a>");
+		resp.getWriter().println("			<li> <a href=\"/staffHome\">Schedule</a>");
 		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");
 		resp.getWriter().println("		<ul class=\"buttons-outline\">");

@@ -380,6 +380,7 @@ a:-moz-any-link
 	color:#E4CE2A;
 	font: 1.0em/20px Verdana, Arial, Helvetica, sans-serif;
 	width:1200px;
+	margin-left: -25px;
 }
 #sub1
 {
