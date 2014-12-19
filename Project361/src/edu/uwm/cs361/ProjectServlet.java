@@ -86,7 +86,7 @@ public class ProjectServlet extends HttpServlet {
 						if(skill != null && !skill.isEmpty()){
 							List<Staff> staff = data.staffBySkill(skill);
 							for(Staff i: staff){
-								http+= "&nbsp&nbsp Name: " + i.getName() + "&nbsp&nbsp&nbsp Skills: "; 
+								http+= "&nbsp&nbsp Name: " + i.getName() + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Skills: "; 
 								for(String j: i.getSkills()){
 									http+= j + ", ";
 								}
