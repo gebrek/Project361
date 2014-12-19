@@ -90,7 +90,7 @@ public class ProjectServlet extends HttpServlet {
 		
 		resp.setContentType("text/html");
 		
-		resp.getWriter().println("<head>"
+		resp.getWriter().println("<head>" 
 		+							"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">"
 		+							"<title>UW Milwaukee</title>"
 		+							"<link href=\"main.css\" rel=\"stylesheet\" type=\"text/css\"/>"

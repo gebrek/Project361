@@ -102,7 +102,7 @@ public class StaffScheduleServlet extends HttpServlet{
 		if (!staff.isEmpty() && staff != null)
 			user = data.getStaff(staff);
 		
-		if(user != null){	
+		if(user != null){	 
 			List<Section> sections = user.getSectionsTaught();
 			http+= "<tr class='border_bottom'><td>Course</td><td>Section</td><td>Units</td><td>Hours</td><td>Days</td><td>Instructor</td><td>Room</td></tr>\n";
 

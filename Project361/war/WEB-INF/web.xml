@@ -123,7 +123,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     	<servlet-name>EmailServlet</servlet-name>
     	<servlet-class>edu.uwm.cs361.EmailRequestServlet</servlet-class>
 	</servlet>
-	<servlet-mapping>
+	<servlet-mapping> 
     	<servlet-name>EmailServlet</servlet-name>
     	<url-pattern>/emailRequest</url-pattern>   
 	</servlet-mapping>
