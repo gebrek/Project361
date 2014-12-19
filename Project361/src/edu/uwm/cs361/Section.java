@@ -238,6 +238,10 @@ public class Section implements Comparable<Section>{
 	 * @param instructor Instructors full name
 	 */
 	public void setInstructor(Staff instructor) {
+		if(instructor==null){
+			this.instructor = null;
+			return;
+		}
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Staff ins = (Staff) pm.getObjectById(Staff.class, instructor.getKey());
 		this.instructor = ins.getKey();
@@ -247,9 +251,13 @@ public class Section implements Comparable<Section>{
 		if(instructor == null){
 			return fallbackInstructor;
 		}else{
-			PersistenceManager pm = PMF.get().getPersistenceManager();
-			Staff inst = (Staff) pm.getObjectById(Staff.class, instructor);
-			return inst.getName();
+			try{
+				PersistenceManager pm = PMF.get().getPersistenceManager();
+				Staff inst = (Staff) pm.getObjectById(Staff.class, instructor);
+				return inst.getName();
+			}catch(Exception e){
+				return fallbackInstructor;
+			}
 		}
 	}
 	public void setFallbackInstructor(String fbinst){
