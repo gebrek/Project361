@@ -90,7 +90,7 @@ public class Staff {
 		if(officeHours.isEmpty() || officeHours == null){
 			ArrayList<String> ss = new ArrayList<String>();
 			ss.add("");
-			return ss;
+			return null;
 		}
 		return officeHours;
 	}
