@@ -244,6 +244,9 @@ public class DatastoreServ {
 		_pm.deletePersistentAll(courses);
 		_pm.deletePersistentAll(sections);
 	}
+	public void deleteStaff(Staff stf){
+		_pm.deletePersistent(stf);
+	}
 	
 	/**
 	 * Edit the given section in datastore

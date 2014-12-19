@@ -131,6 +131,7 @@ public class EditMyContactServlet extends HttpServlet{
 		String office = req.getParameter("office");
 		String homeAddress = req.getParameter("homeAddress");
 		String homePhone = req.getParameter("homePhone");
+		String teachingSkills = req.getParameter("teachingSkills");
 
 		List<String> errors = new ArrayList<String>();
 		
@@ -165,6 +166,14 @@ public class EditMyContactServlet extends HttpServlet{
 			page.layout(displayForm (req,resp,errors, page.getCurrentUser().getName()),req,resp);
 			page.menu(req,resp);
 		} else {
+			if(!teachingSkills.isEmpty() || teachingSkills != null){
+				String[] teachingSkillslist = teachingSkills.split(", ");
+				ArrayList<String> ts = new ArrayList<String>();
+				for(String i : teachingSkillslist){
+					ts.add(i);
+				}
+				page.getCurrentUser().setSkills(ts);
+			}
 			data.updateStaff(username, firstname, password, null);
  			data.updateStaffContact(username, office, officePhone, homeAddress, homePhone);
 			
@@ -180,7 +189,8 @@ public class EditMyContactServlet extends HttpServlet{
 			+				"Office: " + office + "<br>" 
 			+				"Office Phone: " + officePhone + "<br>" 
 			+				"Home Address: " + homeAddress + "<br>" 
-			+				"Home Phone: " + homePhone + "<br><br>" 
+			+				"Home Phone: " + homePhone + "<br>" 
+			+				"Teaching Skills: " + teachingSkills + "<br><br>" 
 			+				"The User's contact info has been updated.<br><br><br><br><br><br>"
 			+				"<input class=\"submit\" type=\"submit\" value=\"Back\" />"
 			+			"</div>"
@@ -246,7 +256,7 @@ public class EditMyContactServlet extends HttpServlet{
 									if (!page.username.equals("admin@uwm.edu") && page.getCurrentUser().getPermissions().equals("TA"))
 									{
 		http +=							"Teaching skills:"
-		+									"<input class='createStaffInput' type=\"text\" id='teachingSkills' name='teachingSkills' value='"; 
+		+									"<input class='createStaffInput' type=\"text\" id='teachingSkills' placeholder= 'skill1, skill2' name='teachingSkills' value='"; 
 											List<String> listskills = page.getCurrentUser().getSkills();
 											if(listskills != null && !listskills.isEmpty()){
 												String skills ="";
@@ -256,7 +266,7 @@ public class EditMyContactServlet extends HttpServlet{
 												http+= skills;
 											}
 											
-											http+= "'required/><br>";
+											http+= "'/><br>";
 									
 									}
 		http+=						"Office Hours:<br>";

@@ -1,5 +1,5 @@
 package edu.uwm.cs361;
-
+//space comment
 // cargo cult imports from CreateStaffServlet. clean up later
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,14 +50,16 @@ public class StaffHomeServlet extends HttpServlet{
 		String days[] = {"Monday","Tuesday","Wednesday",
 						"Thursday","Friday", "Saturday","Sunday"};
 		
-		int startTime = 8;
-		int endTime = 20;
+		int startTime = 4;
+		int endTime = 23;
 		
 		int officeIndex = -1;
 		
 		ArrayList<Integer> officeForCalendar = new ArrayList<Integer>();
 		
 		if(guy.getOfficeHours() != null){
+			
+			
 			for(String s : guy.getOfficeHours()) {
 				
 				int dayBump = -1;
@@ -81,13 +83,19 @@ public class StaffHomeServlet extends HttpServlet{
 				
 				minuteStart = minuteStart >= 30 ? 1 : 0;
 				hourStart += amPmStart * 12;
+				
+				//if(hourStart < startTime) startTime = hourStart;
+				
 				int cellStart = (hourStart - startTime)*days.length*hourPieces + minuteStart*days.length + dayBump;
 				
 				minuteEnd = minuteEnd >= 30 ? 1 : 0;
 				hourEnd += amPmEnd * 12;
-				int cellEnd = (hourEnd - startTime)*days.length*hourPieces + minuteEnd*days.length + dayBump;
 				
-				for(int m = cellStart; m <= cellEnd; m+=7) {
+				//if(hourEnd > endTime) endTime = hourEnd;
+				
+				int cellEnd = (hourEnd - startTime)*days.length*hourPieces + minuteEnd*days.length + dayBump - days.length;
+				
+				for(int m = cellStart; m <= cellEnd; m+=days.length) {
 					officeForCalendar.add(m);
 				}
 			}
@@ -116,42 +124,56 @@ public class StaffHomeServlet extends HttpServlet{
 		+					"</thead>"
 		+					"<tbody class = \"events\" id=heq_schedule_body\">";
 		
+		int addedAny = -1;
 
-		for(int i=startTime;i<endTime;++i)
-		{
-			String timeBreak[] = {"00","30"};
-			
-			for(int dub = 0; dub < hourPieces; ++dub) {
-				http += "<tr>";
+		if(!officeForCalendar.isEmpty())
+		{ 
+			for(int i=startTime;i<endTime;++i)
+			{
+				String timeBreak[] = {"00","30"};
 				
-				http += "<td class=\"times\">";
-				int displayTime = i > 12 ? i - 12 : i;
-				String amPm = i >= 12 ? "PM" : "AM";
-				
-				http += displayTime+":"+timeBreak[dub]+amPm+"</td>";
-				
-				for(int j = 0; j < days.length; ++j) {
-					
-					http += "<td class=\"event_details\">";
-					
-					int num = ( (i-startTime)*days.length*hourPieces + j + dub*days.length);
+				for(int dub = 0; dub < hourPieces; ++dub) {
 					
 					int cur = officeForCalendar.size() > 0 ? officeForCalendar.get(0) : -1;
 					
-					if(num == cur) {
-						
-						officeForCalendar.remove(0);
-						
-						http += "Office hours";
-						
-						
-					} else { http += " "; }
+					int shallowNum = ( (i-startTime)*days.length*hourPieces + dub*days.length);
 					
-					http+= "</td>";
-				}
+					if(cur != -1 && cur - days.length < shallowNum ) 
+					{
+						addedAny = 0;
+						
+						http += "<tr>";
+						
+						http += "<td class=\"times\">";
+						int displayTime = i > 12 ? i - 12 : i;
+						String amPm = i >= 12 ? "PM" : "AM";
+						
+						http += displayTime+":"+timeBreak[dub]+amPm+"</td>";
+						
+						for(int j = 0; j < days.length; ++j) {
+							
+							http += "<td class=\"event_details\">";
+							
+							int num = ( (i-startTime)*days.length*hourPieces + j + dub*days.length);
+							
+							cur = officeForCalendar.size() > 0 ? officeForCalendar.get(0) : -1;
+							
+							if(num == cur) {
+								
+								officeForCalendar.remove(0);
+								
+								http += "Office hours";
+								
+								
+							} else { http += " "; }
+							
+							http+= "</td>";
+						}
+						
+						http += "</tr>";
+					} else { if(addedAny != -1 && addedAny < 5) http += "<tr><td class=\"littlecells\"></td> </tr>"; addedAny++; }
 				
-				http += "</tr>";
-			
+				}
 			}
 		}
 		

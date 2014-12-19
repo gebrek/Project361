@@ -42,8 +42,9 @@ public class ViewStaffServlet extends HttpServlet{
 		String delConf = "";
 		
 		if(delete != null && !delete.isEmpty()){
-			if(delete.equals("Delete")){
-				//data.deleteStaff(staffname);
+			if(delete.equals("Delete Staff")){
+				Staff s = data.getStaff(staffName);
+				data.deleteStaff(s);
 				delConf = staffName + " has been Deleted successfully.";
 				staffName = "";
 			}
@@ -159,7 +160,7 @@ public class ViewStaffServlet extends HttpServlet{
 				{
 					http +=	"<tr>" 
 					+			"<td class='view-staff-hours'>"
-					+				"<br><br>Teaching Proficiencies:";
+					+				"Teaching Proficiencies:";
 									List<String> listskills = user.getSkills();
 									if(listskills != null && !listskills.isEmpty()){
 										for(String i: listskills){
@@ -169,6 +170,17 @@ public class ViewStaffServlet extends HttpServlet{
 					http+=		"</td>"
 					+		"</tr>";
 				}
+				http+=	"<tr>"
+				+			"<td class='view-staff-hours'>"
+				+				"Office Hours:";
+								List<String> listhours = user.getOfficeHours();
+								if(listhours != null && !listhours.isEmpty()){
+									for(String i: listhours){
+										http += "<div class='view-mycontact-hours'>" + i + "</div>";
+									}
+								}
+				http+=		"</td>"
+				+		"</tr>";
 		}
 		
 		http+= 		"</table>"

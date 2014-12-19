@@ -3,6 +3,7 @@ package edu.uwm.cs361;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.*;
 
 
@@ -92,7 +93,7 @@ public class EditStaffContactServlet extends HttpServlet{
 		String office = req.getParameter("office");
 		String homeAddress = req.getParameter("homeAddress");
 		String homePhone = req.getParameter("homePhone");
-		
+		String teachingSkills = req.getParameter("teachingSkills");
 		List<String> errors = new ArrayList<String>();
 		
 		officePhone = formatPhone(officePhone);
@@ -113,7 +114,16 @@ public class EditStaffContactServlet extends HttpServlet{
 			page.layout(displayForm (req,resp,errors, toEdit),req,resp);
 			page.menu(req,resp);
 		} else {
+			Staff s = data.getStaff(toEdit);
 			toEdit = data.getStaff(toEdit).getEmail();
+			if(!teachingSkills.isEmpty() || teachingSkills != null){
+				String[] teachingSkillslist = teachingSkills.split(", ");
+				ArrayList<String> ts = new ArrayList<String>();
+				for(String i : teachingSkillslist){
+					ts.add(i);
+				}
+				s.setSkills(ts);
+			}
 			data.updateStaffContact(toEdit, office, officePhone, homeAddress, homePhone);
 			
 			String http = "";
@@ -126,7 +136,8 @@ public class EditStaffContactServlet extends HttpServlet{
 			+				"Office: " + office + "<br>" 
 			+				"Office Phone: " + officePhone + "<br>" 
 			+				"Home Address: " + homeAddress + "<br>" 
-			+				"Home Phone: " + homePhone + "<br><br>" 
+			+				"Home Phone: " + homePhone + "<br>" 
+			+				"Teaching Skills: " + teachingSkills + "<br><br>" 
 			+				"The User's contact info has been updated.<br><br><br><br><br><br>"
 			+				"<input class=\"submit\" type=\"submit\" value=\"Back\" />"
 			+			"</div>"
@@ -191,8 +202,21 @@ public class EditStaffContactServlet extends HttpServlet{
 		+							"Office: <input class='createStaffInput' type=\"text\" id='officeLoc' name='office' value='" + office + "'required/><br>"
 		+							"Office Phone: <input class='createStaffInput' type=\"text\" id='officePhone' name='officePhone' value='" + officePhone + "'required/><br>"
 		+							"Home Address: <input class='createStaffInput' type=\"text\" id='homeAddress' name='homeAddress' value='" + homeAddress + "'required/><br>"
-		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + homePhone + "'required/><br>"
-		+						"</td>"
+		+							"Home Phone: <input class='createStaffInput' type=\"text\" id='homePhone' name='homePhone' value='" + homePhone + "'required/><br>";
+									if(staffToUpdate.getPermissions().equals("TA")){
+		http+=							"Teaching skills:"
+		+								"<input class='createStaffInput' type=\"text\" id='teachingSkills' name='teachingSkills' value='"; 
+											List<String> listskills = staffToUpdate.getSkills();
+											if(listskills != null && !listskills.isEmpty()){
+												String skills ="";
+												for(String i: listskills){
+													skills += " " + i;
+												}
+												http+= skills;
+											}
+											http+= "'/><br>";
+									}
+		http+=					"</td>"
 		+					"</tr>"
 		+				"</table>"
 		+				"<input class=\"submit\" type=\"submit\" value=\"Submit\" />"
