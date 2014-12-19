@@ -246,7 +246,7 @@ public class EditMyContactServlet extends HttpServlet{
 									if (!page.username.equals("admin@uwm.edu") && page.getCurrentUser().getPermissions().equals("TA"))
 									{
 		http +=							"Teaching skills:"
-		+									"<input class='createStaffInput' type=\"text\" id='teachingSkills' name='teachingSkills' value='"; 
+		+									"<input class='createStaffInput' type=\"text\" id='teachingSkills' placeholder= 'skill1, skill2' name='teachingSkills' value='"; 
 											List<String> listskills = page.getCurrentUser().getSkills();
 											if(listskills != null && !listskills.isEmpty()){
 												String skills ="";
