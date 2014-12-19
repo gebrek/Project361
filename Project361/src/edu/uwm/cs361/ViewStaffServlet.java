@@ -42,7 +42,7 @@ public class ViewStaffServlet extends HttpServlet{
 		String delConf = "";
 		
 		if(delete != null && !delete.isEmpty()){
-			if(delete.equals("Delete")){
+			if(delete.equals("Delete Staff")){
 				Staff s = data.getStaff(staffName);
 				data.deleteStaff(s);
 				delConf = staffName + " has been Deleted successfully.";
