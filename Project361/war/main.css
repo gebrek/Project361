@@ -925,10 +925,6 @@ tbody tr .ad_home_course_listing {
 	margin-top: 10px;
 }
 
-.events tr {
-	height:45px;	
-}
-
 .side_time  {
 	color: #FFFB9E;
 	text-align: right;
@@ -1167,4 +1163,9 @@ form p label {
 	text-decoration: none;
 	border-radius: 0;
 	padding:0;
+}
+
+.littlecells
+{
+	height:1px !important;
 }

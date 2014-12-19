@@ -50,8 +50,8 @@ public class StaffHomeServlet extends HttpServlet{
 		String days[] = {"Monday","Tuesday","Wednesday",
 						"Thursday","Friday", "Saturday","Sunday"};
 		
-		int startTime = 10;
-		int endTime = 10;
+		int startTime = 4;
+		int endTime = 23;
 		
 		int officeIndex = -1;
 		
@@ -81,14 +81,14 @@ public class StaffHomeServlet extends HttpServlet{
 				minuteStart = minuteStart >= 30 ? 1 : 0;
 				hourStart += amPmStart * 12;
 				
-				if(hourStart < startTime) startTime = hourStart;
+				//if(hourStart < startTime) startTime = hourStart;
 				
 				int cellStart = (hourStart - startTime)*days.length*hourPieces + minuteStart*days.length + dayBump;
 				
 				minuteEnd = minuteEnd >= 30 ? 1 : 0;
 				hourEnd += amPmEnd * 12;
 				
-				if(hourEnd > endTime) endTime = hourEnd;
+				//if(hourEnd > endTime) endTime = hourEnd;
 				
 				int cellEnd = (hourEnd - startTime)*days.length*hourPieces + minuteEnd*days.length + dayBump - days.length;
 				
@@ -121,6 +121,7 @@ public class StaffHomeServlet extends HttpServlet{
 		+					"</thead>"
 		+					"<tbody class = \"events\" id=heq_schedule_body\">";
 		
+		int addedAny = -1;
 
 		if(!officeForCalendar.isEmpty())
 		{ 
@@ -129,35 +130,45 @@ public class StaffHomeServlet extends HttpServlet{
 				String timeBreak[] = {"00","30"};
 				
 				for(int dub = 0; dub < hourPieces; ++dub) {
-					http += "<tr>";
 					
-					http += "<td class=\"times\">";
-					int displayTime = i > 12 ? i - 12 : i;
-					String amPm = i >= 12 ? "PM" : "AM";
+					int cur = officeForCalendar.size() > 0 ? officeForCalendar.get(0) : -1;
 					
-					http += displayTime+":"+timeBreak[dub]+amPm+"</td>";
+					int shallowNum = ( (i-startTime)*days.length*hourPieces + dub*days.length);
 					
-					for(int j = 0; j < days.length; ++j) {
+					if(cur != -1 && cur - days.length < shallowNum ) 
+					{
+						addedAny = 0;
 						
-						http += "<td class=\"event_details\">";
+						http += "<tr>";
 						
-						int num = ( (i-startTime)*days.length*hourPieces + j + dub*days.length);
+						http += "<td class=\"times\">";
+						int displayTime = i > 12 ? i - 12 : i;
+						String amPm = i >= 12 ? "PM" : "AM";
 						
-						int cur = officeForCalendar.size() > 0 ? officeForCalendar.get(0) : -1;
+						http += displayTime+":"+timeBreak[dub]+amPm+"</td>";
 						
-						if(num == cur) {
+						for(int j = 0; j < days.length; ++j) {
 							
-							officeForCalendar.remove(0);
+							http += "<td class=\"event_details\">";
 							
-							http += "Office hours";
+							int num = ( (i-startTime)*days.length*hourPieces + j + dub*days.length);
 							
+							cur = officeForCalendar.size() > 0 ? officeForCalendar.get(0) : -1;
 							
-						} else { http += " " + num; }
+							if(num == cur) {
+								
+								officeForCalendar.remove(0);
+								
+								http += "Office hours";
+								
+								
+							} else { http += " "; }
+							
+							http+= "</td>";
+						}
 						
-						http+= "</td>";
-					}
-					
-					http += "</tr>";
+						http += "</tr>";
+					} else { if(addedAny != -1 && addedAny < 5) http += "<tr><td class=\"littlecells\"></td> </tr>"; addedAny++; }
 				
 				}
 			}
