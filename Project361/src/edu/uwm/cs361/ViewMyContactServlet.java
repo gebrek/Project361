@@ -120,7 +120,7 @@ public class ViewMyContactServlet extends HttpServlet{
 									}
 								}
 								else
-									http += "<div class='view-mycontact-hours'> None </div>";
+									http += "<div class='view-mycontact-hours'> There's no office hours entered yet.</div>";
 				http+=		"</td>"
 				+		"</tr>";
 		}

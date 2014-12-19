@@ -56,7 +56,7 @@ body, .layout {
 
 .errors
 {
-	color: #00D7FF;
+	color: #ff0000;
 	font: 1em/20px Verdana, Arial, Helvetica, sans-serif;
 	margin-left: -37px;
 	list-style-type: none;
