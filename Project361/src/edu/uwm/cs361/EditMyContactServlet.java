@@ -311,7 +311,7 @@ public class EditMyContactServlet extends HttpServlet{
 		+							"<div class='start'>:</div>"
 		+ 							"<select class='officehour-select officeHourInput' id='firstend' name='firstend' required>"
 		+								"<option value = '00' selected> 00 </option>";
-										for(int i = 5; i <=60; ){
+										for(int i = 5; i <=59; ){
 											http+="<option>"+ i +"</option>";
 											i += 5;
 										}
@@ -329,8 +329,8 @@ public class EditMyContactServlet extends HttpServlet{
 		http+=						"</select>"
 		+							"<div class='start2'>:</div>"
 		+ 							"<select class='officehour-select officeHourInput2' id='secondend' name='secondend' required>"
-		+								"<option value = '0' selected> 0 </option>";
-										for(int i = 5; i <=60; ){
+		+								"<option value = '00' selected> 00 </option>";
+										for(int i = 5; i <=59; ){
 											http+="<option>"+ i +"</option>";
 											i += 5;
 										}
