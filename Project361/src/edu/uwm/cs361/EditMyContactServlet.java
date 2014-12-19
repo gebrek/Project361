@@ -79,7 +79,7 @@ public class EditMyContactServlet extends HttpServlet{
 					}
 					
 					if(newhours){
-						if(start > end){
+						if((start > end) && firstpm.equals("am")){
 							errors.add("The Starting time is bigger then the End time.");
 						}
 						else{

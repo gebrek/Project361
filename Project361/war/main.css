@@ -952,13 +952,14 @@ tbody tr .ad_home_course_listing {
 }
 .events .event_details {
 	text-align: center;
-	width: 12%
+	width: 12%;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 	
 }
 .events .event_details:hover {
-	background-color: #FFFB9E;
+	background-color: #575757;
 	cursor: default;
-	color: black;
+	color: white;
 }
 
 .events .event_details:hover .office-nh{
