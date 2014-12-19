@@ -116,7 +116,7 @@ public class EditStaffContactServlet extends HttpServlet{
 		} else {
 			Staff s = data.getStaff(toEdit);
 			toEdit = data.getStaff(toEdit).getEmail();
-			if(!teachingSkills.isEmpty() || teachingSkills != null){
+			if(teachingSkills != null && !teachingSkills.isEmpty()){
 				String[] teachingSkillslist = teachingSkills.split(", ");
 				ArrayList<String> ts = new ArrayList<String>();
 				for(String i : teachingSkillslist){
