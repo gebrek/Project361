@@ -53,7 +53,6 @@ public class StaffHomeServlet extends HttpServlet{
 		int startTime = 4;
 		int endTime = 23;
 		
-		int officeIndex = -1;
 		
 		ArrayList<Integer> officeForCalendar = new ArrayList<Integer>();
 		
@@ -81,17 +80,13 @@ public class StaffHomeServlet extends HttpServlet{
 				int minuteEnd = Integer.parseInt(hourMinuteEnd[1].trim().substring(0, 2));
 				int amPmEnd = hourMinuteEnd[1].contains("a") ? 0 : 1;
 				
-				minuteStart = minuteStart >= 30 ? 1 : 0;
-				hourStart += amPmStart * 12;
-				
-				//if(hourStart < startTime) startTime = hourStart;
+				minuteStart = minuteStart >= 60/hourPieces ? 1 : 0;
+				hourStart =  hourStart == 12 ? hourStart : hourStart + amPmStart * 12;
 				
 				int cellStart = (hourStart - startTime)*days.length*hourPieces + minuteStart*days.length + dayBump;
 				
-				minuteEnd = minuteEnd >= 30 ? 1 : 0;
-				hourEnd += amPmEnd * 12;
-				
-				//if(hourEnd > endTime) endTime = hourEnd;
+				minuteEnd = minuteEnd >= 60/hourPieces  ? 1 : 0;
+				hourEnd =  hourEnd == 12 ? hourEnd : hourEnd + amPmEnd * 12;
 				
 				int cellEnd = (hourEnd - startTime)*days.length*hourPieces + minuteEnd*days.length + dayBump - days.length;
 				
@@ -103,10 +98,71 @@ public class StaffHomeServlet extends HttpServlet{
 			Collections.sort(officeForCalendar);
 		}
 		
+		ArrayList<ArrayList<Integer>> sectionsForCalendar = new ArrayList<ArrayList<Integer>>();
+		
+		if(guy.getSectionsTaught() != null){
+			
+			for(Section s : guy.getSectionsTaught()) {
+				
+				ArrayList<Integer> curSectionNums = new ArrayList<Integer>();
+				
+				String secDays = s.getDays();
+				String secTimes = s.getHours();
+				
+				String days2[] = {"M","T", "W", "R", "F"}; 
+					
+				if(secDays != null && secTimes != null) {
+				
+					for(int n = 0; n < days2.length; ++n) {
+						
+						if(secDays.contains(days2[n])) {
+							
+							int dayBump = n;
+							
+							String guyOfficeTime = secTimes;
+							
+							String guyTimes[] = guyOfficeTime.split("-");
+							
+							String hourMinuteStart[] = guyTimes[0].split(":");
+							String hourMinuteEnd[] = guyTimes[1].split(":");
+							
+							int hourStart = Integer.parseInt(hourMinuteStart[0].trim());
+							int minuteStart = Integer.parseInt(hourMinuteStart[1].trim().substring(0, 2));
+							int amPmStart = hourMinuteStart[1].contains("A") ? 0 : 1;
+							int hourEnd = Integer.parseInt(hourMinuteEnd[0].trim());
+							int minuteEnd = Integer.parseInt(hourMinuteEnd[1].trim().substring(0, 2));
+							int amPmEnd = hourMinuteEnd[1].contains("A") ? 0 : 1;
+							
+							minuteStart = minuteStart >= 60/hourPieces ? 1 : 0;
+							hourStart =  hourStart == 12 ? hourStart : hourStart + amPmStart * 12;
+							
+							int cellStart = (hourStart - startTime)*days.length*hourPieces + minuteStart*days.length + dayBump;
+							
+							minuteEnd = minuteEnd >= 60/hourPieces  ? 1 : 0;
+							hourEnd =  hourEnd == 12 ? hourEnd : hourEnd + amPmEnd * 12;
+							
+							int cellEnd = (hourEnd - startTime)*days.length*hourPieces + minuteEnd*days.length + dayBump - days.length;
+							
+							for(int m = cellStart; m <= cellEnd; m+=days.length) {
+								curSectionNums.add(m);
+							}
+						}
+					}
+				}
+				
+				Collections.sort(curSectionNums);
+				
+				sectionsForCalendar.add(curSectionNums);
+			}
+			
+		}
+			
+		
+		
 		String http = "";
 		http += "<form id=\"ccf\">"
 		+			"<div id=\"title-create-staff\">"
-		+				"Weekly Calendar - "
+		+				"Weekly Calendar "
 		+			"</div>"
 		+		 	"<div id=\"sub1\">"
 		+ 				"<table id=\"month\">"
@@ -125,20 +181,31 @@ public class StaffHomeServlet extends HttpServlet{
 		+					"<tbody class = \"events\" id=heq_schedule_body\">";
 		
 		int addedAny = -1;
-
-		if(!officeForCalendar.isEmpty())
+		
+		String timeBreak[] = {"00","30"};
+		
+		if(!officeForCalendar.isEmpty() || !sectionsForCalendar.isEmpty())
 		{ 
 			for(int i=startTime;i<endTime;++i)
 			{
-				String timeBreak[] = {"00","30"};
-				
 				for(int dub = 0; dub < hourPieces; ++dub) {
 					
-					int cur = officeForCalendar.size() > 0 ? officeForCalendar.get(0) : -1;
+					int cur = officeForCalendar.isEmpty() ? -1 : officeForCalendar.get(0);
+					
+					int sectionLow = 10000;
+					
+					if(sectionsForCalendar.size() > 0) {
+						for(ArrayList<Integer> aL : sectionsForCalendar) {
+							if(aL.size() > 0 ) { 
+								int myCurNum = aL.get(0);
+								if(myCurNum < sectionLow) sectionLow = myCurNum;
+							}
+						}
+					}
 					
 					int shallowNum = ( (i-startTime)*days.length*hourPieces + dub*days.length);
 					
-					if(cur != -1 && cur - days.length < shallowNum ) 
+					if( (cur != -1 && cur - days.length < shallowNum) || sectionLow - days.length < shallowNum ) 
 					{
 						addedAny = 0;
 						
@@ -165,14 +232,34 @@ public class StaffHomeServlet extends HttpServlet{
 								http += "Office hours";
 								
 								
-							} else { http += " "; }
+							} else { 
+								
+								for(int v = 0; v < sectionsForCalendar.size(); ++v) {
+									
+									ArrayList<Integer> aL = sectionsForCalendar.get(v);
+									
+									if(aL.size() > 0 && aL.get(0) == num) {
+										
+										ArrayList<Section> secs = guy.getSectionsTaught();
+										
+										Section curSec = secs.get(v);
+										
+										String curTitle = curSec.getCourseid();
+										
+										http += curTitle.substring(8);
+										
+										aL.remove(0);
+									}
+								}
+							}
 							
 							http+= "</td>";
 						}
 						
 						http += "</tr>";
-					} else { if(addedAny != -1 && addedAny < 5) http += "<tr><td class=\"littlecells\"></td> </tr>"; addedAny++; }
-				
+					} else { 
+							if(addedAny != -1 && addedAny < 5) http += "<tr><td class=\"littlecells\"></td> </tr>"; addedAny++; 
+					}
 				}
 			}
 		}
