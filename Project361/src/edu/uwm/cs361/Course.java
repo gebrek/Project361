@@ -24,12 +24,25 @@ public class Course implements Comparable<Course>{
 	@Persistent
 	private String number;
 	
+	/**
+	 * Creates a course in datastore with specified params
+	 * 
+	 * @param id
+	 * @param ttl
+	 * @param num
+	 * @param secs
+	 */
 	public Course(String id, String ttl, String num, List<Section> secs){
 		courseid = id;
 		title = ttl;
 		number = num;
 		sections = secs;
 	}
+	
+	/**
+	 * Creates course with no params set. 
+	 * Use setters to modify afterwards
+	 */
 	public Course(){
 		courseid = null;
 		title = null;
@@ -39,7 +52,7 @@ public class Course implements Comparable<Course>{
 	
 	/**
 	 * 
-	 * @return Key for datastore
+	 * @return Key for Course in datastore
 	 */
 	public Key getKey() {
 		return key;
@@ -47,7 +60,7 @@ public class Course implements Comparable<Course>{
 	
 	/**
 	 * 
-	 * @return Course title
+	 * @return gets the course Course title as string
 	 */
 	public String getTitle() {
 		return title;
@@ -61,15 +74,24 @@ public class Course implements Comparable<Course>{
 		this.title = title;
 	}
 	
+	/**
+	 * REturns list containing all sections belonging to course
+	 * @return
+	 */
 	public List<Section> getSections(){
 		return this.sections;
 	}
+	
+	/**
+	 * Takes an array list of sections and sets this courses sections t that list
+	 * @param secs
+	 */
 	public void setSections(List<Section> secs){
 		this.sections = secs;
 	}
 	/**
 	 * 
-	 * @return Course id (locale number used for reference in datastore)
+	 * @return Course id (local number used for reference in datastore)
 	 */
 	public String getID() {
 		return this.courseid;
@@ -98,6 +120,8 @@ public class Course implements Comparable<Course>{
 	public void setNumber(String number) {
 		this.number = number;
 	}
+	
+	/*
 	public void mergeSections(Course other){
 		for(Section sn : this.sections){
 			for(Section so : other.sections){
@@ -107,6 +131,7 @@ public class Course implements Comparable<Course>{
 			}
 		}
 	}
+	*/
 	
 	/**
 	 * 
@@ -137,12 +162,19 @@ public class Course implements Comparable<Course>{
 		return "Course [courseid=" + courseid + ", title=" + title
 				+ ", sections=" + sections + "]";
 	}
+	
+	/**
+	 * Overrode equality operator
+	 */
 	@Override
 	public boolean equals(Object o){
 		Course c = (Course) o;
 		return courseid.equals(c.courseid);
 	}
 
+	/**
+	 * Compared this to another course for sorting purposes
+	 */
 	@Override
 	public int compareTo(Course c) {
 		

@@ -77,14 +77,14 @@ public class Staff {
 	
 	/**
 	 * 
-	 * @return Key for datastore
+	 * @return REturns Staffs Key for use in datastore
 	 */
 	public Key getKey() {
 		return key;
 	}
 	/**
 	 * 
-	 * @return string list of office hours
+	 * @return Returns array list of all the staff's office hours
 	 */
 	public ArrayList<String> getOfficeHours(){
 		if(officeHours.isEmpty() || officeHours == null){
@@ -259,9 +259,19 @@ public class Staff {
 			sectionsTaught.add(s.getKey());
 		}
 	}
+	
+	/**
+	 * Adds the given section to this staff's list of sections taught
+	 * @param s
+	 */
 	public void addSectionTaught(Section s){
 		sectionsTaught.add(s.getKey());
 	}
+	
+	/**
+	 * Removes the given section to this staff's list of sections taught
+	 * @param s
+	 */
 	public void removeSectionTaught(Section s){
 		sectionsTaught.remove(s.getKey());
 	}
@@ -310,6 +320,11 @@ public class Staff {
 		this.password = password;
 	}
 
+	/**
+	 * Returns a list containing this staffs teaching skills/profiniencies
+	 * List will be 
+	 * @return
+	 */
 	public ArrayList<String> getSkills() {
 		return skills;
 	}

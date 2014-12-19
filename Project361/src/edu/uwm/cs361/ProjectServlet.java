@@ -27,6 +27,10 @@ public class ProjectServlet extends HttpServlet {
 		return user;
 	}
 	
+	/**
+	 * returns a string containing the email of the current user
+	 * @return
+	 */
 	public String getUsername()
 	{
 		return username;
@@ -63,6 +67,14 @@ public class ProjectServlet extends HttpServlet {
 		menu(req,resp);
 	}
 	
+	/**
+	 * Displays the main page content, presenting the admin a search field to lookup TAs by skill
+	 * @param req
+	 * @param resp
+	 * @param skill
+	 * @return
+	 * @throws IOException
+	 */
 	private String displayForm(HttpServletRequest req, HttpServletResponse resp, String skill) throws IOException
 	{
 		resp.setContentType("text/html");

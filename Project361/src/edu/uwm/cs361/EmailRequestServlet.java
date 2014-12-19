@@ -29,7 +29,7 @@ public class EmailRequestServlet extends HttpServlet
 	}
 
 	/**
-	 * Sends email
+	 * Sends email requesting selected information
 	 */
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
@@ -89,6 +89,11 @@ public class EmailRequestServlet extends HttpServlet
 
 	}
 	
+	/**
+	 * Takes staff, and returns true if that staff within the datastore has missing contact information. Otherwise, returns false
+	 * @param user
+	 * @return
+	 */
 	private boolean hasEmptyContact(Staff user) {
 		
 		if(user.getHomeAddress().isEmpty() || user.getHomePhone().isEmpty() || 

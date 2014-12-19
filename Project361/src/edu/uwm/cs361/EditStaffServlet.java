@@ -71,6 +71,9 @@ public class EditStaffServlet extends HttpServlet{
 		}
 	}
 	
+	/**
+	 * Deletes the selected staff from the datastore
+	 */
 	@Override
 	public void doDelete(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {

@@ -44,6 +44,21 @@ public class Section implements Comparable<Section>{
 	@Persistent
 	public boolean edited;
 	
+	/**
+	 * Creates a Section object i the datastore with the supplied parameters
+	 * @param secid
+	 * @param crsid
+	 * @param un
+	 * @param ty
+	 * @param sec
+	 * @param hrs
+	 * @param dys
+	 * @param dts
+	 * @param inst
+	 * @param fbinst
+	 * @param rm
+	 * @param crs
+	 */
 	public Section(String secid, String crsid, String un, String ty, String sec,
 			String hrs, String dys, String dts, Staff inst, String fbinst, String rm, Course crs){
 		sectionid = secid;
@@ -65,6 +80,10 @@ public class Section implements Comparable<Section>{
 		}
 		pm.close();
 	}
+	
+	/**
+	 * Creates a section object in the datastore with all fields set to null. Please use setters to update
+	 */
 	public Section(){
 		sectionid = null;
 		courseid = null;
@@ -81,7 +100,7 @@ public class Section implements Comparable<Section>{
 	}
 	
 	/**
-	 * @return key for datastore
+	 * @return Sections key used for datastore
 	 */
 	public Key getKey() {
 		return key;
@@ -89,7 +108,7 @@ public class Section implements Comparable<Section>{
 	
 	/**
 	 * 
-	 * @param key Key to set for datastore
+	 * @param key Sets the sections key for use in the datastore
 	 */
 	public void setKey(Key key) {
 		this.key = key;
@@ -247,6 +266,11 @@ public class Section implements Comparable<Section>{
 		this.instructor = ins.getKey();
 		pm.close();
 	}
+	
+	/**
+	 * Returns the name of instructor assigned to this course
+	 * @return
+	 */
 	public String getInstructorName(){
 		if(instructor == null){
 			return fallbackInstructor;
@@ -260,9 +284,19 @@ public class Section implements Comparable<Section>{
 			}
 		}
 	}
+	
+	/**
+	 * Sets the name of the instructor to fallback on if primary instructor becomes invalid
+	 * @param fbinst
+	 */
 	public void setFallbackInstructor(String fbinst){
 		fallbackInstructor = fbinst;
 	}
+	
+	/**
+	 * Returns the name of the Sections fallback instructor
+	 * @return
+	 */
 	public String getFallbackInstructor(){
 		return fallbackInstructor;
 	}
@@ -273,6 +307,11 @@ public class Section implements Comparable<Section>{
 	public String getRoom() {
 		return room;
 	}
+	
+	/**
+	 * REturs the course object to which this section belongs
+	 * @return
+	 */
 	public Course getCourse(){
 		return course;
 	}
@@ -296,6 +335,11 @@ public class Section implements Comparable<Section>{
 		return String.format("<tr class='border_bottom'><td></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
 				section, units, hours, days, getInstructorName(), room);
 	}
+	
+	/**
+	 * 
+	 * @return Returns this sections as a formatted html line to fit our course list html. This methods adds course information
+	 */
 	public String toHtmlTRwithCourse(){
 		if (section.length() > 2)
 			section = section.substring(0, 3);
@@ -303,11 +347,19 @@ public class Section implements Comparable<Section>{
 		return String.format("<tr class='border_bottom'><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>\n",
 				courseid.substring(8), section, units, hours, days, getInstructorName(), room);
 	}
+	
+	/**
+	 * Overrode equality method.
+	 */
 	@Override 
 	public boolean equals(Object o){
 		Section s = (Section) o;
 		return (courseid.equals(s.courseid) && sectionid.equals(s.sectionid));
 	}
+	
+	/**
+	 * Returns sting representation of this section
+	 */
 	@Override
 	public String toString() {
 		return "Section [key=" + key + ", sectionid=" + sectionid

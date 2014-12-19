@@ -50,6 +50,10 @@ public class EditSectionServlet extends HttpServlet {
 		doGet(req, resp);
 	}
 
+	/**
+	 * Displays the main page content, generating a list of sections and staff options
+	 * @throws IOException
+	 */
 	private void displayForm() throws IOException {
 
 		page.banner(_req, _resp);

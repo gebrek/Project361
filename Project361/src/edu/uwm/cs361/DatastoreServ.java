@@ -89,6 +89,12 @@ public class DatastoreServ {
 		if(courseList != null) Collections.sort(courseList);
 		return courseList;
 	}
+	
+	/**
+	 * Returns a single course object, based on the course object pased in
+	 * @param c
+	 * @return
+	 */
 	public Course getCoursebyCourse(Course c){
 		try{
 			return getCourse("courseid == '" + c.getID() + "'").get(0);
@@ -115,6 +121,11 @@ public class DatastoreServ {
 		return (List<Section>) q.execute() ;
 	}
 	
+	/**
+	 * REturns a single Section based on a stirng containing course and section information
+	 * @param section
+	 * @return
+	 */
 	public Section getSectionByName(String section)
 	{
 		String secNum = section.substring(section.length() - 3);
@@ -137,6 +148,11 @@ public class DatastoreServ {
 		return null;
 	}
 	
+	/**
+	 * Returns a section object given that same seciton object. If similar enough will return.
+	 * @param s
+	 * @return
+	 */
 	public Section getSectionbySection(Section s){
 		try{
 			return getSection("courseid == '" + s.getCourseid() + "' && sectionid == '" + s.getSection() + "'").get(0);
@@ -146,7 +162,7 @@ public class DatastoreServ {
 	}
 	
 	/**
-	 * 
+	 * Gets a list containing all the Course objects from datastore
 	 * @return List of all courses
 	 */
 	@SuppressWarnings("unchecked")
@@ -156,7 +172,7 @@ public class DatastoreServ {
 	}
 	
 	/**
-	 * 
+	 * Gets a list containing all the Staff objects from datastore
 	 * @return List of all staff
 	 */
 	public ArrayList<Staff> getAllStaff(){
@@ -186,13 +202,28 @@ public class DatastoreServ {
 		
 		_pm.makePersistent(course);
 	}
+	
+	/**
+	 * Adds the given course object to the datastore
+	 * @param course
+	 */
 	public void addCourse(Course course){
 		_pm.makePersistent(course);
 	}
+	
+	/**
+	 * Takes a list of Course objects and adds each to the datastore
+	 * @param courses
+	 */
 	public void addCourseAll(List<Course> courses){
 		_pm.makePersistentAll(courses);
 	}
 	
+	/**
+	 * Takes a string containing 1 skill and returns a list of Staff objects containing all the TA staff who have that skill
+	 * @param skill
+	 * @return
+	 */
 	public ArrayList<Staff> staffBySkill(String skill){
 		ArrayList<Staff> ss = getAllStaff();
 		for(Staff s : ss){
@@ -235,9 +266,19 @@ public class DatastoreServ {
 		
 		_pm.makePersistent(section);
 	}
+	
+	/**
+	 * Adds the given Section object to the datastore
+	 * @param section
+	 */
 	public void addSection(Section section){
 		_pm.makePersistent(section);
 	}
+	
+	/**
+	 * Takes a list of section objects and adds each one to the datastore
+	 * @param sections
+	 */
 	public void addSectionAll(List<Section> sections){
 		_pm.makePersistentAll(sections);
 	}
@@ -254,6 +295,11 @@ public class DatastoreServ {
 		_pm.deletePersistentAll(courses);
 		_pm.deletePersistentAll(sections);
 	}
+	
+	/**
+	 * Given a staff object, the corresponding Staff object is removed from the datastore
+	 * @param stf
+	 */
 	public void deleteStaff(Staff stf){
 		_pm.deletePersistent(stf);
 	}
@@ -288,6 +334,14 @@ public class DatastoreServ {
 //		}
 //		_pm.close();		
 //	}
+	
+	/**
+	 * Takes a Section and a Staff object. Adds the staff to the section 'instructor' field.
+	 * and adds the section to the list of the Staff's list of sections taught
+	 * 
+	 * @param sec
+	 * @param stf
+	 */
 	public void editSectionsStaff(Section sec, Staff stf){
 //		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try{
