@@ -190,7 +190,7 @@ public class EditMyContactServlet extends HttpServlet{
 			+				"Office Phone: " + officePhone + "<br>" 
 			+				"Home Address: " + homeAddress + "<br>" 
 			+				"Home Phone: " + homePhone + "<br>" 
-			+				"Home Phone: " + homePhone + "<br><br>" 
+			+				"Teaching Skills: " + teachingSkills + "<br><br>" 
 			+				"The User's contact info has been updated.<br><br><br><br><br><br>"
 			+				"<input class=\"submit\" type=\"submit\" value=\"Back\" />"
 			+			"</div>"
