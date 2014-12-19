@@ -41,33 +41,63 @@ public class ProjectServlet extends HttpServlet {
 			throws IOException {
 		
 		//form to show the names of the staff in the system for now
-		String http = "";
-		http += "<form id=\"ccf\">"
-		+			"<div id=\"title-create-staff\">"
-		+				"Staff List"
-		+			"</div>"
-		+ 			"<div id=\"sub\">";
-		
-		ArrayList<Staff> users = data.getAllStaff();
-		http += "There is " + users.size() + " users.<br><br>";
-		for(Staff user:users){
-			http += "Name: " + user.getName() + "<br>";
-			
-		}
-		http += "</div>"
-		+		"</form>";
+
 		
 		user = null;
 		username = null;
 		user = checkLogin(req, resp);
 		banner(req,resp);
-		layout(http,req,resp);
+		layout(displayForm(req,resp,""),req,resp);
 		menu(req,resp);
 	}
 	
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
+		
+		//get the value from the dropdown
+		String skill = req.getParameter("skill");
+		
+		banner(req,resp);
+		layout(displayForm(req,resp,skill),req,resp);
+		menu(req,resp);
+	}
+	
+	private String displayForm(HttpServletRequest req, HttpServletResponse resp, String skill) throws IOException
+	{
+		resp.setContentType("text/html");
+		String http = "";
+
+		http += "<form id=\"ccf\" method=\"POST\" action=\"/project\">"
+		+			"<div id=\"title-create-staff\">"
+		+				"Staff List"
+		+			"</div>"
+		+ 			"<div id=\"sub\">"
+		+				"<table>"
+		+					"<tr>"
+		+						"<td class='form'>"
+		+							"Search by Skills: <input class='createStaffInput' type='text' id='skill' name='skill' placeholder='enter a skill' requird/><br>";
+									
+		http+=					"</td>"
+		+					"</tr>"
+		+				"</table>"		
+		+				"<input class='view-skill-staff' type='submit' value='View' /><br><br>";
+		
+						if(skill != null && !skill.isEmpty()){
+							List<Staff> staff = data.staffBySkill(skill);
+							for(Staff i: staff){
+								http+= "&nbsp&nbsp Name: " + i.getName() + "&nbsp&nbsp&nbsp Skills: "; 
+								for(String j: i.getSkills()){
+									http+= j + ", ";
+								}
+								http = http.substring(0, http.length()-1);
+								http += "<br>";
+							}
+						}
+		http+=	 	"</div>"
+		+		"</form>";
+		
+		return http;
 	}
 	
 	/**
@@ -183,10 +213,10 @@ public class ProjectServlet extends HttpServlet {
 		resp.getWriter().println("					<li><a href=\"/viewStaff\"> View Staff</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
-		resp.getWriter().println("					<li><a href=\"/editStaff\"> Edit Staff</a></li>");
+		resp.getWriter().println("					<li><a href=\"/editStaff\"> Edit Staff Account</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("				<ul class=\"buttons-outline\">");
-		resp.getWriter().println("					<li><a href='/editStaffContact'> Edit Staff Contact</a></li>");
+		resp.getWriter().println("					<li><a href='/editStaffContact'> Edit Staff Info</a></li>");
 		resp.getWriter().println("				</ul>");
 		resp.getWriter().println("			</li>");
 		resp.getWriter().println("		</ul>");									
