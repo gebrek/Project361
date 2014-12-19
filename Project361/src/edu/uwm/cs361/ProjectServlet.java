@@ -86,7 +86,7 @@ public class ProjectServlet extends HttpServlet {
 		if (user == null && username.isEmpty())
 		{
 			resp.sendRedirect("/index.html");
-		}
+		} 
 		
 		resp.setContentType("text/html");
 		

@@ -95,7 +95,7 @@ public class StaffScheduleServlet extends HttpServlet{
 		+					"<td></td>"
 		+					"<td>"
 		+						"<input class='view-submit-staff' type='submit' value='View' />";
-		http +=				"</td>"
+		http +=				"</td>" 
 		+				"</tr><br>";
 		
 		Staff user = null;
